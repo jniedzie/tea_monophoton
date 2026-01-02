@@ -1,19 +1,21 @@
 # facility = "lxplus"
 facility = "NAF"
 
-trigger = "doubleEG2"
-# trigger = "singleEG5"
+# trigger = "doubleEG2"
+trigger = "singleEG5"
 
 processes = (
-  # "collisionData",
-  # "lbl",
+  "collisionData",
+  "lbl",
   "cep",
-  # "qed_superchic",
-  # "qed_starlight",
-  # "alps_5",
-  # "alps_30",
-  # "alps_90",
+  "qed_superchic",
+  "qed_starlight",
+  "alps_5",
+  "alps_30",
+  "alps_90",
 )
+
+qed_names = ["qed_superchic", "qed_starlight"]
 
 input_skim = f"initial_{trigger}"
 skim = f"skimmed_{trigger}_baselineSelections"

@@ -5,8 +5,8 @@ printEveryNevents = 1000
 
 base_path = "/data/dust/user/jniedzie/monophoton/"
 
-trigger = "doubleEG2"
-# trigger = "singleEG5"
+# trigger = "doubleEG2"
+trigger = "singleEG5"
 
 # sample = "collisionData"
 # sample = "lbl"
