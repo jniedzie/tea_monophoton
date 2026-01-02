@@ -18,23 +18,10 @@ class LbLHistogramsFiller {
   std::shared_ptr<HistogramsHandler> histogramsHandler;
   std::unique_ptr<EventProcessor> eventProcessor;
 
-  float GetDielectronAcoplanarity(const std::shared_ptr<Event> event);
-  float GetDielectronAcoplanarity(const std::shared_ptr<Electron> &electron1, const std::shared_ptr<Electron> &electron2);
-  float GetPhiModulation(const std::shared_ptr<Electron> &electron1, const std::shared_ptr<Electron> &electron2);
-
-  void FillCaloHistograms(const std::shared_ptr<Event> event);
-  void FillPhotonHistograms(const std::shared_ptr<Event> event);
   void FillMonoPhotonHistograms(const std::shared_ptr<Event> event);
   void FillGenLevelHistograms(const std::shared_ptr<Event> event);
-  void FillElectronHistograms(const std::shared_ptr<Event> event);
   void FillEventLevelHistograms(const std::shared_ptr<Event> event);
-  void FillThreePhotonHistograms(const std::shared_ptr<Event> event);
 
-  TF1 *acoplanarityFunction;
-  TLorentzVector dielectron, genDielectron;
-  TH1D *genDielectronDeltaPt;
-
-  std::map<std::string, float> caloEtaEdges;
   std::map<std::string, float> dataBlinding;
 };
 

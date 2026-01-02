@@ -4,10 +4,8 @@ import ROOT
 from Logger import info, warn, error, fatal
 
 from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, uncertainty_on_zero
-from lbl_params import n_acoplanarity_bins, cep_scaling_min_acoplanarity, n_mass_bins
 from lbl_params import qed_sampling_n_events, qed_sampling_transition_point, qed_sampling_fit_max_aco
 from lbl_paths import processes, merged_histograms_path, qed_names
-from lbl_paths import acoplanarity_histogram_name, mass_histogram_name
 
 input_files = {}
 input_aco_histograms = {}
@@ -39,21 +37,11 @@ def load_histograms(skim, scale_to_integral=False):
       warn(f"File not found: {file_path}")
       continue
 
-    aco_hist_name = acoplanarity_histogram_name.format(n_acoplanarity_bins)
-    mass_hist_name = mass_histogram_name.format(n_mass_bins)
     cut_flow_name = "cutFlow"
 
-    input_aco_histograms[process] = input_files[process].Get(aco_hist_name)
-    input_mass_histograms[process] = input_files[process].Get(mass_hist_name)
-    input_cut_flow_histograms[process] = input_files[process].Get(
-      cut_flow_name
-    )
+    input_cut_flow_histograms[process] = input_files[process].Get(cut_flow_name)
 
     if any([
-      input_aco_histograms[process] is None,
-      type(input_aco_histograms[process]) is ROOT.TObject,
-      input_mass_histograms[process] is None,
-      type(input_mass_histograms[process]) is ROOT.TObject,
       input_cut_flow_histograms[process] is None,
       type(input_cut_flow_histograms[process]) is ROOT.TObject
     ]):
@@ -85,7 +73,7 @@ def scale_non_cep_histograms():
   photonScaleFactor = get_scale_factor(photon=True)[0]
 
   for process in processes:
-    if process == "cep" or process == "collisionData":
+    if process == "collisionData":
       continue
 
     if process not in input_aco_histograms:
@@ -107,67 +95,8 @@ cep_scale = -1
 cep_scale_err = -1
 
 
-def get_cep_scale(skim):
+def get_cep_scale():
   return 294, 71
-  
-  global cep_scale
-  global cep_scale_err
-
-  if cep_scale > 0:
-    return cep_scale, cep_scale_err
-
-  load_histograms(skim)
-  scale_non_cep_histograms()
-
-  try:
-    hist_data_no_background = input_aco_histograms["collisionData"].Clone()
-    data_count_no_background = input_cut_flow_histograms["collisionData"
-                                                         ].GetBinContent(9)
-  except KeyError:
-    fatal(
-      "collisionData histogram not found in input files. Did you forget to create/merge histograms?"
-    )
-    exit()
-  hist_data_no_background.Add(input_aco_histograms["lbl"], -1)
-  data_count_no_background -= input_cut_flow_histograms["lbl"].GetBinContent(9)
-
-  for qed_name in qed_names:
-    print(f"subtracting {qed_name}")
-    hist_data_no_background.Add(input_aco_histograms[qed_name], -1)
-    data_count_no_background -= input_cut_flow_histograms[qed_name
-                                                          ].GetBinContent(9)
-
-  integral_data = hist_data_no_background.Integral(
-    hist_data_no_background.FindBin(cep_scaling_min_acoplanarity),
-    hist_data_no_background.GetNbinsX()
-  )
-
-  integral_cep = input_aco_histograms["cep"].Integral(
-    input_aco_histograms["cep"].FindBin(cep_scaling_min_acoplanarity),
-    input_aco_histograms["cep"].GetNbinsX()
-  )
-
-  if integral_cep == 0:
-    integral_data = hist_data_no_background.Integral()
-    integral_cep = input_aco_histograms["cep"].Integral()
-
-  if integral_cep == 0:
-    integral_data = data_count_no_background
-    integral_cep = input_cut_flow_histograms["cep"].GetBinContent(9)
-
-  if integral_cep == 0:
-    error("Cannot normalize CEP histograms.")
-    return 1, 0
-
-  cep_scale = integral_data / integral_cep
-
-  integral_data_err = integral_data**0.5
-  integral_cep_err = integral_cep**0.5
-
-  cep_scale_err = cep_scale * ((integral_data_err / integral_data)**2 +
-                               (integral_cep_err / integral_cep)**2)**0.5
-
-  return cep_scale, cep_scale_err
 
 
 def get_alp_coupling(mass, cross_section):

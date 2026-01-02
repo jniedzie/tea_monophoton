@@ -183,24 +183,14 @@ mc_scale = 1.0
 
 crossSections = {
   "lbl": mc_scale * 2.59 * lbl_scaling,  # μb
-  "qed": mc_scale * 8827.220 * qed_scaling,  # μb
+  "qed_superchic": mc_scale * 8827.220 * qed_scaling,  # μb
   "qed_starlight": mc_scale * 7920.0 * qed_scaling,  # μb
-  "qed_MG_ee_a": mc_scale * 13.45 * qed_scaling,  # μb
-  "qed_MG_ee_aa": mc_scale * 0.1945 * qed_scaling,  # μb
   "cep": mc_scale * 5.8e-3,  # we scale it to data
   "alps_5": reference_alp_cross_section,
-  "alps_6": reference_alp_cross_section,
-  "alps_9": reference_alp_cross_section,
-  "alps_11": reference_alp_cross_section,
-  "alps_14": reference_alp_cross_section,
-  "alps_16": reference_alp_cross_section,
-  "alps_22": reference_alp_cross_section,
   "alps_30": reference_alp_cross_section,
-  "alps_50": reference_alp_cross_section,
   "alps_90": reference_alp_cross_section,
 
   # "alps_5": mc_scale * 2e2 * 1e-3,  # nb -> μb, limit cross section
-  # "alps_11": mc_scale * 20 * 1e-3,  # nb -> μb, limit cross section
   # "alps_30": mc_scale * 5 * 1e-3,  # nb -> μb, limit cross section
   # "alps_90": mc_scale * 5 * 1e-3,  # nb -> μb, limit cross section
 
@@ -266,19 +256,10 @@ def get_scale_factor(photon=True):
 nGenEvents = {
   "lbl": 466000,
   "cep": 668000,  # we scale it to data
-  "qed_MG_ee_a": 10228329,
-  "qed_MG_ee_aa": 6457150,
-  "qed": 59260000,
+  "qed_superchic": 59260000,
   "qed_starlight": 66750000,
   "alps_5": 754000,
-  "alps_6": 729000,
-  "alps_9": 722000,
-  "alps_11": 692000,
-  "alps_14": 712000,
-  "alps_16": 682000,
-  "alps_22": 694000,
   "alps_30": 719000,
-  "alps_50": 511000,
   "alps_90": 449000,
 }
 
