@@ -3,10 +3,10 @@ from lbl_params import *
 nEvents = -1
 printEveryNevents = 1000
 
-base_initial_path = "/data/dust/user/jniedzie/light_by_light/"
 base_path = "/data/dust/user/jniedzie/monophoton/"
 
-applyTrigger = False
+trigger = "doubleEG2"
+# trigger = "singleEG5"
 
 # sample = "collisionData"
 # sample = "lbl"
@@ -26,13 +26,10 @@ sample = "alps_11"
 # sample = "alps_90"
 
 input_skim = "initial"
-output_skim = "skimmed"
+output_skim = f"skimmed_baselineSelections_{trigger}"
 
-inputFilePath = f"{base_initial_path}/ntuples/{sample}/initial/ntuple_0.root"
-# inputFilePath = f"{base_path}/ntuples/{sample}/merged_{input_skim}.root"
-
-# treeOutputFilePath = inputFilePath.replace("initial", skim)
-treeOutputFilePath = f"{base_path}/ntuples/{sample}/merged_{output_skim}.root"
+inputFilePath = f"{base_path}/{sample}/initial_{trigger}/ntuple_0.root"
+treeOutputFilePath = inputFilePath.replace("initial", output_skim)
 
 # weightsBranchName = "genWeight"
 eventsTreeNames = ["Events",]

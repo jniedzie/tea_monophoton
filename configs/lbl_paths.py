@@ -5,14 +5,14 @@ trigger = "doubleEG2"
 # trigger = "singleEG5"
 
 processes = (
-  "collisionData",
-  "lbl",
+  # "collisionData",
+  # "lbl",
   "cep",
-  "qed_superchic",
-  "qed_starlight",
-  "alps_5",
-  "alps_30",
-  "alps_90",
+  # "qed_superchic",
+  # "qed_starlight",
+  # "alps_5",
+  # "alps_30",
+  # "alps_90",
 )
 
 input_skim = f"initial_{trigger}"

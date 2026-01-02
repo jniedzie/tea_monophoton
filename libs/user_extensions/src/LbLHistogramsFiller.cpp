@@ -775,25 +775,7 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
 }
 
 void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
-  // if (!(int)event->Get("DoubleEG2")) return;
-
-  auto electrons = event->GetCollection("goodElectron");
-  if (electrons->size() == 2) {
-    auto electron_1 = asElectron(electrons->at(0));
-    auto electron_2 = asElectron(electrons->at(1));
-    dielectron = electron_1->GetFourMomentum() + electron_2->GetFourMomentum();
-  }
-  auto genElectrons = event->GetCollection("genElectron");
-  if (genElectrons->size() == 2) {
-    auto electron_1 = asElectron(genElectrons->at(0));
-    auto electron_2 = asElectron(genElectrons->at(1));
-    genDielectron = electron_1->GetFourMomentum() + electron_2->GetFourMomentum();
-  }
-
-  FillCaloHistograms(event);
   FillPhotonHistograms(event);
-  FillThreePhotonHistograms(event);
-  FillElectronHistograms(event);
   FillEventLevelHistograms(event);
   FillGenLevelHistograms(event);
 }

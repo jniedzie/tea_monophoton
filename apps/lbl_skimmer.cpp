@@ -41,16 +41,7 @@ int main(int argc, char** argv) {
   auto lblSelections = make_unique<LbLSelections>();
   auto lblObjectsManager = make_unique<LbLObjectsManager>();
 
-  bool applyTrigger;
-  config.GetValue("applyTrigger", applyTrigger);
-  info() << "applyTrigger: " << applyTrigger << endl;
-  
-  cutFlowManager->RegisterCut("initial");
-
-  if (applyTrigger) {
-    cutFlowManager->RegisterCut("trigger");
-  }
-  
+  cutFlowManager->RegisterCut("initial");  
   cutFlowManager->RegisterCut("singlePhoton");
   cutFlowManager->RegisterCut("nElectrons");
   cutFlowManager->RegisterCut("nTracks");
@@ -88,17 +79,6 @@ int main(int argc, char** argv) {
     lblObjectsManager->InsertGoodMuonsCollection(event);
     
     cutFlowManager->UpdateCutFlow("initial");
-
-    if (applyTrigger) {
-      try {
-        if (!(int)event->Get("DoubleEG2")) continue;
-      } catch (Exception& e) {
-        warn() << e.what() << endl;
-      }
-      cutFlowManager->UpdateCutFlow("trigger");
-    }
-
-    
     if (!lblSelections->PassesSinglePhotonSelection(event, cutFlowManager)) continue;
     if (!lblSelections->PassesChargedExclusivity(event, cutFlowManager)) continue;
     if (!lblSelections->PassesNeutralExclusivity(event, cutFlowManager)) continue;

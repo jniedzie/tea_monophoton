@@ -1,7 +1,7 @@
-from lbl_paths import processes, skim, base_initial_path, base_path, input_skim
+from lbl_paths import processes, skim, base_path, input_skim
 
 samples = processes
 sample_path = ""
 
-input_directory = f"{base_initial_path}/{sample_path}/{input_skim}/"
+input_directory = f"{base_path}/{sample_path}/{input_skim}/"
 output_trees_dir = f"{base_path}/{sample_path}/{skim}/"
