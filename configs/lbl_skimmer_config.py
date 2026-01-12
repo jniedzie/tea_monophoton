@@ -1,7 +1,6 @@
 from lbl_params import *
 
 nEvents = -1
-printEveryNevents = 1000
 
 base_path = "/data/dust/user/jniedzie/monophoton/"
 

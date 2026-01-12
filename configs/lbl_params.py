@@ -26,22 +26,21 @@ photonCuts = {
 
   # LbL cuts:
   # "min_et": 2.0,
-  "max_absEta": 2.2,
-  "max_seedTime": 3.0,
-  "min_SCEtaWidth": 0.0,
-  "min_SCPhiWidth": 0.0,
-  "min_verticalOverCentral": 0.0,
-  "min_horizontalOverCentral": 0.0,
+  # "max_absEta": 2.2,
+  # "min_SCEtaWidth": 0.0,
+  # "min_SCPhiWidth": 0.0,
+  # "min_verticalOverCentral": 0.0,
+  # "min_horizontalOverCentral": 0.0,
+  # "max_seedTime": 3.0,
 
   # Tightened cuts:
   "min_et": 4.0,
-  # "min_SCEtaWidth": 0.002,
-  # "min_SCPhiWidth": 0.001, # try 0.01
-  # "min_verticalOverCentral": 0.03,
-  # "min_horizontalOverCentral": 0.03,
-  
-  # "max_absEta": 1.2,
-  # "max_seedTime": 1.0,
+  "min_SCEtaWidth": 0.001,
+  "min_SCPhiWidth": 0.001,
+  "min_verticalOverCentral": 0.03,
+  "min_horizontalOverCentral": 0.03,
+  "max_absEta": 1.2,
+  "max_seedTime": 1.0,
 }
 
 photonHotSpots = {
@@ -242,12 +241,15 @@ scale_factor_errors = {
 }
 
 
-def get_scale_factor(photon=True):
+def get_scale_factor(photon=True, single_photon=False):
   value = 1
   error = 0
 
   to_skip = "electron" if photon else "photon"
   squared = "photon" if photon else "electron"
+
+  if single_photon:
+    squared = "noSquaring"
 
   for variable in scale_factors:
     if to_skip in variable:
