@@ -18,7 +18,7 @@ qed_error = total_uncertainty_qed - 1
 
 scale = 1.0
 
-print(f"{get_scale_factor(do_photons)=}")
+print(f"{get_scale_factor(do_photons, True)=}")
 
 samples = [
     Sample(
@@ -26,7 +26,7 @@ samples = [
         file_path=f"{base_path}/qed_superchic/merged_{skim}_histograms.root",
         type=SampleType.background,
 
-        cross_section=scale*crossSections["qed_superchic"]*get_scale_factor(do_photons)[0],
+        cross_section=scale*crossSections["qed_superchic"]*get_scale_factor(do_photons, True)[0],
         initial_weight_sum=nGenEvents["qed_superchic"],
 
         # line_style=ROOT.kSolid,
@@ -47,7 +47,7 @@ samples = [
         file_path=f"{base_path}/qed_starlight/merged_{skim}_histograms.root",
         type=SampleType.background,
 
-        cross_section=scale*crossSections["qed_starlight"]*get_scale_factor(do_photons)[0],
+        cross_section=scale*crossSections["qed_starlight"]*get_scale_factor(do_photons, True)[0],
         initial_weight_sum=nGenEvents["qed_starlight"],
 
         # line_style=ROOT.kSolid,
@@ -81,17 +81,32 @@ samples = [
 if do_photons:
     samples.append(
         Sample(
+            name="ds_from_lbl",
+            file_path=f"{base_path}/ds_from_lbl/merged_{skim}_histograms.root",
+            type=SampleType.background,
+            cross_section=crossSections["lbl"]*get_scale_factor(do_photons, True)[0]*82,
+            initial_weight_sum=nGenEvents["lbl"],
+            # line_color=ROOT.kOrange+1,
+            fill_color=ROOT.kGreen+2,
+            fill_alpha=1.0,
+            # fill_alpha=0.0,
+            legend_description="DS (from LbL)",
+            custom_legend=Legend(0.62, 0.75, 0.82, 0.80, "FL"),
+        )
+    )
+    samples.append(
+        Sample(
             name="lbl",
             file_path=f"{base_path}/lbl/merged_{skim}_histograms.root",
             type=SampleType.background,
-            cross_section=crossSections["lbl"]*get_scale_factor(do_photons)[0],
+            cross_section=crossSections["lbl"]*get_scale_factor(do_photons, True)[0],
             initial_weight_sum=nGenEvents["lbl"],
             # line_color=ROOT.kOrange+1,
             fill_color=ROOT.kOrange+1,
             fill_alpha=1.0,
             # fill_alpha=0.0,
             legend_description="#gamma#gamma#rightarrow#gamma#gamma",
-            custom_legend=Legend(0.62, 0.75, 0.82, 0.80, "FL"),
+            custom_legend=Legend(0.62, 0.65, 0.82, 0.70, "FL"),
         )
     )
     samples.append(
@@ -102,8 +117,8 @@ if do_photons:
             # cross_section=get_cep_scale(skim)[0],
             # initial_weight_sum=luminosity,
 
-            cross_section=crossSections["cep"]*get_scale_factor(do_photons)[0]*get_cep_scale()[0],
-            # cross_section=crossSections["cep"]*get_scale_factor(do_photons)[0],
+            cross_section=crossSections["cep"]*get_scale_factor(do_photons, True)[0]*get_cep_scale()[0],
+            # cross_section=crossSections["cep"]*get_scale_factor(do_photons, True)[0],
             initial_weight_sum=nGenEvents["cep"],
 
             # line_color=ROOT.kAzure-4,
@@ -111,11 +126,11 @@ if do_photons:
             fill_alpha=1.0,
             # fill_alpha=0.0,
             legend_description="gg#rightarrow#gamma#gamma",
-            custom_legend=Legend(0.62, 0.65, 0.82, 0.70, "FL"),
+            custom_legend=Legend(0.62, 0.60, 0.82, 0.65, "FL"),
         )
     )
 
-custom_stacks_order = ["cep", "lbl", "qed_starlight", "qed_superchic", "data"]
+custom_stacks_order = ["cep", "lbl", "qed_starlight", "qed_superchic", "ds_from_lbl", "data"]
 
 alp_colors = (
     ROOT.kGray+2,
@@ -156,7 +171,7 @@ if do_alps:
                 name=process,
                 file_path=f"{base_path}/{process}/merged_{skim}_histograms.root",
                 type=SampleType.signal,
-                cross_section=crossSections[process]*get_scale_factor(do_photons)[0]*alp_scale,
+                cross_section=crossSections[process]*get_scale_factor(do_photons, True)[0]*alp_scale,
                 initial_weight_sum=nGenEvents[process],
                 line_color=alp_colors[alp_index],
                 line_style=ROOT.kSolid,
@@ -180,18 +195,22 @@ default_lumi = NormalizationType.to_lumi
 histograms = (
     #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
     # photons
-    Histogram("goodPhoton_et", "", False, True, default_lumi, 1,   0, 20, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
-    Histogram("goodPhoton_logEt", "", False, True, default_lumi, 2,   0.3, 2.6, 1e-2, 5e3, "log_{10}[E_{T}^{#gamma} (GeV)]", y_label, "", lbl_error),
+    Histogram("goodPhoton_et", "", False, True, default_lumi, 5,   0, 100, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram("goodPhoton_et", "", False, True, default_lumi, 40,   0, 20, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "_normCheck", lbl_error),
+    Histogram("goodPhoton_logEt", "", False, True, default_lumi, 5,   0.3, 2.6, 1e-2, 5e3, "log_{10}[E_{T}^{#gamma} (GeV)]", y_label, "", lbl_error),
     
     Histogram("goodPhoton_eta", "", False, True, default_lumi, 1,   -3, 3, 1e-2, 5e5, "#eta^{#gamma}", y_label, "", lbl_error),
-    Histogram("goodPhoton_phi", "", False, True, default_lumi, 1,   -4, 4, 1e-2, 5e5, "#phi^{#gamma}", y_label, "", lbl_error),
-    Histogram("goodPhoton_seedTime", "", False, True, default_lumi, 1,   -4, 4, 1e-2, 5e5, "Photon seed time", y_label, "", lbl_error),
+    Histogram("goodPhoton_phi", "", False, True, default_lumi, 2,   -4, 4, 1e-2, 5e5, "#phi^{#gamma}", y_label, "", lbl_error),
+    Histogram("goodPhoton_seedTime", "", False, True, default_lumi, 2,   -4, 4, 1e-2, 5e5, "Photon seed time", y_label, "", lbl_error),
 
-    Histogram("goodPhoton_SCEta"   , "", False, True, default_lumi, 1,   -3, 3, 1e-4 , 5e5, "#eta^{SC}", y_label, "", lbl_error),
-    Histogram("goodPhoton_SCPhi"   , "", False, True, default_lumi, 1,   -4, 4, 1e-4 , 5e5, "#phi^{SC}", y_label, "", lbl_error),
+    Histogram("goodPhoton_SCEta"   , "", False, True, default_lumi, 1,   -3, 3, 1e-2, 5e5, "#eta^{SC}", y_label, "", lbl_error),
+    Histogram("goodPhoton_SCPhi"   , "", False, True, default_lumi, 1,   -4, 4, 1e-2, 5e5, "#phi^{SC}", y_label, "", lbl_error),
 
-    Histogram("goodPhoton_SCEtaWidth" , "", False, True, default_lumi, 1,   0, 0.01, 1e-1, 5e5, "#eta^{SC} width", y_label, "", lbl_error),
-    Histogram("goodPhoton_SCPhiWidth" , "", False, True, default_lumi, 1,   0, 0.01, 1e-1, 5e5, "#phi^{SC} width", y_label, "", lbl_error),
+    Histogram("goodPhoton_SCEtaWidth" , "", False, True, default_lumi, 1,   0, 0.01, 1e-2, 5e5, "#eta^{SC} width", y_label, "", lbl_error),
+    Histogram("goodPhoton_SCPhiWidth" , "", False, True, default_lumi, 10,   0, 0.1, 1e-2, 5e5, "#phi^{SC} width", y_label, "", lbl_error),
+
+    Histogram("goodPhoton_verticalOverCentral", "", False, True, default_lumi, 20,   0, 1.0, 1e-2, 3e3, "E_{right+left}/(2*E_{max})", y_label, "", lbl_error),
+    Histogram("goodPhoton_horizontalOverCentral", "", False, True, default_lumi, 10,   0, 0.6, 1e-2, 3e3, "E_{top+bottom}/(2*E_{max})", y_label, "", lbl_error),
 
     Histogram("goodPhoton_topOverCentral", "", False, True, default_lumi, 5,   0, 1.2, 1e-2, 3e2, "E_{top}/E_{max}", y_label, "", lbl_error),
     Histogram("goodPhoton_bottomOverCentral", "", False, True, default_lumi, 5,   0, 1.2, 1e-2, 3e2, "E_{bottom}/E_{max}", y_label, "", lbl_error),
@@ -200,8 +219,7 @@ histograms = (
 
     Histogram("goodPhoton_minOverCentral", "", False, True, default_lumi, 4,   0, 0.1, 1e-2, 3e3, "E_{min}/E_{max}", y_label, "", lbl_error),
 
-    Histogram("goodPhoton_verticalOverCentral", "", False, True, default_lumi, 5,   0, 0.1, 1e-1, 3e3, "E_{right+left}/(2*E_{max})", y_label, "", lbl_error),
-    Histogram("goodPhoton_horizontalOverCentral", "", False, True, default_lumi, 5,   0, 0.1, 1e-1, 3e3, "E_{top+bottom}/(2*E_{max})", y_label, "", lbl_error),
+    
 
     Histogram("goodPhoton_verticalImbalance", "", False, True, default_lumi, 5,   -2, 2, 1e-3, 2e5, "E_{top-bottom}/E_{top+bottom}", y_label, "", lbl_error),
     Histogram("goodPhoton_horizontalImbalance", "", False, True, default_lumi, 5,   -2, 2, 1e-3, 2e5, "E_{left-right}/E_{left+right}", y_label, "", lbl_error),
@@ -220,7 +238,7 @@ histograms = (
     # Histogram("goodPhoton_phi", "", False, False, NormalizationType.to_lumi, 2,   -3.14, 3.14, 0, 20, "#phi^{#gamma}", y_label, "", lbl_error),
 
     # event
-    Histogram("cutFlow", "", False, True, NormalizationType.to_data, 1, 0, 10, 1e-5, 1e9, "Selection", "#sum genWeight"),
+    Histogram("cutFlow", "", False, True, NormalizationType.to_data, 1, 0, 20, 1e-5, 1e13, "Selection", "#sum genWeight"),
 )
 
 
