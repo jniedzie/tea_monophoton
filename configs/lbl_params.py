@@ -12,32 +12,35 @@ eventCuts = {
 
 # good object definitions
 photonCuts = {
-  # Basic cuts
-  "min_et": 4.0,  # was 2.0 in LbL
-  "max_absEta": 1.2,  # was 2.2 in LbL
+  # Common cuts:
   "max_swissCross": 0.95,
   "max_hOverE_barrel": 0.04596,
   "max_hOverE_endcap": 0.0590,
-  "max_seedTime": 1.0,  # was 3.0 in LbL
-
-  # SC Eta
-  "min_SCEtaWidth": 0.002,  # was 0.0 in LbL
   "max_SCEtaWidth_barrel": 0.0106,
   "max_SCEtaWidth_endcap": 0.0272,
-
-  # SC Phi
-  "min_SCPhiWidth": 0.001,  # was 0.0 in LbL, try 0.01
-  "max_SCPhiWidth": 999999,
-
-  # sigmaIEtaIEta
+  "max_SCPhiWidth": 999999,  # try 0.01
   "min_sigmaIEtaIEta_barrel": 0,  # try 0.009
   "max_sigmaIEtaIEta_barrel": 0.02,
   "min_sigmaIEtaIEta_endcap": 0,  # try 0.009
   "max_sigmaIEtaIEta_endcap": 0.06,
 
-  # shower shape variables
-  "min_verticalOverCentral": 0.03,  # was 0.0 in LbL
-  "max_horizontalOverCentral": 0.03,  # was 9999999 in LbL
+  # LbL cuts:
+  "min_et": 2.0,
+  "max_absEta": 2.2,
+  "max_seedTime": 3.0,
+  "min_SCEtaWidth": 0.0,
+  "min_SCPhiWidth": 0.0,
+  "min_verticalOverCentral": 0.0,
+  "min_horizontalOverCentral": 0.0,
+
+  # Tightened cuts:
+  # "min_et": 4.0,
+  # "max_absEta": 1.2,
+  # "max_seedTime": 1.0,
+  # "min_SCEtaWidth": 0.002,
+  # "min_SCPhiWidth": 0.001, # try 0.01
+  # "min_verticalOverCentral": 0.03,
+  # "min_horizontalOverCentral": 0.03,
 }
 
 dataBlinding = {
@@ -262,18 +265,6 @@ nGenEvents = {
   "alps_30": 719000,
   "alps_90": 449000,
 }
-
-#  significance & limits parameters
-cep_scaling_min_acoplanarity = 0.015
-n_acoplanarity_bins = 40
-n_mass_bins = 200
-
-do_qed_sampling = True
-qed_sampling_n_events = 400
-qed_sampling_transition_point = 0.026
-qed_sampling_fit_max_aco = 0.2
-
-do_lbl_sampling = False
 
 uncertainty_on_zero = 1.84  # 95% CL
 # uncertainty_on_zero = 1.14  # 68% CL

@@ -4,7 +4,6 @@ import ROOT
 from Logger import info, warn, error, fatal
 
 from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, uncertainty_on_zero
-from lbl_params import qed_sampling_n_events, qed_sampling_transition_point, qed_sampling_fit_max_aco
 from lbl_paths import processes, merged_histograms_path, qed_names
 
 input_files = {}
@@ -140,6 +139,10 @@ def add_uncertainties_on_zero(histogram):
 
 
 def sample_from_fit(hist, divide_bin_width, options=""):
+  qed_sampling_n_events = 400
+  qed_sampling_transition_point = 0.026
+  qed_sampling_fit_max_aco = 0.2
+  
   ROOT.gRandom.SetSeed(0)
 
   formula = f"[p0]*(x<={qed_sampling_transition_point})+(exp([p1]+[p2]*x))*(x>{qed_sampling_transition_point})"

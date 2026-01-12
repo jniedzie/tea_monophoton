@@ -18,7 +18,7 @@ processes = (
 qed_names = ["qed_superchic", "qed_starlight"]
 
 input_skim = f"initial_{trigger}"
-skim = f"skimmed_{trigger}_baselineSelections"
+skim = f"skimmed_{trigger}_lblSelections"
 
 if facility == "NAF":
   base_initial_path = "/data/dust/user/jniedzie/light_by_light/ntuples/"
