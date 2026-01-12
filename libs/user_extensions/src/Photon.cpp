@@ -27,6 +27,8 @@ Photon::Photon(std::shared_ptr<PhysicsObject> physicsObject_) : physicsObject(ph
   }
 
   detRegion = absEta < caloEtaEdges["maxEB"] ? "barrel" : "endcap";
+
+  config.GetMap("photonHotSpots", hotSpots);
 }
 
 float Photon::GetSwissCross() {
@@ -50,11 +52,20 @@ bool Photon::IsEtaAboveLimit() { return absEta > photonCuts["max_absEta"]; }
 bool Photon::IsInCrack() { return (absEtaSC > detectorParams["crack_start"] && absEtaSC < detectorParams["crack_end"]); }
 
 bool Photon::IsInHotSpot() {
-  if (phi > 2.20 && phi < 2.27 && eta > -1.87 && eta < -1.83) return true;
-  if (phi > -2.78 && phi < -2.70 && eta > -1.62 && eta < -1.58) return true;
+  for(auto &[name, coords] : hotSpots) {
+    float etaMin = coords[0];
+    float etaMax = coords[1];
+    float phiMin = coords[2];
+    float phiMax = coords[3];
 
-  if (phi > 2.17 && phi < 2.21 && eta > -1.60 && eta < -1.58) return true;
-  if (phi > 0.09 && phi < 0.13 && eta > 2.12 && eta < 2.14) return true;
+    if (phi > phiMin && phi < phiMax && eta > etaMin && eta < etaMax) return true;
+  }
+
+  // if (phi > 2.20 && phi < 2.27 && eta > -1.87 && eta < -1.83) return true;
+  // if (phi > -2.78 && phi < -2.70 && eta > -1.62 && eta < -1.58) return true;
+
+  // if (phi > 2.17 && phi < 2.21 && eta > -1.60 && eta < -1.58) return true;
+  // if (phi > 0.09 && phi < 0.13 && eta > 2.12 && eta < 2.14) return true;
 
   return false;
 }

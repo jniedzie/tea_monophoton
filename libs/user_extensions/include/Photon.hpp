@@ -48,6 +48,8 @@ class Photon {
   float eta, phi, absEta, etaSC, phiSC, absEtaSC;
 
   std::string detRegion;
+
+  std::map<std::string, std::vector<float>> hotSpots;
 };
 
 #endif /* Photon_hpp */

@@ -25,7 +25,7 @@ photonCuts = {
   "max_sigmaIEtaIEta_endcap": 0.06,
 
   # LbL cuts:
-  "min_et": 2.0,
+  # "min_et": 2.0,
   "max_absEta": 2.2,
   "max_seedTime": 3.0,
   "min_SCEtaWidth": 0.0,
@@ -34,13 +34,22 @@ photonCuts = {
   "min_horizontalOverCentral": 0.0,
 
   # Tightened cuts:
-  # "min_et": 4.0,
-  # "max_absEta": 1.2,
-  # "max_seedTime": 1.0,
+  "min_et": 4.0,
   # "min_SCEtaWidth": 0.002,
   # "min_SCPhiWidth": 0.001, # try 0.01
   # "min_verticalOverCentral": 0.03,
   # "min_horizontalOverCentral": 0.03,
+  
+  # "max_absEta": 1.2,
+  # "max_seedTime": 1.0,
+}
+
+photonHotSpots = {
+  # eta_min, eta_max, phi_min, phi_max
+  # "hotspot_1": (-1.87, -1.83, 2.20, 2.27),
+  # "hotspot_2": (-1.62, -1.58, -2.78, -2.70),
+  # "hotspot_3": (-1.60, -1.58, 2.17, 2.21),
+  # "hotspot_4": (2.12, 2.14, 0.09, 0.13),
 }
 
 dataBlinding = {

@@ -29,7 +29,7 @@ defaultHistParams = (
   ("goodPhoton", "SCEnergy", 1000, 0, 1000, ""),
   ("goodPhoton", "SCEt", 1000, 0, 1000, ""),
   ("goodPhoton", "SCEta", 100, -5, 5, ""),
-  ("goodPhoton", "SCEtaWidth", 100, 0, 0.1, ""),
+  ("goodPhoton", "SCEtaWidth", 1000, 0, 0.2, ""),
   ("goodPhoton", "SCPhi", 100, -5, 5, ""),
   ("goodPhoton", "SCPhiWidth", 1000, 0, 0.2, ""),
   ("goodPhoton", "energy", 1000, 0, 1000, ""),

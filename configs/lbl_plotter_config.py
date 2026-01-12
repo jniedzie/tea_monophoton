@@ -180,11 +180,18 @@ default_lumi = NormalizationType.to_lumi
 histograms = (
     #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
     # photons
-    Histogram("goodPhoton_et", "", False, True, default_lumi, 1,   0, 20, 1e-2, 5e3, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram("goodPhoton_et", "", False, True, default_lumi, 1,   0, 20, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
     Histogram("goodPhoton_logEt", "", False, True, default_lumi, 2,   0.3, 2.6, 1e-2, 5e3, "log_{10}[E_{T}^{#gamma} (GeV)]", y_label, "", lbl_error),
-    Histogram("goodPhoton_eta", "", False, False, default_lumi, 2,   -2.2, 2.2, 0, 100, "#eta^{#gamma}", y_label, "", lbl_error),
-    Histogram("goodPhoton_phi", "", False, False, default_lumi, 5,   -4, 4, 0, 20, "#phi^{#gamma}", y_label, "", lbl_error),
-    Histogram("goodPhoton_seedTime", "", False, True, default_lumi, 1,   -2, 2, 1e-2, 3e3, "Photon seed time", y_label, "", lbl_error),
+    
+    Histogram("goodPhoton_eta", "", False, True, default_lumi, 1,   -3, 3, 1e-2, 5e5, "#eta^{#gamma}", y_label, "", lbl_error),
+    Histogram("goodPhoton_phi", "", False, True, default_lumi, 1,   -4, 4, 1e-2, 5e5, "#phi^{#gamma}", y_label, "", lbl_error),
+    Histogram("goodPhoton_seedTime", "", False, True, default_lumi, 1,   -4, 4, 1e-2, 5e5, "Photon seed time", y_label, "", lbl_error),
+
+    Histogram("goodPhoton_SCEta"   , "", False, True, default_lumi, 1,   -3, 3, 1e-4 , 5e5, "#eta^{SC}", y_label, "", lbl_error),
+    Histogram("goodPhoton_SCPhi"   , "", False, True, default_lumi, 1,   -4, 4, 1e-4 , 5e5, "#phi^{SC}", y_label, "", lbl_error),
+
+    Histogram("goodPhoton_SCEtaWidth" , "", False, True, default_lumi, 1,   0, 0.01, 1e-1, 5e5, "#eta^{SC} width", y_label, "", lbl_error),
+    Histogram("goodPhoton_SCPhiWidth" , "", False, True, default_lumi, 1,   0, 0.01, 1e-1, 5e5, "#phi^{SC} width", y_label, "", lbl_error),
 
     Histogram("goodPhoton_topOverCentral", "", False, True, default_lumi, 5,   0, 1.2, 1e-2, 3e2, "E_{top}/E_{max}", y_label, "", lbl_error),
     Histogram("goodPhoton_bottomOverCentral", "", False, True, default_lumi, 5,   0, 1.2, 1e-2, 3e2, "E_{bottom}/E_{max}", y_label, "", lbl_error),
@@ -199,10 +206,8 @@ histograms = (
     Histogram("goodPhoton_verticalImbalance", "", False, True, default_lumi, 5,   -2, 2, 1e-3, 2e5, "E_{top-bottom}/E_{top+bottom}", y_label, "", lbl_error),
     Histogram("goodPhoton_horizontalImbalance", "", False, True, default_lumi, 5,   -2, 2, 1e-3, 2e5, "E_{left-right}/E_{left+right}", y_label, "", lbl_error),
 
-    Histogram("goodPhoton_SCEta"    , "", False, True, default_lumi, 1,   -3, 3, 1e-2, 5e3, "#eta^{SC}", y_label, "", lbl_error),
-    Histogram("goodPhoton_SCEtaWidth"    , "", False, True, default_lumi, 1,   0, 0.01, 1, 5e3, "#eta^{SC} width", y_label, "", lbl_error),
-    Histogram("goodPhoton_SCPhi"    , "", False, True, default_lumi, 5,   -4, 4, 1, 5e3, "#phi^{SC}", y_label, "", lbl_error),
-    Histogram("goodPhoton_SCPhiWidth"    , "", False, True, default_lumi, 10,   0, 0.1, 1e-1, 5e3, "#phi^{SC} width", y_label, "", lbl_error),
+    
+    
 
     Histogram("goodPhoton_hOverE"    , "", False, True, default_lumi, 1,   0, 0.1, 1e-1, 5e3, "#phi^{SC} width", y_label, "", lbl_error),
     Histogram("goodPhoton_hasConversionTracks"    , "", False, False, default_lumi, 1,   0, 1, 0, 400, "#phi^{SC} width", y_label, "", lbl_error),
@@ -218,6 +223,11 @@ histograms = (
     Histogram("cutFlow", "", False, True, NormalizationType.to_data, 1, 0, 10, 1e-5, 1e9, "Selection", "#sum genWeight"),
 )
 
+
+histograms2D = (
+  #           name                      title logs              norm          rebins  x_range  y_range  z_range   labels
+  Histogram2D("goodPhoton_eta_vs_phi", "", False, False, False, default_lumi, 5,  5,  -3,  3,  -4,  4,  0, 1e3,  "#eta", "#phi", "Counts"),
+)
 
 histogramsRatio = []
 
@@ -243,6 +253,7 @@ plotting_options = {
 }
 
 canvas_size = (800, 600)
+canvas_size_2Dhists = (800, 600)
 show_ratio_plots = True
 ratio_limits = (0.0, 5.0)
 
