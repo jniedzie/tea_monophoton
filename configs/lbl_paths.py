@@ -18,23 +18,16 @@ processes = (
 
 qed_names = ["qed_superchic", "qed_starlight"]
 
-# input_skim = f"initial_{trigger}"
+input_skim = f"initial_{trigger}"
+
 # skim = f"skimmed_{trigger}_lblSelections"
-
-# input_skim = f"skimmed_{trigger}_lblSelections"
-# skim = f"skimmed_{trigger}_lblSelections_et-gt4"
-
-# input_skim = f"skimmed_{trigger}_lblSelections_et-gt4"
+skim = f"skimmed_{trigger}_lblSelections_et-gt4"
 # skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts"
-
-# input_skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts"
 # skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts"
-
-# input_skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts"
 # skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly"
+# skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_deltaT"
+# skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT"
 
-input_skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly"
-skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT"
 
 if facility == "NAF":
   base_initial_path = "/data/dust/user/jniedzie/light_by_light/ntuples/"

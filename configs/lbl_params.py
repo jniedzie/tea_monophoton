@@ -26,11 +26,11 @@ photonCuts = {
 
   # LbL cuts:
   # "min_et": 2.0,
-  # "max_absEta": 2.2,
   # "min_SCEtaWidth": 0.0,
   # "min_SCPhiWidth": 0.0,
   # "min_verticalOverCentral": 0.0,
   # "min_horizontalOverCentral": 0.0,
+  # "max_absEta": 2.2,
   # "max_seedTime": 3.0,
 
   # Tightened cuts:
@@ -194,6 +194,7 @@ mc_scale = 1.0
 
 crossSections = {
   "lbl": mc_scale * 2.59 * lbl_scaling,  # μb
+  "ds_from_lbl": mc_scale * 2.59 * lbl_scaling * 82,  # μb
   "qed_superchic": mc_scale * 8827.220 * qed_scaling,  # μb
   "qed_starlight": mc_scale * 7920.0 * qed_scaling,  # μb
   "cep": mc_scale * 5.8e-3,  # we scale it to data
@@ -269,6 +270,7 @@ def get_scale_factor(photon=True, single_photon=False):
 
 nGenEvents = {
   "lbl": 466000,
+  "ds_from_lbl": 466000,
   "cep": 668000,  # we scale it to data
   "qed_superchic": 59260000,
   "qed_starlight": 66750000,
