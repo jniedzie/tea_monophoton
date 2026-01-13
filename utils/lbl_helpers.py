@@ -7,8 +7,7 @@ from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, 
 from lbl_paths import processes, merged_histograms_path, qed_names
 
 input_files = {}
-input_aco_histograms = {}
-input_mass_histograms = {}
+input_histograms = {}
 input_cut_flow_histograms = {}
 
 
@@ -20,42 +19,36 @@ def unsilence_root():
   ROOT.gErrorIgnoreLevel = ROOT.kInfo
 
 
-def load_histograms(skim, scale_to_integral=False):
+def load_histograms(skim):
   if len(input_files) > 0:
     return
 
   silence_root()
 
   for process in processes:
+    info(f"Loading histograms for process: {process}")
+    
     file_path = merged_histograms_path.format(process, skim)
 
     try:
       input_files[process] = ROOT.TFile.Open(file_path)
-
     except OSError:
       warn(f"File not found: {file_path}")
       continue
 
     cut_flow_name = "cutFlow"
-
     input_cut_flow_histograms[process] = input_files[process].Get(cut_flow_name)
+
+    hist_name = "goodPhoton_et"
+    max_et = 100
+    input_histograms[process] = limit_histogram(input_files[process].Get(hist_name), max_et)
 
     if any([
       input_cut_flow_histograms[process] is None,
       type(input_cut_flow_histograms[process]) is ROOT.TObject
     ]):
-      fatal(
-        f"Some histograms for CEP normalization not found in file: {file_path}"
-      )
+      fatal(f"Some histograms for CEP normalization not found in file: {file_path}")
       exit()
-
-  if scale_to_integral:
-    main_aco_hist = input_files["collisionData"].Get("diphoton_acoplanarity60")
-    scale = main_aco_hist.Integral(
-    ) / input_aco_histograms["collisionData"].Integral()
-
-    for process in processes:
-      input_aco_histograms[process].Scale(scale)
 
   unsilence_root()
 
@@ -75,7 +68,7 @@ def scale_non_cep_histograms():
     if process == "collisionData":
       continue
 
-    if process not in input_aco_histograms:
+    if process not in input_histograms:
       warn(
         f"Skipping scaling of process {process} because it was not found in the input files."
       )
@@ -85,8 +78,7 @@ def scale_non_cep_histograms():
     scale /= nGenEvents[process]
 
     info(f"Scaling {process} by {scale:.6f}")
-    input_aco_histograms[process].Scale(scale)
-    input_mass_histograms[process].Scale(scale)
+    input_histograms[process].Scale(scale)
     input_cut_flow_histograms[process].Scale(scale)
 
 
