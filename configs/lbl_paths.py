@@ -21,12 +21,12 @@ qed_names = ["qed_superchic", "qed_starlight"]
 input_skim = f"initial_{trigger}"
 
 # skim = f"skimmed_{trigger}_lblSelections"
-skim = f"skimmed_{trigger}_lblSelections_et-gt4"
+# skim = f"skimmed_{trigger}_lblSelections_et-gt4"
 # skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts"
 # skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts"
 # skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly"
 # skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_deltaT"
-# skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT"
+skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT"
 
 
 if facility == "NAF":

@@ -52,7 +52,7 @@ bool Photon::IsEtaAboveLimit() { return absEta > photonCuts["max_absEta"]; }
 bool Photon::IsInCrack() { return (absEtaSC > detectorParams["crack_start"] && absEtaSC < detectorParams["crack_end"]); }
 
 bool Photon::IsInHotSpot() {
-  for(auto &[name, coords] : hotSpots) {
+  for (auto& [name, coords] : hotSpots) {
     float etaMin = coords[0];
     float etaMax = coords[1];
     float phiMin = coords[2];
@@ -81,6 +81,11 @@ bool Photon::PassesShowerShape() {
   if (GetVerticalOverCentralEnergy() < photonCuts["min_verticalOverCentral"]) return false;
   if (GetHorizontalOverCentralEnergy() < photonCuts["min_horizontalOverCentral"]) return false;
 
+  if (GetHorizontalImbalance() > photonCuts["max_horizontalImbalance"]) return false;
+  if (GetHorizontalImbalance() < photonCuts["min_horizontalImbalance"]) return false;
+  if (GetVerticalImbalance() > photonCuts["max_verticalImbalance"]) return false;
+  if (GetVerticalImbalance() < photonCuts["min_verticalImbalance"]) return false;
+
   return true;
 }
 
@@ -98,7 +103,10 @@ bool Photon::PassesSwissCross() {
 
 bool Photon::PassesEtCuts() { return (float)Get("et") > photonCuts["min_et"]; }
 
-bool Photon::PassesSeedTimeCuts() { return fabs((float)Get("seedTime")) < photonCuts["max_seedTime"]; }
+bool Photon::PassesSeedTimeCuts() {
+  float seedTime = Get("seedTime");
+  return (seedTime > photonCuts["min_seedTime"] && seedTime < photonCuts["max_seedTime"]);
+}
 
 bool Photon::PassesConversionCuts() { return !(int)Get("hasConversionTracks"); }
 

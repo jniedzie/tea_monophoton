@@ -23,6 +23,10 @@ photonCuts = {
   "max_sigmaIEtaIEta_barrel": 0.02,
   "min_sigmaIEtaIEta_endcap": 0,  # try 0.009
   "max_sigmaIEtaIEta_endcap": 0.06,
+  "min_horizontalImbalance": -99999,
+  "min_verticalImbalance": -99999,
+  "max_horizontalImbalance": 99999,
+  "max_verticalImbalance": 99999,
 
   # LbL cuts:
   # "min_et": 2.0,
@@ -31,6 +35,7 @@ photonCuts = {
   # "min_verticalOverCentral": 0.0,
   # "min_horizontalOverCentral": 0.0,
   # "max_absEta": 2.2,
+  # "min_seedTime": -3.0,
   # "max_seedTime": 3.0,
 
   # Tightened cuts:
@@ -40,7 +45,8 @@ photonCuts = {
   "min_verticalOverCentral": 0.03,
   "min_horizontalOverCentral": 0.03,
   "max_absEta": 1.2,
-  "max_seedTime": 1.0,
+  "min_seedTime": -1.2,
+  "max_seedTime": 0.8,
 }
 
 photonHotSpots = {

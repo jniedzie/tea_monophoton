@@ -19,8 +19,10 @@ class LbLHistogramsFiller {
   std::unique_ptr<EventProcessor> eventProcessor;
 
   void FillMonoPhotonHistograms(const std::shared_ptr<Event> event);
+  void FillEGammaHistograms(const std::shared_ptr<Event> event);
   void FillGenLevelHistograms(const std::shared_ptr<Event> event);
   void FillEventLevelHistograms(const std::shared_ptr<Event> event);
+  void SaveHighEtPhotonsInfo(const std::shared_ptr<Event> event);
 
   std::map<std::string, float> dataBlinding;
 };
