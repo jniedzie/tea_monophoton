@@ -1,6 +1,6 @@
 # event cuts
 eventCuts = {
-  "ZDC_cut": 3,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n
+  "ZDC_cut": 2,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n
   "max_Nelectrons": 0,
   "max_Ntracks": 0,
   "max_Nmuons": 0,

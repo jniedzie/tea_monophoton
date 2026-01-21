@@ -19,7 +19,12 @@ processes = (
 
 qed_names = ["qed_superchic", "qed_starlight"]
 
-input_skim = f"initial_{trigger}"
+# trigger selection
+input_skim = "initial_noTrigger"
+skim = f"initial_{trigger}"
+
+# skimming
+# input_skim = f"initial_{trigger}"
 
 # skim = f"skimmed_{trigger}_lblSelections"
 # skim = f"skimmed_{trigger}_lblSelections_et-gt4"
@@ -32,7 +37,7 @@ input_skim = f"initial_{trigger}"
 
 # skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT_zdc-none"
 # skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT_zdc-0n0n"
-skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT_zdc-le1n1n"
+# skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT_zdc-le1n1n"
 
 
 if facility == "NAF":
