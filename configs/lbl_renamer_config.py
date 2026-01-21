@@ -145,7 +145,7 @@ branchesNames = {
   "section"               : ("ZDC_section"                , "ZDC_section[nZDC]/I"),
   "channel"               : ("ZDC_channel"                , "ZDC_channel[nZDC]/I"),
   
-  
+  "HLT_HIUPC_SingleEG5_NotMBHF2AND_v1": ("SingleEG5"      , "SingleEG5/I"),
   "HLT_HIUPC_DoubleEG2_NotMBHF2AND_v1": ("DoubleEG2"      , "DoubleEG2/I"),
   "HLT_HIZeroBias_v1"                 : ("ZeroBias"       , "ZeroBias/I"),
 

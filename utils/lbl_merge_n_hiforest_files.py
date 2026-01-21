@@ -5,13 +5,19 @@ import os
 # input_pattern = "ntuples_loose_selections_*.root"
 
 base_path = "/data/dust/user/jniedzie/monophoton/"
+
 # sample = "qed_superchic"
-sample = "collisionData"
+# sample = "collisionData"
+sample = "qed_mg1gamma"
 
-input_path = f"{base_path}/{sample}/initial_singleEG5"
-input_pattern = "ntuples_loose_selections_*.root"
+dir = "noTrigger"
+# dir = "initial_singleEG5"
 
-output_path = f"{base_path}/{sample}/initial_singleEG5_merged"
+
+input_path = f"{base_path}/{sample}/{dir}"
+input_pattern = "*.root"
+
+output_path = f"{base_path}/{sample}/{dir}_merged"
 output_pattern = "ntuple_{}.root"
 
 n_files_to_merge = 20
