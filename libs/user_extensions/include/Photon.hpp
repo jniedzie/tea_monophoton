@@ -19,6 +19,17 @@ class Photon {
   void Reset() { physicsObject->Reset(); }
 
   float GetSwissCross();
+  float GetEt() { return GetAs<float>("et"); }
+  float GetEta() { return eta; }
+  float GetPhi() { return phi; }
+  float GetSeedTime() { return GetAs<float>("seedTime"); }
+
+  float GetEnergyTop() { return energyTop; }
+  float GetEnergyBottom() { return energyBottom; }
+  float GetEnergyLeft() { return energyLeft; }
+  float GetEnergyRight() { return energyRight; }
+  float GetEnergyCentral() { return energyCentral; }
+  float GetMinEnergy() { return energyMin; }
 
   bool IsInHEM();
   bool IsEtaAboveLimit();
@@ -46,6 +57,7 @@ class Photon {
 
   std::map<std::string, float> photonCuts, detectorParams, caloEtaEdges, electronPhotonMatching;
   float eta, phi, absEta, etaSC, phiSC, absEtaSC;
+  float energyTop, energyBottom, energyLeft, energyRight, energyCentral, energyMin;
 
   std::string detRegion;
 

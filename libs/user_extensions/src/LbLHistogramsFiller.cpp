@@ -25,32 +25,40 @@ LbLHistogramsFiller::~LbLHistogramsFiller() {}
 void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event) {
   auto photons = event->GetCollection("goodPhoton");
   auto photon = asPhoton(photons->at(0));
-  
-  float et = photon->Get("et");
-  if (asLbLEvent(event)->IsData() && et > dataBlinding["max_et"]) return;
 
-  float energyTop = photon->GetAs<float>("energyTop");
-  float energyBottom = photon->GetAs<float>("energyBottom");
-  float energyLeft = photon->GetAs<float>("energyLeft");
-  float energyRight = photon->GetAs<float>("energyRight");
-  float energyCentral = photon->GetAs<float>("maxEnergyCrystal");
-  float minEnergy = min({energyTop, energyBottom, energyLeft, energyRight});
+  if (asLbLEvent(event)->IsData() && photon->GetEt() > dataBlinding["max_et"]) return;
+  FillMonoPhotonHistograms(photon);
 
-  histogramsHandler->Fill("goodPhoton_absEta_vs_et", fabs((float)photon->Get("eta")), et);
-  histogramsHandler->Fill("goodPhoton_eta_vs_et", (float)photon->Get("eta"), et);
-  histogramsHandler->Fill("goodPhoton_eta_vs_phi", (float)photon->Get("eta"), (float)photon->Get("phi"));
-  histogramsHandler->Fill("goodPhoton_et", et);
-  histogramsHandler->Fill("goodPhoton_logEt", TMath::Log10(et));
-  histogramsHandler->Fill("goodPhoton_seedTime", photon->GetAs<float>("seedTime"));
-  histogramsHandler->Fill("goodPhoton_topOverCentral", energyTop / energyCentral);
-  histogramsHandler->Fill("goodPhoton_bottomOverCentral", energyBottom / energyCentral);
-  histogramsHandler->Fill("goodPhoton_leftOverCentral", energyLeft / energyCentral);
-  histogramsHandler->Fill("goodPhoton_rightOverCentral", energyRight / energyCentral);
-  histogramsHandler->Fill("goodPhoton_minOverCentral", minEnergy / energyCentral);
-  histogramsHandler->Fill("goodPhoton_verticalOverCentral", photon->GetVerticalOverCentralEnergy());
-  histogramsHandler->Fill("goodPhoton_horizontalOverCentral", photon->GetHorizontalOverCentralEnergy());
-  histogramsHandler->Fill("goodPhoton_horizontalImbalance", photon->GetHorizontalImbalance());
-  histogramsHandler->Fill("goodPhoton_verticalImbalance", photon->GetVerticalImbalance());
+  if (fabs(photon->GetEta()) > 1.2) FillMonoPhotonHistograms(photon, "EndCap_");
+  else FillMonoPhotonHistograms(photon, "Barrel_");
+}
+
+void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Photon> photon, string prefix) {
+  histogramsHandler->Fill("goodPhoton_" + prefix + "absEta_vs_et", fabs(photon->GetEta()), photon->GetEt());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "eta_vs_et", photon->GetEta(), photon->GetEt());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "eta_vs_phi", photon->GetEta(), photon->GetPhi());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "et", photon->GetEt());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "logEt", TMath::Log10(photon->GetEt()));
+  histogramsHandler->Fill("goodPhoton_" + prefix + "seedTime", photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "topOverCentral", photon->GetEnergyTop() / photon->GetEnergyCentral());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "bottomOverCentral", photon->GetEnergyBottom() / photon->GetEnergyCentral());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "leftOverCentral", photon->GetEnergyLeft() / photon->GetEnergyCentral());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "rightOverCentral", photon->GetEnergyRight() / photon->GetEnergyCentral());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "minOverCentral", photon->GetMinEnergy() / photon->GetEnergyCentral());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "verticalOverCentral", photon->GetVerticalOverCentralEnergy());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalOverCentral", photon->GetHorizontalOverCentralEnergy());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance", photon->GetHorizontalImbalance());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance", photon->GetVerticalImbalance());
+
+  vector<string> defaultBranches = {
+      "SCEnergy",         "SCEt",       "SCEta",        "SCEtaWidth",        "SCPhi", "SCPhiWidth", "energy",
+      "energyBottom",     "energyLeft", "energyRight",  "energyTop",         "eta",   "hOverE",     "hasConversionTracks",
+      "maxEnergyCrystal", "phi",        "sigmaEta2012", "sigmaIEtaIEta2012",
+  };
+
+  for (string branch : defaultBranches) {
+    histogramsHandler->Fill("goodPhoton_" + prefix + branch, photon->GetAs<float>(branch));
+  }
 }
 
 void LbLHistogramsFiller::FillEGammaHistograms(const shared_ptr<Event> event) {

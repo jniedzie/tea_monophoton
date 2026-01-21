@@ -29,15 +29,22 @@ Photon::Photon(std::shared_ptr<PhysicsObject> physicsObject_) : physicsObject(ph
   detRegion = absEta < caloEtaEdges["maxEB"] ? "barrel" : "endcap";
 
   config.GetMap("photonHotSpots", hotSpots);
+
+  energyTop = GetAs<float>("energyTop");
+  energyBottom = GetAs<float>("energyBottom");
+  energyLeft = GetAs<float>("energyLeft");
+  energyRight = GetAs<float>("energyRight");
+  energyCentral = GetAs<float>("maxEnergyCrystal");
+  energyMin = min({energyTop, energyBottom, energyLeft, energyRight});
 }
 
 float Photon::GetSwissCross() {
   float swissCross = 0;
-  swissCross += (float)Get("energyTop");
-  swissCross += (float)Get("energyBottom");
-  swissCross += (float)Get("energyLeft");
-  swissCross += (float)Get("energyRight");
-  swissCross /= (float)Get("maxEnergyCrystal");
+  swissCross += energyTop;
+  swissCross += energyBottom;
+  swissCross += energyLeft;
+  swissCross += energyRight;
+  swissCross /= energyCentral;
 
   return 1 - swissCross;
 }

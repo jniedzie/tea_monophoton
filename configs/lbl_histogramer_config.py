@@ -26,27 +26,6 @@ histogramsOutputFilePath = f"../{skim}_{sample}_histograms.root"
 
 defaultHistParams = (
   # collection      variable          bins    xmin     xmax     dir
-  ("goodPhoton", "SCEnergy", 1000, 0, 1000, ""),
-  ("goodPhoton", "SCEt", 1000, 0, 1000, ""),
-  ("goodPhoton", "SCEta", 100, -5, 5, ""),
-  ("goodPhoton", "SCEtaWidth", 1000, 0, 0.2, ""),
-  ("goodPhoton", "SCPhi", 100, -5, 5, ""),
-  ("goodPhoton", "SCPhiWidth", 1000, 0, 0.2, ""),
-  ("goodPhoton", "energy", 1000, 0, 1000, ""),
-  ("goodPhoton", "energyBottom", 1000, 0, 1000, ""),
-  ("goodPhoton", "energyLeft", 1000, 0, 1000, ""),
-  ("goodPhoton", "energyRight", 1000, 0, 1000, ""),
-  ("goodPhoton", "energyTop", 1000, 0, 1000, ""),
-  # ("goodPhoton", "et", 1000, 0, 1000, ""),  # removing from here for blinding (custom filling)
-  ("goodPhoton", "eta", 100, -5, 5, ""),
-  ("goodPhoton", "hOverE", 1000, 0, 1.0, ""),
-  ("goodPhoton", "hasConversionTracks", 2, 0, 1, ""),
-  ("goodPhoton", "maxEnergyCrystal", 1000, 0, 1000, ""),
-  ("goodPhoton", "phi", 100, -5, 5, ""),
-  # ("goodPhoton", "seedTime", 100, -5, 5, ""),  # removing from here for blinding (custom filling)
-  ("goodPhoton", "sigmaEta2012", 100, 0, 0.1, ""),
-  ("goodPhoton", "sigmaIEtaIEta2012", 100, 0, 0.1, ""),
-
   ("convertedPhoton", "et", 200, 0, 100, ""),
   ("convertedPhoton", "eta", 100, -2.2, 2.2, ""),
   ("convertedPhoton", "phi", 100, -3.14, 3.14, ""),
@@ -64,37 +43,10 @@ defaultHistParams = (
 
 histParams = (
   # photons
-  ("unfoldingPhoton", "pt", 5, 0, 1, ""),
-  ("unfoldingPhoton", "mass", 5, 5, 25, ""),
-  ("unfoldingPhoton", "absRap", 2, 0, 2.2, ""),
-  ("unfoldingPhoton", "absRap3", 3, 0, 2.2, ""),
-  ("unfoldingPhoton", "rap3", 3, -2.2, 2.2, ""),
-  ("unfoldingPhoton", "rap4", 4, -2.2, 2.2, ""),
-  ("unfoldingPhoton", "costhetastar2", 2, 0, 1, ""),
-  ("unfoldingPhoton", "costhetastar3", 3, 0, 1, ""),
-  ("unfoldingPhoton", "costhetastar4", 4, 0, 1, ""),
-  ("goodPhotonSR", "et", 5, 2, 8, ""),
-  ("goodPhotonSR", "eta", 5, -2.2, 2.2, ""),
-  ("goodPhotonSR", "phi", 6, -3.14, 3.14, ""),
-  ("goodPhoton", "et", 2000, 0, 1000, ""),
-  ("goodPhoton", "logEt", 200, -1, 3, ""),
-  ("goodPhoton", "seedTime", 1000, -50, 50, ""),
-  ("goodPhoton", "topOverCentral", 1000, 0, 10, ""),
-  ("goodPhoton", "bottomOverCentral", 1000, 0, 10, ""),
-  ("goodPhoton", "leftOverCentral", 1000, 0, 10, ""),
-  ("goodPhoton", "rightOverCentral", 1000, 0, 10, ""),
-  ("goodPhoton", "minOverCentral", 1000, 0, 1.0, ""),
-  ("goodPhoton", "verticalOverCentral", 10000, 0, 10, ""),
-  ("goodPhoton", "horizontalOverCentral", 10000, 0, 10, ""),
-  ("goodPhoton", "horizontalImbalance", 100, -2, 2, ""),
-  ("goodPhoton", "verticalImbalance", 100, -2, 2, ""),
 
   # gen-level
   ("genPhoton", "et", 200, 0, 10, ""),
   ("genPhoton", "energy", 200, 0, 10, ""),
-  ("leadingGenPhoton", "energy", 200, 0, 10, ""),
-  ("leadingGenPhotonBarrel", "energy", 200, 0, 10, ""),
-  ("leadingGenPhotonBarrelEndcap", "energy", 200, 0, 10, ""),
 
   # event
   ("event", "deltaEt", 100, 0, 1, ""),
@@ -108,14 +60,58 @@ histParams = (
   ("monophoton", "egamma_deltaR_gt50GeV", 1000, -10, 10, ""),
 )
 
-histParams2D = (
-  ("goodPhoton_absEta_vs_et", 100, 0, 3.0, 1000, 0, 1000, ""),
-  ("goodPhoton_eta_vs_et", 100, -3.0, 3.0, 1000, 0, 1000, ""),
-  ("goodPhoton_eta_vs_phi", 1000, -3.0, 3.0, 1000, -4.0, 4.0, ""),
-  ("goodPhoton_eta_vs_phi_vs_et", 1000, -3.0, 3.0, 1000, -4.0, 4.0, ""),
-  ("goodPhoton_eta_vs_phi_gt50GeV", 100, -3.0, 3.0, 100, -4.0, 4.0, ""),
-  ("egamma_et_vs_goodPhoton_et", 1000, 0, 1000, 1000, 0, 1000, ""),
-)
+histParams2D = ((
+  "egamma_et_vs_goodPhoton_et", 1000, 0, 1000, 1000, 0, 1000, ""
+), )
+
+for prefix in ["", "Barrel_", "EndCap_"]:
+  histParams += (
+    ("goodPhoton", f"{prefix}et", 2000, 0, 1000, ""),
+    ("goodPhoton", f"{prefix}logEt", 200, -1, 3, ""),
+    ("goodPhoton", f"{prefix}seedTime", 1000, -50, 50, ""),
+    ("goodPhoton", f"{prefix}topOverCentral", 1000, 0, 10, ""),
+    ("goodPhoton", f"{prefix}bottomOverCentral", 1000, 0, 10, ""),
+    ("goodPhoton", f"{prefix}leftOverCentral", 1000, 0, 10, ""),
+    ("goodPhoton", f"{prefix}rightOverCentral", 1000, 0, 10, ""),
+    ("goodPhoton", f"{prefix}minOverCentral", 1000, 0, 1.0, ""),
+    ("goodPhoton", f"{prefix}verticalOverCentral", 10000, 0, 10, ""),
+    ("goodPhoton", f"{prefix}horizontalOverCentral", 10000, 0, 10, ""),
+    ("goodPhoton", f"{prefix}horizontalImbalance", 100, -2, 2, ""),
+    ("goodPhoton", f"{prefix}verticalImbalance", 100, -2, 2, ""),
+    
+    ("goodPhoton", f"{prefix}SCEnergy", 1000, 0, 1000, ""),
+    ("goodPhoton", f"{prefix}SCEt", 1000, 0, 1000, ""),
+    ("goodPhoton", f"{prefix}SCEta", 100, -5, 5, ""),
+    ("goodPhoton", f"{prefix}SCEtaWidth", 1000, 0, 0.2, ""),
+    ("goodPhoton", f"{prefix}SCPhi", 100, -5, 5, ""),
+    ("goodPhoton", f"{prefix}SCPhiWidth", 1000, 0, 0.2, ""),
+    ("goodPhoton", f"{prefix}energy", 1000, 0, 1000, ""),
+    ("goodPhoton", f"{prefix}energyBottom", 1000, 0, 1000, ""),
+    ("goodPhoton", f"{prefix}energyLeft", 1000, 0, 1000, ""),
+    ("goodPhoton", f"{prefix}energyRight", 1000, 0, 1000, ""),
+    ("goodPhoton", f"{prefix}energyTop", 1000, 0, 1000, ""),
+    ("goodPhoton", f"{prefix}eta", 100, -5, 5, ""),
+    ("goodPhoton", f"{prefix}hOverE", 1000, 0, 1.0, ""),
+    ("goodPhoton", f"{prefix}hasConversionTracks", 2, 0, 1, ""),
+    ("goodPhoton", f"{prefix}maxEnergyCrystal", 1000, 0, 1000, ""),
+    ("goodPhoton", f"{prefix}phi", 100, -5, 5, ""),
+    ("goodPhoton", f"{prefix}sigmaEta2012", 100, 0, 0.1, ""),
+    ("goodPhoton", f"{prefix}sigmaIEtaIEta2012", 100, 0, 0.1, ""),
+  )
+
+  histParams2D += (
+    (f"goodPhoton_{prefix}absEta_vs_et", 100, 0, 3.0, 1000, 0, 1000, ""),
+    (f"goodPhoton_{prefix}eta_vs_et", 100, -3.0, 3.0, 1000, 0, 1000, ""),
+    (f"goodPhoton_{prefix}eta_vs_phi", 1000, -3.0, 3.0, 1000, -4.0, 4.0, ""),
+    (
+      f"goodPhoton_{prefix}eta_vs_phi_vs_et", 1000, -3.0, 3.0, 1000, -4.0, 4.0,
+      ""
+    ),
+    (
+      f"goodPhoton_{prefix}eta_vs_phi_gt50GeV", 100, -3.0, 3.0, 100, -4.0, 4.0,
+      ""
+    ),
+  )
 
 eventsTreeNames = [
   "Events",
