@@ -238,6 +238,13 @@ bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager
     if (totalEnergyPlus > 1600 || totalEnergyMinus > 1600) return false;  // 0n0n
   } else if (eventCuts.at("ZDC_cut") == 3) {
     if (totalEnergyPlus > 4000 || totalEnergyMinus > 4000) return false;  // 0n0n + 1n0n + 0n1n + 1n1n
+  } else if (eventCuts.at("ZDC_cut") == 4) {
+    auto photons = event->GetCollection("goodPhoton");
+    auto photon = asPhoton(photons->at(0));
+    float photonEta = photon->GetEta();
+    float zdcEnergy = (photonEta < 0) ? totalEnergyPlus : totalEnergyMinus;
+
+    if (zdcEnergy < 7000) return false;  // 0nXn, X≥3n (on the side opposite to the photon)
   } else {
     warn() << "Unknown ZDC cut type: " << eventCuts.at("ZDC_cut") << ". Will skip ZDC cuts." << endl;
   }
