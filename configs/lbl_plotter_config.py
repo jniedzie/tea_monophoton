@@ -27,39 +27,23 @@ samples = [
         name="qed_superchic",
         file_path=f"{base_path}/qed_superchic/merged_{skim}_histograms.root",
         type=SampleType.background,
-
         cross_section=scale*crossSections["qed_superchic"]*get_scale_factor(do_photons, single_photon)[0],
         initial_weight_sum=nGenEvents["qed_superchic"],
-
-        # line_style=ROOT.kSolid,
-        # line_color=ROOT.kRed,
-        # fill_alpha=0.0,
-        
         fill_color=ROOT.kYellow,
-        fill_alpha=1.0,
-        
+        fill_alpha=1.0,        
         marker_size=0.0,
-        
         legend_description="#gamma#gamma#rightarrowe^{+}e^{-}",
         custom_legend=Legend(0.62, 0.70, 0.82, 0.75, "FL"),
-        # legend_description="QED"
     ),
     Sample(
         name="qed_starlight",
         file_path=f"{base_path}/qed_starlight/merged_{skim}_histograms.root",
         type=SampleType.background,
-
         cross_section=scale*crossSections["qed_starlight"]*get_scale_factor(do_photons, single_photon)[0],
         initial_weight_sum=nGenEvents["qed_starlight"],
-
-        # line_style=ROOT.kSolid,
-        # line_color=ROOT.kBlue,
-        # fill_alpha=0.0,
-        
         fill_color=ROOT.kYellow,
         line_color=ROOT.kYellow,
         fill_alpha=1.0,
-        
         marker_size=0.0,
         legend_description=""
     ),
@@ -75,64 +59,55 @@ samples = [
         fill_alpha=0.0,
         legend_description="Data",
         custom_legend=Legend(0.62, 0.80, 0.82, 0.90, "pl", ""),
-        # custom_legend=Legend(0.62, 0.80, 0.82, 0.90, "pl", "#gamma#gamma#rightarrow#gamma#gamma"),
-        # custom_legend=Legend(0.7, 0.80, 0.80, 0.90, "pl", "#gamma#gamma#rightarrowe^{+}e^{-}(#gamma)(#gamma)"),
+    ),
+    Sample(
+        name="ds_from_lbl",
+        file_path=f"{base_path}/ds_from_lbl/merged_{skim}_histograms.root",
+        type=SampleType.background,
+        cross_section=crossSections["lbl"]*get_scale_factor(do_photons, single_photon)[0]*82,
+        initial_weight_sum=nGenEvents["lbl"],
+        fill_color=ROOT.kGreen+2,
+        fill_alpha=1.0,
+        legend_description="DS (from LbL)",
+        custom_legend=Legend(0.62, 0.75, 0.82, 0.80, "FL"),
+    ),
+    Sample(
+        name="lbl",
+        file_path=f"{base_path}/lbl/merged_{skim}_histograms.root",
+        type=SampleType.background,
+        cross_section=crossSections["lbl"]*get_scale_factor(do_photons, single_photon)[0],
+        initial_weight_sum=nGenEvents["lbl"],
+        fill_color=ROOT.kOrange+1,
+        fill_alpha=1.0,
+        legend_description="#gamma#gamma#rightarrow#gamma#gamma",
+        custom_legend=Legend(0.62, 0.65, 0.82, 0.70, "FL"),
+    ),
+    Sample(
+        name="cep",
+        file_path=f"{base_path}/cep/merged_{skim}_histograms.root",
+        type=SampleType.background,
+        cross_section=crossSections["cep"]*get_scale_factor(do_photons, single_photon)[0]*get_cep_scale()[0],
+        initial_weight_sum=nGenEvents["cep"],
+        fill_color=ROOT.kAzure-4,
+        fill_alpha=1.0,
+        legend_description="gg#rightarrow#gamma#gamma",
+        custom_legend=Legend(0.62, 0.60, 0.82, 0.65, "FL"),
+    ),
+    Sample(
+        name="qed_mg1gamma",
+        file_path=f"{base_path}/qed_mg1gamma/merged_{skim}_histograms.root",
+        type=SampleType.background,
+        cross_section=scale*crossSections["qed_mg1gamma"]*get_scale_factor(do_photons, single_photon)[0],
+        initial_weight_sum=nGenEvents["qed_mg1gamma"],
+        fill_color=ROOT.kRed-1,
+        fill_alpha=1.0,
+        marker_size=0.0,
+        legend_description="#gamma#gamma#rightarrowe^{+}e^{-}#gamma",
+        custom_legend=Legend(0.62, 0.55, 0.82, 0.60, "FL"),
     ),
 ]
 
-if do_photons:
-    samples.append(
-        Sample(
-            name="ds_from_lbl",
-            file_path=f"{base_path}/ds_from_lbl/merged_{skim}_histograms.root",
-            type=SampleType.background,
-            cross_section=crossSections["lbl"]*get_scale_factor(do_photons, single_photon)[0]*82,
-            initial_weight_sum=nGenEvents["lbl"],
-            # line_color=ROOT.kOrange+1,
-            fill_color=ROOT.kGreen+2,
-            fill_alpha=1.0,
-            # fill_alpha=0.0,
-            legend_description="DS (from LbL)",
-            custom_legend=Legend(0.62, 0.75, 0.82, 0.80, "FL"),
-        )
-    )
-    samples.append(
-        Sample(
-            name="lbl",
-            file_path=f"{base_path}/lbl/merged_{skim}_histograms.root",
-            type=SampleType.background,
-            cross_section=crossSections["lbl"]*get_scale_factor(do_photons, single_photon)[0],
-            initial_weight_sum=nGenEvents["lbl"],
-            # line_color=ROOT.kOrange+1,
-            fill_color=ROOT.kOrange+1,
-            fill_alpha=1.0,
-            # fill_alpha=0.0,
-            legend_description="#gamma#gamma#rightarrow#gamma#gamma",
-            custom_legend=Legend(0.62, 0.65, 0.82, 0.70, "FL"),
-        )
-    )
-    samples.append(
-        Sample(
-            name="cep",
-            file_path=f"{base_path}/cep/merged_{skim}_histograms.root",
-            type=SampleType.background,
-            # cross_section=get_cep_scale(skim)[0],
-            # initial_weight_sum=luminosity,
-
-            cross_section=crossSections["cep"]*get_scale_factor(do_photons, single_photon)[0]*get_cep_scale()[0],
-            # cross_section=crossSections["cep"]*get_scale_factor(do_photons, single_photon)[0],
-            initial_weight_sum=nGenEvents["cep"],
-
-            # line_color=ROOT.kAzure-4,
-            fill_color=ROOT.kAzure-4,
-            fill_alpha=1.0,
-            # fill_alpha=0.0,
-            legend_description="gg#rightarrow#gamma#gamma",
-            custom_legend=Legend(0.62, 0.60, 0.82, 0.65, "FL"),
-        )
-    )
-
-custom_stacks_order = ["cep", "lbl", "qed_starlight", "qed_superchic", "ds_from_lbl", "data"]
+custom_stacks_order = ["qed_mg1gamma", "cep", "lbl", "qed_starlight", "qed_superchic", "ds_from_lbl", "data"]
 
 alp_colors = (
     ROOT.kGray+2,
