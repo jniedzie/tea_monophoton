@@ -30,12 +30,22 @@ Photon::Photon(std::shared_ptr<PhysicsObject> physicsObject_) : physicsObject(ph
 
   config.GetMap("photonHotSpots", hotSpots);
 
-  energyTop = GetAs<float>("energyTop");
-  energyBottom = GetAs<float>("energyBottom");
-  energyLeft = GetAs<float>("energyLeft");
-  energyRight = GetAs<float>("energyRight");
-  energyCentral = GetAs<float>("maxEnergyCrystal");
-  energyMin = min({energyTop, energyBottom, energyLeft, energyRight});
+  try {
+    energyTop = GetAs<float>("energyTop");
+    energyBottom = GetAs<float>("energyBottom");
+    energyLeft = GetAs<float>("energyLeft");
+    energyRight = GetAs<float>("energyRight");
+    energyCentral = GetAs<float>("maxEnergyCrystal");
+    energyMin = min({energyTop, energyBottom, energyLeft, energyRight});
+  } catch (const std::exception& e) {
+    warn() << "No photon energy deposit information found. Swiss cross and imbalance variables will not be calculated." << endl;
+    energyTop = 0;
+    energyBottom = 0;
+    energyLeft = 0;
+    energyRight = 0;
+    energyCentral = 0;
+    energyMin = 0;
+  }
 }
 
 float Photon::GetSwissCross() {
