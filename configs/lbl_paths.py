@@ -5,15 +5,16 @@ facility = "NAF"
 trigger = "singleEG5"
 
 processes = (
-  "collisionData",
-  "lbl",
-  "ds_from_lbl",
-  "cep",
-  "qed_superchic",
-  "qed_starlight",
-  "alps_5",
-  "alps_30",
-  "alps_90",
+  # "collisionData",
+  # "lbl",
+  # "ds_from_lbl",
+  # "cep",
+  # "qed_superchic",
+  # "qed_starlight",
+  "qed_mg1gamma",
+  # "alps_5",
+  # "alps_30",
+  # "alps_90",
 )
 
 qed_names = ["qed_superchic", "qed_starlight"]
@@ -26,7 +27,12 @@ input_skim = f"initial_{trigger}"
 # skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts"
 # skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly"
 # skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_deltaT"
-skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT"
+# skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT"
+# skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_deltaT_tightSigmaIEtaIEta"
+
+# skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT_zdc-none"
+# skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT_zdc-0n0n"
+skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT_zdc-le1n1n"
 
 
 if facility == "NAF":

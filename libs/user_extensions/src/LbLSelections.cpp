@@ -7,7 +7,7 @@
 using namespace std;
 
 LbLSelections::LbLSelections() {
-  auto &config = ConfigManager::GetInstance();
+  auto& config = ConfigManager::GetInstance();
   config.GetMap("eventCuts", eventCuts);
 
   lblObjectsManager = make_shared<LbLObjectsManager>();
@@ -22,7 +22,7 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
 
     string detectorType = tower->GetDetectorType();
 
-    if (detectorType == "HCAL"){
+    if (detectorType == "HCAL") {
       if (tower->IsDead()) continue;
       if (tower->IsInHadronicCrack()) continue;
       if (tower->IsHadronicEnergyAboveNoiseThreshold()) nPassingTowers++;
@@ -42,9 +42,9 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
       if (tower->IsDead()) continue;
       if (tower->OverlapsWithOtherObjects(event->GetCollection("goodPhoton"))) continue;
       if (tower->OverlapsWithOtherObjects(event->GetCollection("goodElectron"))) continue;
-      
+
       // This for HF is actually equivalent to checking the EM energy:
-      if (tower->IsHadronicEnergyAboveNoiseThreshold()) nPassingTowers++; 
+      if (tower->IsHadronicEnergyAboveNoiseThreshold()) nPassingTowers++;
       if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
     }
   }
@@ -86,19 +86,19 @@ bool LbLSelections::PassesThreePhotonsSelection(shared_ptr<Event> event, shared_
   return true;
 }
 
-bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, shared_ptr<map<string, int>> cutFlow) {
+bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager,
+                                            shared_ptr<map<string, int>> cutFlow) {
   auto genMatchedPhotons = asLbLEvent(event)->GetGenMatchedRecoPhotons();
   cutFlow->at("00_initial") += 2;
   cutFlow->at("01_genMatched") += genMatchedPhotons.size();
 
   if (genMatchedPhotons.size() != 2) {
     warn() << "Number of gen-matched reco photons != 2" << endl;
-  }
-  else {
+  } else {
     lblObjectsManager->IsGoodPhoton(asPhoton(genMatchedPhotons.at(0)), cutFlow);
     lblObjectsManager->IsGoodPhoton(asPhoton(genMatchedPhotons.at(1)), cutFlow);
   }
-  
+
   auto goodPhotons = event->GetCollection("goodPhoton");
   int nPhotons = goodPhotons->size();
   if (nPhotons != 2) return false;
@@ -203,11 +203,16 @@ bool LbLSelections::PassesDiphotonPt(shared_ptr<Event> event, shared_ptr<CutFlow
 }
 
 bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  if (eventCuts.at("ZDC_cut") == 0) {
+    cutFlowManager->UpdateCutFlow("ZDC");
+    return true;
+  }
+
   shared_ptr<PhysicsObjects> zdcEnergies;
 
   try {
     zdcEnergies = event->GetCollection("ZDC");
-  } catch (Exception &e) {
+  } catch (Exception& e) {
     warn() << "No ZDC collection found in event. Will skip ZDC cuts." << endl;
     cutFlowManager->UpdateCutFlow("ZDC");
     return true;
@@ -226,14 +231,16 @@ bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager
     }
   }
 
-  // if (totalEnergyPlus < eventCuts.at("max_ZDCenergyPerSide")) cutFlowManager->UpdateCutFlow("ZDC+");
-  // if (totalEnergyMinus < eventCuts.at("max_ZDCenergyPerSide")) cutFlowManager->UpdateCutFlow("ZDC-");
-
-  // if (totalEnergyPlus > eventCuts.at("max_ZDCenergyPerSide") && totalEnergyMinus > eventCuts.at("max_ZDCenergyPerSide")) return false;
-
-  if (totalEnergyPlus > 1600 || totalEnergyMinus > 1600) return false; // 0n0n
-  // if (totalEnergyPlus > 4000 || totalEnergyMinus > 4000) return false; // 0n0n + 1n0n + 0n1n + 1n1n
-
+  // <1n: 1600, <2n: 4000, <3n: 7000 GeV, <4n: 10000 GeV
+  if (eventCuts.at("ZDC_cut") == 1) {
+    if (totalEnergyPlus > 7000 && totalEnergyMinus > 7000) return false;
+  } else if (eventCuts.at("ZDC_cut") == 2) {
+    if (totalEnergyPlus > 1600 || totalEnergyMinus > 1600) return false;  // 0n0n
+  } else if (eventCuts.at("ZDC_cut") == 3) {
+    if (totalEnergyPlus > 4000 || totalEnergyMinus > 4000) return false;  // 0n0n + 1n0n + 0n1n + 1n1n
+  } else {
+    warn() << "Unknown ZDC cut type: " << eventCuts.at("ZDC_cut") << ". Will skip ZDC cuts." << endl;
+  }
 
   cutFlowManager->UpdateCutFlow("ZDC");
 

@@ -1,9 +1,6 @@
 # event cuts
 eventCuts = {
-  # "max_ZDCenergyPerSide": 10000.0,  # <4n
-  "max_ZDCenergyPerSide": 7000.0,  # <3n
-  # "max_ZDCenergyPerSide": 4000.0,  # <2n
-  # "max_ZDCenergyPerSide": 1600.0,  # <1n
+  "ZDC_cut": 3,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n
   "max_Nelectrons": 0,
   "max_Ntracks": 0,
   "max_Nmuons": 0,
@@ -22,7 +19,6 @@ photonCuts = {
   "min_sigmaIEtaIEta_barrel": 0,  # try 0.009
   "max_sigmaIEtaIEta_barrel": 0.02,
   "min_sigmaIEtaIEta_endcap": 0,  # try 0.009
-  "max_sigmaIEtaIEta_endcap": 0.06,
   "min_horizontalImbalance": -99999,
   "min_verticalImbalance": -99999,
   "max_horizontalImbalance": 99999,
@@ -37,6 +33,7 @@ photonCuts = {
   # "max_absEta": 2.2,
   # "min_seedTime": -3.0,
   # "max_seedTime": 3.0,
+  "max_sigmaIEtaIEta_endcap": 0.06,
 
   # Tightened cuts:
   "min_et": 4.0,
@@ -47,6 +44,7 @@ photonCuts = {
   "max_absEta": 1.2,
   "min_seedTime": -1.2,
   "max_seedTime": 0.8,
+  # "max_sigmaIEtaIEta_endcap": 0.02,
 }
 
 photonHotSpots = {
@@ -203,6 +201,8 @@ crossSections = {
   "ds_from_lbl": mc_scale * 2.59 * lbl_scaling * 82,  # μb
   "qed_superchic": mc_scale * 8827.220 * qed_scaling,  # μb
   "qed_starlight": mc_scale * 7920.0 * qed_scaling,  # μb
+  "qed_mg1gamma": mc_scale * 13.45,  # μb
+  "qed_mg2gamma": mc_scale * 0.1945,  # μb
   "cep": mc_scale * 5.8e-3,  # we scale it to data
   "alps_5": reference_alp_cross_section,
   "alps_30": reference_alp_cross_section,
@@ -280,6 +280,8 @@ nGenEvents = {
   "cep": 668000,  # we scale it to data
   "qed_superchic": 59260000,
   "qed_starlight": 66750000,
+  "qed_mg1gamma": 10228329,
+  "qed_mg2gamma": 6457150,
   "alps_5": 754000,
   "alps_30": 719000,
   "alps_90": 449000,
