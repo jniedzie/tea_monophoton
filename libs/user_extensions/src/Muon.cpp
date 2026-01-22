@@ -11,17 +11,17 @@ Muon::Muon(shared_ptr<PhysicsObject> physicsObject_) : physicsObject(physicsObje
   config.GetMap("caloEtaEdges", caloEtaEdges);
 
   try {
-    eta = Get("Eta");
+    eta = Get("Eta", false);
   } catch (Exception &e) {
     eta = Get("eta");
   }
   try {
-    phi = Get("Phi");
+    phi = Get("Phi", false);
   } catch (Exception &e) {
     phi = Get("phi");
   }
   try {
-    pt = Get("Pt");
+    pt = Get("Pt", false);
   } catch (Exception &e) {
     pt = Get("pt");
   }
