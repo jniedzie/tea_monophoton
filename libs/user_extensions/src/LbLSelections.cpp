@@ -208,6 +208,12 @@ bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager
     return true;
   }
 
+  // If ZDC cuts are applied, we need to skip the bad runs
+  int badRunsMin = 326571;
+  int badRunsMax = 326676;
+  int runNumber = event->GetAs<int>("runNumber");
+  if (runNumber >= badRunsMin && runNumber <= badRunsMax) return false;
+
   shared_ptr<PhysicsObjects> zdcEnergies;
 
   try {
