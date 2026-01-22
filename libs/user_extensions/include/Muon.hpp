@@ -11,7 +11,7 @@ class Muon {
  public:
   Muon(std::shared_ptr<PhysicsObject> physicsObject_);
 
-  auto Get(std::string branchName) { return physicsObject->Get(branchName); }
+  auto Get(std::string branchName, bool verbose=true) { return physicsObject->Get(branchName, verbose); }
   
   template <typename T>
   T GetAs(std::string branchName) { return physicsObject->GetAs<T>(branchName); }

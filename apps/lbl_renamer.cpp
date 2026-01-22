@@ -74,43 +74,15 @@ void MergeTrees(vector<TTree*> inputTrees, TTree* outputTree, map<string, vector
 }
 
 int main(int argc, char** argv) {
-  auto args = make_unique<ArgsManager>(argc, argv);
+  vector<string> requiredArgs = {"config", "input_path", "output_trees_path"};
+  vector<string> optionalArgs = {};
+  auto args = make_unique<ArgsManager>(argc, argv, requiredArgs, optionalArgs);
+  ConfigManager::Initialize(args);
 
-  if (!args->GetString("config").has_value()) {
-    fatal() << "No config file provided" << endl;
-    exit(1);
-  }
-
-  try {
-    ConfigManager::Initialize(args->GetString("config").value());
-  } catch (Exception& e) {
-    fatal() << "Error when retriving config path:" << e.what() << endl;
-    exit(1);
-  }
-  auto& config = ConfigManager::GetInstance();
-
-  string inputPath, outputPath;
-
-  try {
-    inputPath = args->GetString("input_path").value();
-  } catch (Exception& e) {
-    fatal() << "Error when retriving input path:" << e.what() << endl;
-    exit(1);
-  }
-
-  try{
-    outputPath = args->GetString("output_trees_path").value();
-  }
-  catch (Exception& e) {
-    fatal() << "Error when retriving output path:" << e.what() << endl;
-    exit(1);
-  }
-
-  // Open the input files and get the trees
+  string inputPath = args->GetString("input_path").value();
   auto inputFile = TFile::Open(inputPath.c_str());
 
   vector<TTree*> trees;
-
   vector<string> treeNames = {"ggHiNtuplizer/EventTree", "rechitanalyzerpp/zdcrechit", "l1object/L1UpgradeFlatTree", "hltanalysis/HltTree"};
 
   for (auto treeName : treeNames) {
@@ -123,10 +95,12 @@ int main(int argc, char** argv) {
   }
 
   // Create the output file and tree
+  string outputPath = args->GetString("output_trees_path").value();
   auto outputFile = new TFile(outputPath.c_str(), "recreate");
   auto outputTree = new TTree("Events", "Events");
 
   // Define the branch renaming map
+  auto& config = ConfigManager::GetInstance();
   map<string, vector<string>> renameMap;
   config.GetMap("branchesNames", renameMap);
 

@@ -16,23 +16,11 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-  auto args = make_unique<ArgsManager>(argc, argv);
-
-  if (!args->GetString("config").has_value()) {
-    fatal() << "No config file provided" << endl;
-    exit(1);
-  }
-
-  ConfigManager::Initialize(args->GetString("config").value());
-  auto& config = ConfigManager::GetInstance();
-
-  if (args->GetString("input_path").has_value()) {
-    config.SetInputPath(args->GetString("input_path").value());
-  }
-
-  if (args->GetString("output_trees_path").has_value()) {
-    config.SetTreesOutputPath(args->GetString("output_trees_path").value());
-  }
+  vector<string> requiredArgs = {"config"};
+  vector<string> optionalArgs = {"input_path", "output_trees_path"};
+  auto args = make_unique<ArgsManager>(argc, argv, requiredArgs, optionalArgs);
+  ConfigManager::Initialize(args);
+  
 
   auto eventReader = make_shared<EventReader>();
   auto eventWriter = make_shared<EventWriter>(eventReader);
@@ -41,14 +29,15 @@ int main(int argc, char** argv) {
   auto lblSelections = make_unique<LbLSelections>();
   auto lblObjectsManager = make_unique<LbLObjectsManager>();
 
-  cutFlowManager->RegisterCut("initial");  
+  cutFlowManager->RegisterCut("initial");
   cutFlowManager->RegisterCut("singlePhoton");
   cutFlowManager->RegisterCut("nElectrons");
   cutFlowManager->RegisterCut("nTracks");
   cutFlowManager->RegisterCut("nMuons");
   cutFlowManager->RegisterCut("neutralExclusivity");
   cutFlowManager->RegisterCut("ZDC");
-  
+
+  auto& config = ConfigManager::GetInstance();
   vector<string> eventsTreeNames;
   config.GetVector("eventsTreeNames", eventsTreeNames);
 
@@ -77,13 +66,13 @@ int main(int argc, char** argv) {
     lblObjectsManager->InsertGoodElectronsCollection(event);
     lblObjectsManager->InsertGoodTracksCollection(event);
     lblObjectsManager->InsertGoodMuonsCollection(event);
-    
+
     cutFlowManager->UpdateCutFlow("initial");
     if (!lblSelections->PassesSinglePhotonSelection(event, cutFlowManager)) continue;
     if (!lblSelections->PassesChargedExclusivity(event, cutFlowManager)) continue;
     if (!lblSelections->PassesNeutralExclusivity(event, cutFlowManager)) continue;
     if (!lblSelections->PassesZDC(event, cutFlowManager)) continue;
-    
+
     for (string eventsTreeName : eventsTreeNames) {
       eventWriter->AddCurrentEvent(eventsTreeName);
     }
@@ -100,7 +89,7 @@ int main(int argc, char** argv) {
 
   info() << "Single photon cut flow:" << endl;
   for (const auto& [cutName, count] : *singlePhotonCutFlow) {
-    info() << "  " << cutName << ": " << count << "\t" << count/(float)previousCount << endl;
+    info() << "  " << cutName << ": " << count << "\t" << count / (float)previousCount << endl;
     // info() << count << "\t" << count/(float)previousCount << endl;
     previousCount = count;
   }
