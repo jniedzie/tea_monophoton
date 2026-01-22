@@ -242,9 +242,22 @@ bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager
     auto photons = event->GetCollection("goodPhoton");
     auto photon = asPhoton(photons->at(0));
     float photonEta = photon->GetEta();
+    float photonEt = photon->GetEt();
     float zdcEnergy = (photonEta < 0) ? totalEnergyPlus : totalEnergyMinus;
 
-    if (zdcEnergy < 7000) return false;  // 0nXn, X≥3n (on the side opposite to the photon)
+    // if (photonEt > 30 && (zdcEnergy >= 10000)) {
+
+    //   ofstream photonFile("/afs/desy.de/user/j/jniedzie/tea_monophoton/debugging/info" + to_string(event->GetAs<int>("eventNumber")) + ".txt");
+    //   if (photonFile.is_open()) {
+    //     photonFile << "Photon Et: " << photonEt << "\teta: " << photonEta;
+    //     photonFile << "\tZDC+: " << totalEnergyPlus << "\tZDC-: " << totalEnergyMinus << endl;
+    //     photonFile << "\tzdcEnergy: " << zdcEnergy << endl;
+    //     photonFile << "\tpasses: " << (zdcEnergy >= 10000) << endl;
+    //   }
+    // }
+
+    if (zdcEnergy < 10000) return false;  // 0nXn, X>3n (on the side opposite to the photon)
+    // if (totalEnergyPlus < 10000 || totalEnergyMinus < 10000) return false;  // 0nXn, X≥3n
   } else {
     warn() << "Unknown ZDC cut type: " << eventCuts.at("ZDC_cut") << ". Will skip ZDC cuts." << endl;
   }
