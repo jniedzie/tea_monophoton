@@ -172,8 +172,10 @@ default_lumi = NormalizationType.to_lumi
 histograms = (
   #           name              title  logx logy    norm_type               rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
   Histogram("cutFlow"             , "", False, True, NormalizationType.to_data, 1, 0, 20, 1e-5, 1e13, "Selection", "#sum genWeight"),
-  Histogram("event_ZDCenergyPlus" , "", False, True, NormalizationType.to_lumi, 100, 0, 10000, 1e-1, 1e5, "#sum E_{ZDC}^{+} (GeV)", y_label),
-  Histogram("event_ZDCenergyMinus" , "", False, True, NormalizationType.to_lumi, 100, 0, 10000, 1e-1, 1e5,"#sum E_{ZDC}^{-} (GeV)", y_label),
+  Histogram("event_ZDCenergyPlus" , "", False, True, NormalizationType.to_lumi, 10000, 0, 1e6, 1e-1, 1e5, "#sum E_{ZDC}^{+} (GeV)", y_label),
+  Histogram("event_ZDCenergyMinus" , "", False, True, NormalizationType.to_lumi, 10000, 0, 1e6, 1e-1, 1e5,"#sum E_{ZDC}^{-} (GeV)", y_label),
+  Histogram("event_ZDCenergyPlusLogX" , "", False, True, NormalizationType.to_lumi, 15, 1, 6, 1e-1, 1e5, "log[#sum E_{ZDC}^{+} (GeV)]", y_label),
+  Histogram("event_ZDCenergyMinusLogX" , "", False, True, NormalizationType.to_lumi, 15, 1, 6, 1e-1, 1e5,"log[#sum E_{ZDC}^{-} (GeV)]", y_label),
 )
 
 histograms2D = (
@@ -181,8 +183,8 @@ histograms2D = (
   Histogram2D("egamma_et_vs_goodPhoton_et", "", False, False, False, default_lumi, 1,  1,  0,  12,  0,  12,  0, 50,  "e/#gamma E_{T} (GeV)", "reco-#gamma E_{T} (GeV)", "Counts"),
 )
 
-# for prefix in ["", "Barrel_", "EndCap_"]:
-for prefix in [""]:
+for prefix in ["", "Barrel_", "EndCap_"]:
+# for prefix in [""]:
   histograms += (
     #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
     # Histogram(f"goodPhoton_{prefix}et", "", False, True, default_lumi, 1,   0, 20, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),

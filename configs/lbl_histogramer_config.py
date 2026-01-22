@@ -1,28 +1,6 @@
-from scale_factors_config import *
 from lbl_params import *
-import numpy as np
-from numpy import pi
 
 nEvents = -1
-printEveryNevents = 1000
-
-base_path = "/data/dust/user/jniedzie/monophoton/"
-
-trigger = "doubleEG2"
-# trigger = "singleEG5"
-
-sample = "collisionData"
-# sample = "lbl"
-# sample = "cep"
-# sample = "qed"
-# sample = "qed_MG_ee_a"
-# sample = "emptyBeams"
-# sample = "qed_sc_noPhotos"
-
-skim = f"skimmed_baselineSelections_{trigger}"
-
-inputFilePath = f"{base_path}/{sample}/{skim}/ntuple_0.root"
-histogramsOutputFilePath = f"../{skim}_{sample}_histograms.root"
 
 defaultHistParams = (
   # collection      variable          bins    xmin     xmax     dir
@@ -50,8 +28,10 @@ histParams = (
 
   # event
   ("event", "deltaEt", 100, 0, 1, ""),
-  ("event", "ZDCenergyPlus", 10000, 0, 20000, ""),
-  ("event", "ZDCenergyMinus", 10000, 0, 20000, ""),
+  ("event", "ZDCenergyPlus", 1e6, 0, 1e6, ""),
+  ("event", "ZDCenergyMinus", 1e6, 0, 1e6, ""),
+  ("event", "ZDCenergyPlusLogX", 1000, 0, 6, ""),
+  ("event", "ZDCenergyMinusLogX", 1000, 0, 6, ""),
   ("monophoton", "egamma_deltaEta", 1000, -10, 10, ""),
   ("monophoton", "egamma_deltaPhi", 1000, -10, 10, ""),
   ("monophoton", "egamma_deltaR", 1000, -10, 10, ""),

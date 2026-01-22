@@ -29,8 +29,11 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
   if (asLbLEvent(event)->IsData() && photon->GetEt() > dataBlinding["max_et"]) return;
   FillMonoPhotonHistograms(photon);
 
-  if (fabs(photon->GetEta()) > 1.2) FillMonoPhotonHistograms(photon, "EndCap_");
-  else FillMonoPhotonHistograms(photon, "Barrel_");
+  if (fabs(photon->GetEta()) > 1.2) {
+    FillMonoPhotonHistograms(photon, "EndCap_");
+  } else {
+    FillMonoPhotonHistograms(photon, "Barrel_");
+  }
 }
 
 void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Photon> photon, string prefix) {
@@ -297,20 +300,11 @@ void LbLHistogramsFiller::SaveHighEtPhotonsInfo(const shared_ptr<Event> event) {
 }
 
 void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) {
-  float leadingPhotonEnergy = 99999;
-  float leadingPhotonEnergyBarrel = 99999;
-  float leadingPhotonEnergyBarrelEndcap = 99999;
-
-  float leadingPhotonEt = 0;
-  float leadingPhotonEtBarrel = 0;
-  float leadingPhotonEtBarrelEndcap = 0;
-
   auto photons = event->GetCollection("genPhoton");
   auto electrons = event->GetCollection("genElectron");
 
   for (auto physObject : *photons) {
     auto photon = asPhoton(physObject)->GetFourMomentum();
-
     if (fabs(photon.Eta()) > 5.2) continue;
 
     bool overlapsWithElectron = false;
@@ -325,62 +319,10 @@ void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) 
 
     histogramsHandler->Fill("genPhoton_et", photon.Pt());
     histogramsHandler->Fill("genPhoton_energy", photon.E());
-
-    if (photon.Pt() > leadingPhotonEt) {
-      leadingPhotonEt = photon.Pt();
-      leadingPhotonEnergy = photon.E();
-    }
-    if (photon.Pt() > leadingPhotonEtBarrel && fabs(photon.Eta()) < 1.4442) {
-      leadingPhotonEtBarrel = photon.Pt();
-      leadingPhotonEnergyBarrel = photon.E();
-    }
-
-    if (photon.Pt() > leadingPhotonEtBarrelEndcap && fabs(photon.Eta()) < 3.0) {
-      leadingPhotonEtBarrelEndcap = photon.Pt();
-      leadingPhotonEnergyBarrelEndcap = photon.E();
-    }
   }
 }
 
 void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event) {
-  auto lblEvent = asLbLEvent(event);
-  float deltaEt = lblEvent->GetDeltaEt();
-  histogramsHandler->Fill("event_deltaEt", deltaEt);
-
-  auto photons = event->GetCollection("goodPhoton");
-
-  if (photons->size() == 2) {
-    double deltaPhi = asPhoton(photons->at(0))->GetFourMomentum().DeltaPhi(asPhoton(photons->at(1))->GetFourMomentum());
-    double acoplanarity = 1 - (fabs(deltaPhi) / TMath::Pi());
-    float cosThetaStar = fabs(lblEvent->GetCosThetaStar(false));
-
-    histogramsHandler->Fill("event_cosThetaStar", cosThetaStar);
-
-    if (acoplanarity < 0.01) {
-      histogramsHandler->Fill("eventSR3_cosThetaStar", cosThetaStar);
-      histogramsHandler->Fill("eventSR4_cosThetaStar", cosThetaStar);
-      histogramsHandler->Fill("eventSR5_cosThetaStar", cosThetaStar);
-      histogramsHandler->Fill("eventSR10_cosThetaStar", cosThetaStar);
-
-      histogramsHandler->Fill("unfoldingPhoton_costhetastar2", cosThetaStar);
-      histogramsHandler->Fill("unfoldingPhoton_costhetastar3", cosThetaStar);
-      histogramsHandler->Fill("unfoldingPhoton_costhetastar4", cosThetaStar);
-    }
-  }
-
-  auto electrons = event->GetCollection("goodElectron");
-  if (electrons->size() == 2) {
-    double deltaPhi = asElectron(electrons->at(0))->GetFourMomentum().DeltaPhi(asElectron(electrons->at(1))->GetFourMomentum());
-    double acoplanarity = 1 - (fabs(deltaPhi) / TMath::Pi());
-    float cosThetaStar = fabs(asLbLEvent(event)->GetCosThetaStar(true));
-
-    histogramsHandler->Fill("event_electronsCosThetaStar", cosThetaStar);
-
-    if (acoplanarity < 0.01) {
-      histogramsHandler->Fill("eventSR_electronsCosThetaStar", cosThetaStar);
-    }
-  }
-
   try {
     auto zdcEnergies = event->GetCollection("ZDC");
 
@@ -398,6 +340,8 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
     }
     histogramsHandler->Fill("event_ZDCenergyPlus", totalEnergyPlus);
     histogramsHandler->Fill("event_ZDCenergyMinus", totalEnergyMinus);
+    histogramsHandler->Fill("event_ZDCenergyPlusLogX", TMath::Log10(totalEnergyPlus));
+    histogramsHandler->Fill("event_ZDCenergyMinusLogX", TMath::Log10(totalEnergyMinus));
   } catch (const Exception& e) {
     warn() << "Cannot fill ZDC histograms, since ZDC collection was not found." << endl;
   }
@@ -406,15 +350,17 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
 void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
   auto photons = event->GetCollection("goodPhoton");
 
-  if (photons->size() == 1) {
-    FillMonoPhotonHistograms(event);
-    FillEGammaHistograms(event);
-
-    // auto photon = asPhoton(photons->at(0));
-    // float et = photon->Get("et");
-    // if (et > 50) SaveHighEtPhotonsInfo(event);
+  if (photons->size() != 1) {
+    fatal() << "Number of good photons != 1. This should never happen." << endl;
+    exit(13);
   }
 
+  FillMonoPhotonHistograms(event);
+  FillEGammaHistograms(event);
   FillEventLevelHistograms(event);
   FillGenLevelHistograms(event);
+
+  // auto photon = asPhoton(photons->at(0));
+  // float et = photon->Get("et");
+  // if (et > 50) SaveHighEtPhotonsInfo(event);
 }
