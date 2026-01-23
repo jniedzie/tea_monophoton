@@ -53,6 +53,8 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Photon> phot
   histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance", photon->GetHorizontalImbalance());
   histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance", photon->GetVerticalImbalance());
   histogramsHandler->Fill("goodPhoton_" + prefix + "swissCross", photon->GetSwissCross());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance_vs_seedTime", photon->GetHorizontalImbalance(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance_vs_seedTime", photon->GetVerticalImbalance(), photon->GetSeedTime());
 
   vector<string> defaultBranches = {
       "SCEnergy",         "SCEt",       "SCEta",        "SCEtaWidth",        "SCPhi", "SCPhiWidth", "energy",

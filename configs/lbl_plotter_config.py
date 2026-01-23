@@ -197,7 +197,7 @@ for prefix in ["", "Barrel_", "EndCap_"]:
 
     Histogram(f"goodPhoton_{prefix}eta", "", False, True, default_lumi, 1,   -3, 3, 1e-2, 5e5, "#eta^{#gamma}", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}phi", "", False, True, default_lumi, 2,   -4, 4, 1e-2, 5e5, "#phi^{#gamma}", y_label, "", lbl_error),
-    Histogram(f"goodPhoton_{prefix}seedTime", "", False, True, default_lumi, 2,   -4, 4, 1e-2, 5e5, "Photon seed time", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}seedTime", "", False, True, default_lumi, 2,   -4, 4, 1e-2, 5e5, "Photon seed time (ns)", y_label, "", lbl_error),
 
     # Histogram(f"goodPhoton_{prefix}SCEtaWidth" , "", False, True, default_lumi, 1,   0, 0.01, 1e-2, 5e5, "#eta^{SC} width", y_label, "", lbl_error),
     # Histogram(f"goodPhoton_{prefix}SCPhiWidth" , "", False, True, default_lumi, 1,   0, 0.01, 1e-2, 5e5, "#phi^{SC} width", y_label, "", lbl_error),
@@ -230,6 +230,8 @@ for prefix in ["", "Barrel_", "EndCap_"]:
   histograms2D += (
     #           name                      title logs              norm          rebins  x_range  y_range  z_range   labels
     Histogram2D(f"goodPhoton_{prefix}eta_vs_phi", "", False, False, False, default_lumi, 5,  5,  -3,  3,  -4,  4,  0, 1e3,  "#eta", "#phi", "Counts"),  
+    Histogram2D(f"goodPhoton_{prefix}horizontalImbalance_vs_seedTime", "", False, False, False, default_lumi, 1,  1,  -2.0,  2.0,  -4,  4,  0, 1e3,  "E_{left-right}/E_{left+right}", "Photon seed time (ns)", "Counts"),  
+    Histogram2D(f"goodPhoton_{prefix}verticalImbalance_vs_seedTime", "", False, False, False, default_lumi, 1,  1,  -2.0,  2.0,  -4,  4,  0, 1e3,  "E_{top-bottom}/E_{top+bottom}", "Photon seed time (ns)", "Counts"),  
   )
 
 histogramsRatio = []
