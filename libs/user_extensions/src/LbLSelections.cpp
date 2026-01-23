@@ -255,10 +255,13 @@ bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager
 
     //   ofstream photonFile("/afs/desy.de/user/j/jniedzie/tea_monophoton/debugging/info" + to_string(event->GetAs<int>("eventNumber")) + ".txt");
     //   if (photonFile.is_open()) {
-    //     photonFile << "Photon Et: " << photonEt << "\teta: " << photonEta;
-    //     photonFile << "\tZDC+: " << totalEnergyPlus << "\tZDC-: " << totalEnergyMinus << endl;
-    //     photonFile << "\tzdcEnergy: " << zdcEnergy << endl;
-    //     photonFile << "\tpasses: " << (zdcEnergy >= 10000) << endl;
+    //     // print all photon and zdc info using their operator<< overloads
+    //     photonFile << "Event: " << event->GetAs<int>("eventNumber") << ", Lumi section: " << event->GetAs<int>("lumiSection")
+    //                << ", Run: " << event->GetAs<int>("runNumber") << endl;
+    //     photonFile << "Photon information:\n" << *photon << endl;
+        
+    //     // photonFile << "Photon Et: " << photonEt << "\teta: " << photonEta << "\tphi: " << photon->GetPhi() << endl;
+    //     photonFile << "\tZDC+: " << totalEnergyPlus << "\tZDC-: " << totalEnergyMinus << "\tzdcEnergy: " << zdcEnergy << endl;
     //   }
     // }
 
