@@ -38,7 +38,11 @@ input_skim = f"initial_{trigger}"
 # skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT_zdc-le1n1n"
 
 # skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT_zdc-0n0n"
-skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT_zdc-requireBreaking"
+# skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_barrelOnly_deltaT_zdc-requireBreaking"
+skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_deltaT_zdc-requireBreaking"
+# skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_deltaT_zdc-requireBreakingInverted"
+# skim = f"skimmed_{trigger}_lblSelections_et-gt4_widthCuts_shapeCuts_deltaT_zdc-requireBreakingBoth"
+# skim = f"skimmed_{trigger}_test"
 
 
 if facility == "NAF":

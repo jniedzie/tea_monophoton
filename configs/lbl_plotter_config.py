@@ -172,10 +172,10 @@ default_lumi = NormalizationType.to_lumi
 histograms = (
   #           name              title  logx logy    norm_type               rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
   Histogram("cutFlow"             , "", False, True, NormalizationType.to_data, 1, 0, 20, 1e-5, 1e13, "Selection", "#sum genWeight"),
-  Histogram("event_ZDCenergyPlus" , "", False, True, NormalizationType.to_lumi, 10000, 0, 1e6, 1e-1, 1e5, "#sum E_{ZDC}^{+} (GeV)", y_label),
-  Histogram("event_ZDCenergyMinus" , "", False, True, NormalizationType.to_lumi, 10000, 0, 1e6, 1e-1, 1e5,"#sum E_{ZDC}^{-} (GeV)", y_label),
-  Histogram("event_ZDCenergyPlusLogX" , "", False, True, NormalizationType.to_lumi, 15, 1, 6, 1e-1, 1e5, "log[#sum E_{ZDC}^{+} (GeV)]", y_label),
-  Histogram("event_ZDCenergyMinusLogX" , "", False, True, NormalizationType.to_lumi, 15, 1, 6, 1e-1, 1e5,"log[#sum E_{ZDC}^{-} (GeV)]", y_label),
+  # Histogram("event_ZDCenergyPlus" , "", False, True, NormalizationType.to_lumi, 10000, 0, 1e6, 1e-1, 1e5, "#sum E_{ZDC}^{+} (GeV)", y_label),
+  # Histogram("event_ZDCenergyMinus" , "", False, True, NormalizationType.to_lumi, 10000, 0, 1e6, 1e-1, 1e5,"#sum E_{ZDC}^{-} (GeV)", y_label),
+  # Histogram("event_ZDCenergyPlusLogX" , "", False, True, NormalizationType.to_lumi, 15, 1, 6, 1e-1, 1e5, "log[#sum E_{ZDC}^{+} (GeV)]", y_label),
+  # Histogram("event_ZDCenergyMinusLogX" , "", False, True, NormalizationType.to_lumi, 15, 1, 6, 1e-1, 1e5,"log[#sum E_{ZDC}^{-} (GeV)]", y_label),
 )
 
 histograms2D = (
@@ -192,27 +192,38 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     Histogram(f"goodPhoton_{prefix}et", "", False, True, default_lumi, 40,   0, 20, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "_normCheck", lbl_error),
     # Histogram(f"goodPhoton_{prefix}logEt", "", False, True, default_lumi, 5,   0.3, 2.6, 1e-2, 5e3, "log_{10}[E_{T}^{#gamma} (GeV)]", y_label, "", lbl_error),
 
+    Histogram(f"goodPhoton_{prefix}hOverE", "", False, True, default_lumi, 2,   0, 0.025, 1e-2, 5e5, "H/E", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}swissCross", "", False, True, default_lumi, 40,   0, 1.2, 1e-2, 5e5, "Swiss cross", y_label, "", lbl_error),
+
     Histogram(f"goodPhoton_{prefix}eta", "", False, True, default_lumi, 1,   -3, 3, 1e-2, 5e5, "#eta^{#gamma}", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}phi", "", False, True, default_lumi, 2,   -4, 4, 1e-2, 5e5, "#phi^{#gamma}", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}seedTime", "", False, True, default_lumi, 2,   -4, 4, 1e-2, 5e5, "Photon seed time", y_label, "", lbl_error),
 
-    Histogram(f"goodPhoton_{prefix}SCEtaWidth" , "", False, True, default_lumi, 1,   0, 0.01, 1e-2, 5e5, "#eta^{SC} width", y_label, "", lbl_error),
-    Histogram(f"goodPhoton_{prefix}SCPhiWidth" , "", False, True, default_lumi, 1,   0, 0.01, 1e-2, 5e5, "#phi^{SC} width", y_label, "", lbl_error),
-    # Histogram(f"goodPhoton_{prefix}SCPhiWidth" , "", False, True, default_lumi, 20,   0, 0.1, 1e-2, 5e5, "#phi^{SC} width", y_label, "", lbl_error),
+    # Histogram(f"goodPhoton_{prefix}SCEtaWidth" , "", False, True, default_lumi, 1,   0, 0.01, 1e-2, 5e5, "#eta^{SC} width", y_label, "", lbl_error),
+    # Histogram(f"goodPhoton_{prefix}SCPhiWidth" , "", False, True, default_lumi, 1,   0, 0.01, 1e-2, 5e5, "#phi^{SC} width", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}SCEtaWidth" , "", False, True, default_lumi, 5,   0, 0.03, 1e-2, 5e5, "#eta^{SC} width", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}SCPhiWidth" , "", False, True, default_lumi, 10,   0, 0.05, 1e-2, 5e5, "#phi^{SC} width", y_label, "", lbl_error),
 
-    Histogram(f"goodPhoton_{prefix}verticalOverCentral", "", False, True, default_lumi, 15,   0, 0.5, 1e-2, 3e3, "E_{right+left}/(2*E_{max})", y_label, "", lbl_error),
-    Histogram(f"goodPhoton_{prefix}horizontalOverCentral", "", False, True, default_lumi, 15,   0, 0.5, 1e-2, 3e3, "E_{top+bottom}/(2*E_{max})", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}verticalOverCentral", "", False, True, default_lumi, 15,   0, 0.5, 1e-2, 3e3, "E_{top+bottom}/(2*E_{max})", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}horizontalOverCentral", "", False, True, default_lumi, 15,   0, 0.5, 1e-2, 3e3, "E_{right+left}/(2*E_{max})", y_label, "", lbl_error),
     # Histogram(f"goodPhoton_{prefix}verticalOverCentral", "", False, True, default_lumi, 5,   0, 0.5, 1e-2, 3e3, "E_{right+left}/(2*E_{max})", y_label, "", lbl_error),
     # Histogram(f"goodPhoton_{prefix}horizontalOverCentral", "", False, True, default_lumi, 5,   0, 0.5, 1e-2, 3e3, "E_{top+bottom}/(2*E_{max})", y_label, "", lbl_error),
+
+    Histogram(f"goodPhoton_{prefix}energyTop"   , "", False, True, default_lumi, 1,   0, 25, 1e-2, 3e3, "E_{top}", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}energyBottom"   , "", False, True, default_lumi, 1,   0, 25, 1e-2, 3e3, "E_{bottom}", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}energyLeft"   , "", False, True, default_lumi, 1,   0, 25, 1e-2, 3e3, "E_{left}", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}energyRight"   , "", False, True, default_lumi, 1,   0, 25, 1e-2, 3e3, "E_{right}", y_label, "", lbl_error),
 
     Histogram(f"goodPhoton_{prefix}topOverCentral"   , "", False, True, default_lumi, 1,   0, 0.5, 1e-2, 3e3, "E_{top}/E_{max}", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}bottomOverCentral", "", False, True, default_lumi, 1,   0, 0.5, 1e-2, 3e3, "E_{bottom}/E_{max}", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}leftOverCentral"  , "", False, True, default_lumi, 1,   0, 0.5, 1e-2, 3e3, "E_{left}/E_{max}", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}rightOverCentral" , "", False, True, default_lumi, 1,   0, 0.5, 1e-2, 3e3, "E_{right}/E_{max}", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}minOverCentral" , "", False, True, default_lumi, 1,   0, 0.02, 1e-2, 3e3, "E_{min}/E_{max}", y_label, "", lbl_error),
 
-    Histogram(f"goodPhoton_{prefix}verticalImbalance"  , "", False, True, default_lumi, 5,   -2, 2, 1e-3, 3e5, "E_{top-bottom}/E_{top+bottom}", y_label, "", lbl_error),
-    Histogram(f"goodPhoton_{prefix}horizontalImbalance", "", False, True, default_lumi, 5,   -2, 2, 1e-3, 3e5, "E_{left-right}/E_{left+right}", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}verticalImbalance"  , "", False, True, default_lumi, 1,   -1.1, 1.1, 1e-3, 3e5, "E_{top-bottom}/E_{top+bottom}", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}horizontalImbalance", "", False, True, default_lumi, 1,   -1.1, 1.1, 1e-3, 3e5, "E_{left-right}/E_{left+right}", y_label, "", lbl_error),
 
+    Histogram(f"goodPhoton_{prefix}sigmaEta2012"  , "", False, True, default_lumi, 1,   0, 0.06, 1e-1, 3e5, "#sigma_{#eta, 2012}", y_label, "", lbl_error),    
     Histogram(f"goodPhoton_{prefix}sigmaIEtaIEta2012"  , "", False, True, default_lumi, 1,   0, 0.06, 1e-1, 3e5, "#sigma_{i#eta i#eta, 2012}", y_label, "", lbl_error),    
   )
 

@@ -58,6 +58,7 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     ("goodPhoton", f"{prefix}horizontalOverCentral", 10000, 0, 10, ""),
     ("goodPhoton", f"{prefix}horizontalImbalance", 100, -2, 2, ""),
     ("goodPhoton", f"{prefix}verticalImbalance", 100, -2, 2, ""),
+    ("goodPhoton", f"{prefix}swissCross", 1200, 0, 1.2, ""),
     
     ("goodPhoton", f"{prefix}SCEnergy", 1000, 0, 1000, ""),
     ("goodPhoton", f"{prefix}SCEt", 1000, 0, 1000, ""),
@@ -70,6 +71,7 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     ("goodPhoton", f"{prefix}energyLeft", 1000, 0, 1000, ""),
     ("goodPhoton", f"{prefix}energyRight", 1000, 0, 1000, ""),
     ("goodPhoton", f"{prefix}energyTop", 1000, 0, 1000, ""),
+    ("goodPhoton", f"{prefix}energyMin", 1000, 0, 1000, ""),
     ("goodPhoton", f"{prefix}eta", 100, -5, 5, ""),
     ("goodPhoton", f"{prefix}hOverE", 1000, 0, 1.0, ""),
     ("goodPhoton", f"{prefix}hasConversionTracks", 2, 0, 1, ""),
