@@ -1,5 +1,3 @@
-import socket
-from Logger import fatal
 from teaHelpers import get_facility
 
 from lbl_params import eventCuts, zdcCutNames, photonCuts
