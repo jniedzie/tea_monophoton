@@ -7,6 +7,14 @@ eventCuts = {
   "max_Ntowers": 0,
 }
 
+zdcCutNames = {
+  0: "None",
+  1: "LbLstyle",
+  2: "0n0n",
+  3: "Le1n1n",
+  4: "TargetNucleusBreaking",
+}
+
 # good object definitions
 photonCuts = {
   # Common cuts:
@@ -42,9 +50,14 @@ photonCuts = {
   "min_verticalOverCentral": 0.03,
   "min_horizontalOverCentral": 0.03,
   # "max_absEta": 1.2,
-  "min_seedTime": -1.2,
-  "max_seedTime": 0.8,
+  # "min_seedTime": -1.2,
+  # "max_seedTime": 0.8,
   # "max_sigmaIEtaIEta_endcap": 0.02,
+  
+  
+  "min_seedTime": -999,
+  "max_seedTime": 999,
+  
 }
 
 photonHotSpots = {

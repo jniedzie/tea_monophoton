@@ -225,6 +225,11 @@ for prefix in ["", "Barrel_", "EndCap_"]:
 
     Histogram(f"goodPhoton_{prefix}sigmaEta2012"  , "", False, True, default_lumi, 1,   0, 0.06, 1e-1, 3e5, "#sigma_{#eta, 2012}", y_label, "", lbl_error),    
     Histogram(f"goodPhoton_{prefix}sigmaIEtaIEta2012"  , "", False, True, default_lumi, 1,   0, 0.06, 1e-1, 3e5, "#sigma_{i#eta i#eta, 2012}", y_label, "", lbl_error),    
+  
+  
+  
+    Histogram(f"genPhoton_{prefix}et", "", False, True, default_lumi, 5,   0, 100, 1e-5, 5e5, "E_{T}^{gen #gamma} (GeV)", y_label, "", lbl_error),
+  
   )
 
   histograms2D += (

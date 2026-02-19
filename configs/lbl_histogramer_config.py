@@ -34,9 +34,10 @@ histParams = (
   ("monophoton", "egamma_deltaR_gt50GeV", 1000, -10, 10, ""),
 )
 
-histParams2D = ((
-  "egamma_et_vs_goodPhoton_et", 1000, 0, 1000, 1000, 0, 1000, ""
-), )
+histParams2D = (
+  ("egamma_et_vs_goodPhoton_et", 1000, 0, 1000, 1000, 0, 1000, ""), 
+  
+)
 
 for prefix in ["", "Barrel_", "EndCap_"]:
   histParams += (
@@ -83,9 +84,11 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     (f"goodPhoton_{prefix}eta_vs_et", 100, -3.0, 3.0, 1000, 0, 1000, ""),
     (f"goodPhoton_{prefix}eta_vs_phi", 1000, -3.0, 3.0, 1000, -4.0, 4.0, ""),
     (f"goodPhoton_{prefix}eta_vs_phi_vs_et", 1000, -3.0, 3.0, 1000, -4.0, 4.0, ""),
-    (f"goodPhoton_{prefix}eta_vs_phi_gt50GeV", 100, -3.0, 3.0, 100, -4.0, 4.0, ""),
+    (f"goodPhoton_{prefix}eta_vs_phi_gt30p0GeV", 100, -3.0, 3.0, 100, -4.0, 4.0, ""),
+    (f"goodPhoton_{prefix}eta_vs_phi_gt50p0GeV", 100, -3.0, 3.0, 100, -4.0, 4.0, ""),
     (f"goodPhoton_{prefix}horizontalImbalance_vs_seedTime", 100, -2.0, 2.0, 100, -5.0, 5.0, ""),
     (f"goodPhoton_{prefix}verticalImbalance_vs_seedTime", 100, -2.0, 2.0, 100, -5.0, 5.0, ""),
+    (f"goodPhoton_{prefix}et_vs_seedTime", 2000, 0, 1000, 100, -5.0, 5.0, ""),
   )
 
 eventsTreeNames = [

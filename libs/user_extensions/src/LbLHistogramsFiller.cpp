@@ -53,9 +53,9 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Photon> phot
   histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance", photon->GetHorizontalImbalance());
   histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance", photon->GetVerticalImbalance());
   histogramsHandler->Fill("goodPhoton_" + prefix + "swissCross", photon->GetSwissCross());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance_vs_seedTime", photon->GetHorizontalImbalance(),
-                          photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance_vs_seedTime", photon->GetHorizontalImbalance(),photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance_vs_seedTime", photon->GetVerticalImbalance(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "et_vs_seedTime", photon->GetEt(), photon->GetSeedTime());
 
   vector<string> defaultBranches = {
       "SCEnergy",         "SCEt",       "SCEta",        "SCEtaWidth",        "SCPhi", "SCPhiWidth", "energy",
@@ -114,11 +114,23 @@ void LbLHistogramsFiller::FillEGammaHistograms(const shared_ptr<Event> event) {
   histogramsHandler->Fill("egamma_et_vs_goodPhoton_et", closestEgamma->Get("et"), et);
 }
 
-void LbLHistogramsFiller::SaveHighEtPhotonsInfo(const shared_ptr<Event> event) {
+void LbLHistogramsFiller::SaveHighEtPhotonsInfo(const shared_ptr<Event> event, float minEt, bool saveTextFile = false) {
   auto photons = event->GetCollection("goodPhoton");
   auto photon = asPhoton(photons->at(0));
 
-  // histogramsHandler->Fill("goodPhoton_eta_vs_phi_gt50GeV", (float)photon->Get("eta"), (float)photon->Get("phi"), et);
+  if (photon->GetEt() < minEt) return;
+
+  // turn minEt into a string with 1 decimal, e.g. 50.0 -> "50.0"
+  string minEtStr = to_string(minEt);
+  minEtStr = minEtStr.substr(0, minEtStr.find(".") + 2);
+  // replace "." with "p" in minEtStr, e.g. "50.0" -> "50p0"
+  minEtStr.replace(minEtStr.find("."), 1, "p");
+
+  histogramsHandler->SetEventWeights({{"default", photon->GetEt()}});
+  histogramsHandler->Fill("goodPhoton_eta_vs_phi_gt"+minEtStr+"GeV", photon->GetEta(), photon->GetPhi());
+  
+  if (!saveTextFile) return;
+
   // open a text file to write the photon information
   ofstream photonFile("/afs/desy.de/user/j/jniedzie/tea_lbl/photon_info" + to_string(event->GetAs<int>("eventNumber")) + ".txt");
   if (photonFile.is_open()) {
@@ -374,5 +386,6 @@ void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
 
   // auto photon = asPhoton(photons->at(0));
   // float et = photon->Get("et");
-  // if (et > 50) SaveHighEtPhotonsInfo(event);
+  SaveHighEtPhotonsInfo(event, 30.0, false);
+  SaveHighEtPhotonsInfo(event, 50.0, false);
 }
