@@ -9,6 +9,7 @@ LbLObjectsManager::LbLObjectsManager() {
   auto& config = ConfigManager::GetInstance();
   config.GetMap("detectorParams", detectorParams);
   config.GetMap("caloEtaEdges", caloEtaEdges);
+  config.GetVector("knownPids", knownPids);
 }
 
 bool LbLObjectsManager::IsGoodPhoton(const shared_ptr<Photon> photon, shared_ptr<map<string, int>> cutFlow) {
@@ -151,11 +152,24 @@ shared_ptr<PhysicsObjects> LbLObjectsManager::GetGenParticles(const shared_ptr<E
 
 int LbLObjectsManager::GetParticlePid(const shared_ptr<PhysicsObject> particle) {
   int particlePid = particle->Get("pid");
+  int convertedPid;
 
-  // this is a hack needed because pid was stored as float in the tree
-  // float *floatPtr = reinterpret_cast<float *>(&particlePid);
-  // float floatValue = *floatPtr;
-  // particlePid = round(floatValue);
+  if (find(knownPids.begin(), knownPids.end(), abs(particlePid)) != knownPids.end()) {
+    return particlePid;
+  } else {
+    // this is a hack needed if pid was stored as float in the tree
+  float* floatPtr = reinterpret_cast<float*>(&particlePid);
+    float floatValue = *floatPtr;
+    convertedPid = round(floatValue);
 
-  return particlePid;
+    if (find(knownPids.begin(), knownPids.end(), abs(convertedPid)) != knownPids.end()) {
+      return convertedPid;
+    }
+  }
+
+  fatal() << "Unknown PID: " << particlePid << ", converted: " << convertedPid
+          << ". If one of them makes sense, add it to knownPids in the config. Otherwise, there's a serious problem in decoding it from "
+             "the ntuple."
+          << endl;
+  exit(1);
 }

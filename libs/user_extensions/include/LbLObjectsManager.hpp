@@ -29,4 +29,5 @@ class LbLObjectsManager {
   int GetParticlePid(const std::shared_ptr<PhysicsObject> particle);
 
   std::map<std::string, float> detectorParams, caloEtaEdges;
+  std::vector<int> knownPids;
 };

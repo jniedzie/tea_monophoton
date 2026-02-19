@@ -1,6 +1,6 @@
 # event cuts
 eventCuts = {
-  "ZDC_cut": 4,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n, 4: target-nucleus-breaking
+  "ZDC_cut": 2,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n, 4: target-nucleus-breaking
   "max_Nelectrons": 0,
   "max_Ntracks": 0,
   "max_Nmuons": 0,
@@ -286,6 +286,8 @@ nGenEvents = {
   "alps_30": 719000,
   "alps_90": 449000,
 }
+
+knownPids = [11, 22, 1000822080]
 
 uncertainty_on_zero = 1.84  # 95% CL
 # uncertainty_on_zero = 1.14  # 68% CL
