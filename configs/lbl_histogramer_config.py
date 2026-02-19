@@ -20,12 +20,6 @@ defaultHistParams = (
 )
 
 histParams = (
-  # photons
-
-  # gen-level
-  ("genPhoton", "et", 200, 0, 10, ""),
-  ("genPhoton", "energy", 200, 0, 10, ""),
-
   # event
   ("event", "deltaEt", 100, 0, 1, ""),
   ("event", "ZDCenergyPlus", 1e6, 0, 1e6, ""),
@@ -79,6 +73,9 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     ("goodPhoton", f"{prefix}phi", 100, -5, 5, ""),
     ("goodPhoton", f"{prefix}sigmaEta2012", 100, 0, 0.1, ""),
     ("goodPhoton", f"{prefix}sigmaIEtaIEta2012", 100, 0, 0.1, ""),
+    
+    # gen-level
+    ("genPhoton", f"{prefix}et", 2000, 0, 1000, ""),
   )
 
   histParams2D += (

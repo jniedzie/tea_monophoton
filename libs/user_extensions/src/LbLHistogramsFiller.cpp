@@ -53,7 +53,8 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Photon> phot
   histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance", photon->GetHorizontalImbalance());
   histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance", photon->GetVerticalImbalance());
   histogramsHandler->Fill("goodPhoton_" + prefix + "swissCross", photon->GetSwissCross());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance_vs_seedTime", photon->GetHorizontalImbalance(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance_vs_seedTime", photon->GetHorizontalImbalance(),
+                          photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance_vs_seedTime", photon->GetVerticalImbalance(), photon->GetSeedTime());
 
   vector<string> defaultBranches = {
@@ -304,24 +305,31 @@ void LbLHistogramsFiller::SaveHighEtPhotonsInfo(const shared_ptr<Event> event) {
 
 void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) {
   auto photons = event->GetCollection("genPhoton");
-  auto electrons = event->GetCollection("genElectron");
+  // auto electrons = event->GetCollection("genElectron");
+
+  warn() << "Filling gen-level histograms. Number of gen photons: " << photons->size() << endl;
 
   for (auto physObject : *photons) {
-    auto photon = asPhoton(physObject)->GetFourMomentum();
-    if (fabs(photon.Eta()) > 5.2) continue;
+    auto photon = asPhoton(physObject);
+    // if (fabs(photon.Eta()) > 5.2) continue;
 
-    bool overlapsWithElectron = false;
+    // bool overlapsWithElectron = false;
 
-    for (auto electron : *electrons) {
-      if (photon.DeltaR(asElectron(electron)->GetFourMomentum()) < 0.1) {
-        overlapsWithElectron = true;
-        break;
-      }
+    // for (auto electron : *electrons) {
+    //   if (photon.DeltaR(asElectron(electron)->GetFourMomentum()) < 0.1) {
+    //     overlapsWithElectron = true;
+    //     break;
+    //   }
+    // }
+    // if (overlapsWithElectron) continue;
+
+    histogramsHandler->Fill("genPhoton_et", photon->GetEt());
+
+    if (fabs(photon->GetEta()) > 1.2) {
+      histogramsHandler->Fill("genPhoton_Barrel_et", photon->GetEt());
+    } else {
+      histogramsHandler->Fill("genPhoton_EndCap_et", photon->GetEt());
     }
-    if (overlapsWithElectron) continue;
-
-    histogramsHandler->Fill("genPhoton_et", photon.Pt());
-    histogramsHandler->Fill("genPhoton_energy", photon.E());
   }
 }
 
@@ -353,15 +361,16 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
 void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
   auto photons = event->GetCollection("goodPhoton");
 
+  FillGenLevelHistograms(event);
+
   if (photons->size() != 1) {
     fatal() << "Number of good photons != 1. This should never happen." << endl;
-    exit(13);
+    // exit(13);
+  } else {
+    FillMonoPhotonHistograms(event);
+    FillEGammaHistograms(event);
+    FillEventLevelHistograms(event);
   }
-
-  FillMonoPhotonHistograms(event);
-  FillEGammaHistograms(event);
-  FillEventLevelHistograms(event);
-  FillGenLevelHistograms(event);
 
   // auto photon = asPhoton(photons->at(0));
   // float et = photon->Get("et");

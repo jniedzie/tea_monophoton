@@ -4,6 +4,7 @@ nEvents = -1
 
 triggerSelection = (
     "SingleEG5",
+    # "SingleEG5_Prescaled",
 )
 
 eventCuts = {}
