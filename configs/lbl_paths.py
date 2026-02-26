@@ -28,12 +28,15 @@ qed_names = ["qed_superchic", "qed_starlight"]
 # skimming
 input_skim = f"initial_{trigger}"
 
+# figure out cuts combination
 zdcCut = zdcCutNames[eventCuts["ZDC_cut"]]
+timeCut = "_noTimeCut" if (photonCuts["min_seedTime"] < -900 and photonCuts["max_seedTime"] > 900) else ""
+swissCrossCut = "_noSwissCrossCut" if photonCuts["max_swissCross"] >= 1.0 else ""
+scPhiWidthCut = "_tightPhiWidth" if photonCuts["max_SCPhiWidth_barrel"] < 0.15 else ""
+VHfractionsCut = "_noVHfractionsCut" if (photonCuts["min_verticalOverCentral"] == 0.0 and photonCuts["min_horizontalOverCentral"] == 0) else ""
 
-noTimeCut = photonCuts["min_seedTime"] < -900 and photonCuts["max_seedTime"] > 900
-timeCut = "_noTimeCut" if noTimeCut else ""
-
-skim = f"skimmed_{trigger}_baseSelections{timeCut}_zdc{zdcCut}"
+# build skim name
+skim = f"skimmed_{trigger}_baseSelections{timeCut}{swissCrossCut}{scPhiWidthCut}{VHfractionsCut}_zdc{zdcCut}"
 
 if get_facility() == "NAF":
   base_path = "/data/dust/user/jniedzie/monophoton/"

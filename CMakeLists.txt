@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 project(user_analysis)
 
+set(CMAKE_CXX_STANDARD 20)
+
 # setup variables for macOS builds
 set(CMAKE_OSX_ARCHITECTURES "arm64")
 SET(CMAKE_OSX_DEPLOYMENT_TARGET 13.2)

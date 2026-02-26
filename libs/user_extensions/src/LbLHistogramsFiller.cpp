@@ -126,8 +126,9 @@ void LbLHistogramsFiller::SaveHighEtPhotonsInfo(const shared_ptr<Event> event, f
   // replace "." with "p" in minEtStr, e.g. "50.0" -> "50p0"
   minEtStr.replace(minEtStr.find("."), 1, "p");
 
-  histogramsHandler->SetEventWeights({{"default", photon->GetEt()}});
+  // histogramsHandler->SetEventWeights({{"default", photon->GetEt()}});
   histogramsHandler->Fill("goodPhoton_eta_vs_phi_gt"+minEtStr+"GeV", photon->GetEta(), photon->GetPhi());
+  // histogramsHandler->SetEventWeights({{"default", 1.0}});
   
   if (!saveTextFile) return;
 

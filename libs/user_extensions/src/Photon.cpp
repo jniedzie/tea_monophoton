@@ -93,7 +93,7 @@ bool Photon::PassesShowerShape() {
   if ((float)Get("sigmaIEtaIEta2012") < photonCuts["min_sigmaIEtaIEta_" + detRegion]) return false;
   if ((float)Get("SCEtaWidth") < photonCuts["min_SCEtaWidth"]) return false;
   if ((float)Get("SCPhiWidth") < photonCuts["min_SCPhiWidth"]) return false;
-  if ((float)Get("SCPhiWidth") > photonCuts["max_SCPhiWidth"]) return false;
+  if ((float)Get("SCPhiWidth") > photonCuts["max_SCPhiWidth_" + detRegion]) return false;
 
   if (GetVerticalOverCentralEnergy() < photonCuts["min_verticalOverCentral"]) return false;
   if (GetHorizontalOverCentralEnergy() < photonCuts["min_horizontalOverCentral"]) return false;

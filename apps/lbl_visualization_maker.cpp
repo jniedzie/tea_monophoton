@@ -177,8 +177,11 @@ void CheckArgs(int argc, char **argv) {
 int main(int argc, char **argv) {
   gROOT->SetBatch(true);
 
-  CheckArgs(argc, argv);
-  ConfigManager::Initialize(argv[1]);
+  vector<string> requiredArgs = {"config"};
+  vector<string> optionalArgs = {};
+  auto args = make_unique<ArgsManager>(argc, argv, requiredArgs, optionalArgs);
+  ConfigManager::Initialize(args);
+
   auto &config = ConfigManager::GetInstance();
 
   int eventsOffset, nEvents;

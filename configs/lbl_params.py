@@ -1,6 +1,7 @@
 # event cuts
 eventCuts = {
-  "ZDC_cut": 2,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n, 4: target-nucleus-breaking
+  "ZDC_cut":
+  2,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n, 4: target-nucleus-breaking
   "max_Nelectrons": 0,
   "max_Ntracks": 0,
   "max_Nmuons": 0,
@@ -18,12 +19,12 @@ zdcCutNames = {
 # good object definitions
 photonCuts = {
   # Common cuts:
-  "max_swissCross": 0.95,
   "max_hOverE_barrel": 0.04596,
   "max_hOverE_endcap": 0.0590,
   "max_SCEtaWidth_barrel": 0.0106,
   "max_SCEtaWidth_endcap": 0.0272,
-  "max_SCPhiWidth": 999999,  # try 0.01
+  "max_SCPhiWidth_barrel": 999999,
+  "max_SCPhiWidth_endcap": 999999,
   "min_sigmaIEtaIEta_barrel": 0,  # try 0.009
   "max_sigmaIEtaIEta_barrel": 0.02,
   "min_sigmaIEtaIEta_endcap": 0,  # try 0.009
@@ -33,6 +34,7 @@ photonCuts = {
   "max_verticalImbalance": 99999,
 
   # LbL cuts:
+  # "max_swissCross": 0.95,
   # "min_et": 2.0,
   # "min_SCEtaWidth": 0.0,
   # "min_SCPhiWidth": 0.0,
@@ -44,20 +46,21 @@ photonCuts = {
   "max_sigmaIEtaIEta_endcap": 0.06,
 
   # Tightened cuts:
+  "max_swissCross": 0.87,
   "min_et": 4.0,
   "min_SCEtaWidth": 0.001,
   "min_SCPhiWidth": 0.001,
-  "min_verticalOverCentral": 0.03,
-  "min_horizontalOverCentral": 0.03,
+  "min_verticalOverCentral": 0.005,
+  "min_horizontalOverCentral": 0.005,
   # "max_absEta": 1.2,
   # "min_seedTime": -1.2,
   # "max_seedTime": 0.8,
   # "max_sigmaIEtaIEta_endcap": 0.02,
-  
-  
+  # "max_SCPhiWidth_barrel": 0.01,
+
+  # loosened cuts:
   "min_seedTime": -999,
   "max_seedTime": 999,
-  
 }
 
 photonHotSpots = {
