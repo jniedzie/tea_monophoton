@@ -34,11 +34,15 @@ timeCut = "_noTimeCut" if (photonCuts["min_seedTime"] < -900 and photonCuts["max
 swissCrossCut = "_noSwissCrossCut" if photonCuts["max_swissCross"] >= 1.0 else ""
 scPhiWidthCut = "_tightPhiWidth" if photonCuts["max_SCPhiWidth_barrel"] < 0.15 else ""
 VHfractionsCut = "_noVHfractionsCut" if (photonCuts["min_verticalOverCentral"] == 0.0 and photonCuts["min_horizontalOverCentral"] == 0) else ""
+hOverEcut = "_tightHOverE" if (photonCuts["max_hOverE_barrel"] < 0.005 and photonCuts["max_hOverE_endcap"] < 0.005) else ""
+
+# suffix = ""
+suffix = "_goodNEE"
 
 # build skim name
-skim = f"skimmed_{trigger}_baseSelections{timeCut}{swissCrossCut}{scPhiWidthCut}{VHfractionsCut}_zdc{zdcCut}"
+skim = f"skimmed_{trigger}_baseSelections{timeCut}{swissCrossCut}{scPhiWidthCut}{VHfractionsCut}{hOverEcut}_zdc{zdcCut}{suffix}"
 
-if get_facility() == "NAF":
+if get_facility() == "naf":
   base_path = "/data/dust/user/jniedzie/monophoton/"
 elif get_facility() == "lxplus":
   base_path = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/"

@@ -178,10 +178,10 @@ histograms = (
   # Histogram("event_ZDCenergyMinusLogX" , "", False, True, NormalizationType.to_lumi, 15, 1, 6, 1e-1, 1e5,"log[#sum E_{ZDC}^{-} (GeV)]", y_label),
 )
 
-# histograms2D = (
+histograms2D = (
 #   #           name                      title logs              norm          rebins  x_range  y_range  z_range   labels
 #   Histogram2D("egamma_et_vs_goodPhoton_et", "", False, False, False, default_lumi, 1,  1,  0,  12,  0,  12,  0, 50,  "e/#gamma E_{T} (GeV)", "reco-#gamma E_{T} (GeV)", "Counts"),
-# )
+)
 
 for prefix in ["", "Barrel_", "EndCap_"]:
 # for prefix in [""]:
@@ -192,17 +192,17 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     # Histogram(f"goodPhoton_{prefix}et", "", False, True, default_lumi, 40,   0, 20, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "_normCheck", lbl_error),
     # # Histogram(f"goodPhoton_{prefix}logEt", "", False, True, default_lumi, 5,   0.3, 2.6, 1e-2, 5e3, "log_{10}[E_{T}^{#gamma} (GeV)]", y_label, "", lbl_error),
 
-    Histogram(f"goodPhoton_{prefix}hOverE", "", False, True, default_lumi, 2,   0, 0.025, 1e-2, 5e5, "H/E", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}hOverE", "", False, True, default_lumi, 1,   0, 0.025, 1e-2, 5e5, "H/E", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}swissCross", "", False, True, default_lumi, 20,   0, 1.5, 1e-2, 5e10, "Swiss cross", y_label, "", lbl_error),
 
-    # Histogram(f"goodPhoton_{prefix}eta", "", False, True, default_lumi, 1,   -3, 3, 1e-2, 5e5, "#eta^{#gamma}", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}eta", "", False, True, default_lumi, 1,   -3, 3, 1e-2, 5e5, "#eta^{#gamma}", y_label, "", lbl_error),
     # Histogram(f"goodPhoton_{prefix}phi", "", False, True, default_lumi, 2,   -4, 4, 1e-2, 5e5, "#phi^{#gamma}", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}seedTime", "", False, True, default_lumi, 2,   -4, 4, 1e-2, 5e6, "Photon seed time (ns)", y_label, "", lbl_error),
 
     # # Histogram(f"goodPhoton_{prefix}SCEtaWidth" , "", False, True, default_lumi, 1,   0, 0.01, 1e-2, 5e5, "#eta^{SC} width", y_label, "", lbl_error),
     # # Histogram(f"goodPhoton_{prefix}SCPhiWidth" , "", False, True, default_lumi, 1,   0, 0.01, 1e-2, 5e5, "#phi^{SC} width", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}SCEtaWidth" , "", False, True, default_lumi, 5,   0, 0.03, 1e-2, 5e5, "#eta^{SC} width", y_label, "", lbl_error),
-    Histogram(f"goodPhoton_{prefix}SCPhiWidth" , "", False, True, default_lumi, 5,   0, 0.02, 1e-2, 5e5, "#phi^{SC} width", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}SCPhiWidth" , "", False, True, default_lumi, 5,   0, 0.05, 1e-2, 5e5, "#phi^{SC} width", y_label, "", lbl_error),
 
     # Histogram(f"goodPhoton_{prefix}verticalOverCentral", "", False, True, default_lumi, 15,   0, 0.5, 1e-2, 3e5, "E_{top+bottom}/(2*E_{max})", y_label, "", lbl_error),
     # Histogram(f"goodPhoton_{prefix}horizontalOverCentral", "", False, True, default_lumi, 15,   0, 0.5, 1e-2, 3e5, "E_{right+left}/(2*E_{max})", y_label, "", lbl_error),
@@ -232,12 +232,12 @@ for prefix in ["", "Barrel_", "EndCap_"]:
   
   )
 
-  # histograms2D += (
+  histograms2D += (
   #   #           name                      title logs              norm          rebins  x_range  y_range  z_range   labels
-  #   Histogram2D(f"goodPhoton_{prefix}eta_vs_phi", "", False, False, False, default_lumi, 5,  5,  -3,  3,  -4,  4,  0, 1e3,  "#eta", "#phi", "Counts"),  
+    Histogram2D(f"goodPhoton_{prefix}eta_vs_phi", "", False, False, False, default_lumi, 5,  5,  -3,  3,  -4,  4,  0, 1e3,  "#eta", "#phi", "Counts"),  
   #   Histogram2D(f"goodPhoton_{prefix}horizontalImbalance_vs_seedTime", "", False, False, False, default_lumi, 1,  1,  -2.0,  2.0,  -4,  4,  0, 1e3,  "E_{left-right}/E_{left+right}", "Photon seed time (ns)", "Counts"),  
   #   Histogram2D(f"goodPhoton_{prefix}verticalImbalance_vs_seedTime", "", False, False, False, default_lumi, 1,  1,  -2.0,  2.0,  -4,  4,  0, 1e3,  "E_{top-bottom}/E_{top+bottom}", "Photon seed time (ns)", "Counts"),  
-  # )
+  )
 
 histogramsRatio = []
 
