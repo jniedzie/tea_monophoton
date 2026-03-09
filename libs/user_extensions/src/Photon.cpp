@@ -77,13 +77,6 @@ bool Photon::IsInHotSpot() {
 
     if (phi > phiMin && phi < phiMax && eta > etaMin && eta < etaMax) return true;
   }
-
-  // if (phi > 2.20 && phi < 2.27 && eta > -1.87 && eta < -1.83) return true;
-  // if (phi > -2.78 && phi < -2.70 && eta > -1.62 && eta < -1.58) return true;
-
-  // if (phi > 2.17 && phi < 2.21 && eta > -1.60 && eta < -1.58) return true;
-  // if (phi > 0.09 && phi < 0.13 && eta > 2.12 && eta < 2.14) return true;
-
   return false;
 }
 

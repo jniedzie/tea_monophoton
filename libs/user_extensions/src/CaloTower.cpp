@@ -15,7 +15,7 @@ CaloTower::CaloTower(std::shared_ptr<PhysicsObject> physicsObject_) : physicsObj
   absEta = fabs(eta);
   iEta = GetIeta();
 
-  auto &config = ConfigManager::GetInstance();
+  auto& config = ConfigManager::GetInstance();
   config.GetMap("deadEtas", deadEtas);
   config.GetMap("caloEtaEdges", caloEtaEdges);
   config.GetMap("caloMatching", caloMatching);
