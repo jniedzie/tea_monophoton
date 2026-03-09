@@ -19,8 +19,6 @@ zdcCutNames = {
 # good object definitions
 photonCuts = {
   # Common cuts:
-  "max_hOverE_barrel": 0.04596,
-  "max_hOverE_endcap": 0.0590,
   "max_SCEtaWidth_barrel": 0.0106,
   "max_SCEtaWidth_endcap": 0.0272,
   "max_SCPhiWidth_barrel": 999999,
@@ -34,6 +32,8 @@ photonCuts = {
   "max_verticalImbalance": 99999,
 
   # LbL cuts:
+  # "max_hOverE_barrel": 0.04596,
+  # "max_hOverE_endcap": 0.0590,
   # "max_swissCross": 0.95,
   # "min_et": 2.0,
   # "min_SCEtaWidth": 0.0,
@@ -46,6 +46,8 @@ photonCuts = {
   "max_sigmaIEtaIEta_endcap": 0.06,
 
   # Tightened cuts:
+  "max_hOverE_barrel": 0.001,
+  "max_hOverE_endcap": 0.001,
   "max_swissCross": 0.87,
   "min_et": 4.0,
   "min_SCEtaWidth": 0.001,
