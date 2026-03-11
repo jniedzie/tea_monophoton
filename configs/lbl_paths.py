@@ -37,7 +37,8 @@ VHfractionsCut = "_noVHfractionsCut" if (photonCuts["min_verticalOverCentral"] =
 hOverEcut = "_tightHOverE" if (photonCuts["max_hOverE_barrel"] < 0.005 and photonCuts["max_hOverE_endcap"] < 0.005) else ""
 
 # suffix = ""
-suffix = "_goodNEE"
+# suffix = "_goodNEE"
+suffix = "_superCleanNEE"
 
 # build skim name
 skim = f"skimmed_{trigger}_baseSelections{timeCut}{swissCrossCut}{scPhiWidthCut}{VHfractionsCut}{hOverEcut}_zdc{zdcCut}{suffix}"

@@ -19,35 +19,38 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
 
   for (auto physicsObject : *towers) {
     auto tower = asCaloTower(physicsObject);
-
     string detectorType = tower->GetDetectorType();
 
+    // We skip these checks to make NEE super-clean
+    // if (detectorType == "HadronicCrack" || detectorType == "ElectromagneticCrack") continue;
+    // if (tower->IsDead()) continue;
+
     if (detectorType == "HCAL") {
-      if (tower->IsDead()) continue;
-      if (tower->IsInHadronicCrack()) continue;
+      // add hotspots (make maps, see if there are any)
       if (tower->IsHadronicEnergyAboveNoiseThreshold()) nPassingTowers++;
       if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
     }
-    if (detectorType == "ECAL") {
-      if (tower->IsDead()) continue;
-      if (tower->IsEtaAboveLimit()) continue;
-      if (tower->IsInHEM()) continue;
-      if (tower->IsInElectromagneticCrack()) continue;
+    else if (detectorType == "ECAL") {
+      // add hotspots (?)
+      
+      // Skipping for super-clean NEE (to be replaced with eta-dependent thresholds)
+      // if (tower->IsEtaAboveLimit()) continue;
       if (tower->OverlapsWithOtherObjects(event->GetCollection("goodPhoton"))) continue;
-      if (tower->OverlapsWithOtherObjects(event->GetCollection("goodElectron"))) continue;
       if (tower->IsElectromagneticEnergyAboveNoiseThreshold()) nPassingTowers++;
       if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
     }
-    if (detectorType == "HF") {
-      if (tower->IsDead()) continue;
-      if (tower->OverlapsWithOtherObjects(event->GetCollection("goodPhoton"))) continue;
-      if (tower->OverlapsWithOtherObjects(event->GetCollection("goodElectron"))) continue;
-
-      // This for HF is actually equivalent to checking the EM energy:
+    else if (detectorType == "HF") {
+      // add hotspots (?)
+      
       if (tower->IsHadronicEnergyAboveNoiseThreshold()) nPassingTowers++;
       if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
     }
+    else {
+      fatal() << "Unknown detector type for calo tower: " << detectorType << endl;
+      exit(0);
+    }
   }
+
   if (nPassingTowers > eventCuts.at("max_Ntowers")) return false;
 
   if (cutFlowManager) cutFlowManager->UpdateCutFlow("neutralExclusivity");
@@ -253,13 +256,13 @@ bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager
 
     // if (photonEt > 30 && (zdcEnergy >= 10000)) {
 
-    //   ofstream photonFile("/afs/desy.de/user/j/jniedzie/tea_monophoton/debugging/info" + to_string(event->GetAs<int>("eventNumber")) + ".txt");
-    //   if (photonFile.is_open()) {
+    //   ofstream photonFile("/afs/desy.de/user/j/jniedzie/tea_monophoton/debugging/info" + to_string(event->GetAs<int>("eventNumber")) +
+    //   ".txt"); if (photonFile.is_open()) {
     //     // print all photon and zdc info using their operator<< overloads
     //     photonFile << "Event: " << event->GetAs<int>("eventNumber") << ", Lumi section: " << event->GetAs<int>("lumiSection")
     //                << ", Run: " << event->GetAs<int>("runNumber") << endl;
     //     photonFile << "Photon information:\n" << *photon << endl;
-        
+
     //     // photonFile << "Photon Et: " << photonEt << "\teta: " << photonEta << "\tphi: " << photon->GetPhi() << endl;
     //     photonFile << "\tZDC+: " << totalEnergyPlus << "\tZDC-: " << totalEnergyMinus << "\tzdcEnergy: " << zdcEnergy << endl;
     //   }
