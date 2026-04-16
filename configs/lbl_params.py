@@ -1,7 +1,6 @@
 # event cuts
 eventCuts = {
-  "ZDC_cut":
-  2,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n, 4: target-nucleus-breaking
+  "ZDC_cut": 2,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n, 4: target-nucleus-breaking
   "max_Nelectrons": 0,
   "max_Ntracks": 0,
   "max_Nmuons": 0,
@@ -65,6 +64,34 @@ photonCuts = {
   "max_seedTime": 999,
 }
 
+# good object definitions
+# photonCuts = {
+#     # no cuts
+#     "max_SCEtaWidth_barrel": 999999,
+#     "max_SCEtaWidth_endcap": 999999,
+#     "max_SCPhiWidth_barrel": 999999,
+#     "max_SCPhiWidth_endcap": 999999,
+#     "min_sigmaIEtaIEta_barrel": -999999,
+#     "max_sigmaIEtaIEta_barrel": 999999,
+#     "min_sigmaIEtaIEta_endcap": -999999,
+#     "min_horizontalImbalance": -99999,
+#     "min_verticalImbalance": -99999,
+#     "max_horizontalImbalance": 99999,
+#     "max_verticalImbalance": 99999,
+#     "max_absEta": 999999,
+#     "max_sigmaIEtaIEta_endcap": 999999,
+#     "max_hOverE_barrel": 999999,
+#     "max_hOverE_endcap": 999999,
+#     "max_swissCross": 999999,
+#     "min_et": -999999,
+#     "min_SCEtaWidth": -999999,
+#     "min_SCPhiWidth": -999999,
+#     "min_verticalOverCentral": -999999,
+#     "min_horizontalOverCentral": -999999,
+#     "min_seedTime": -999999,
+#     "max_seedTime": 999999,
+# }
+
 photonHotSpots = {
   # eta_min, eta_max, phi_min, phi_max
   # "hotspot_1": (-1.87, -1.83, 2.20, 2.27),
@@ -79,11 +106,19 @@ dataBlinding = {
 }
 
 electronCuts = {
-  "min_pt": 2.0,
-  "max_absEtaSC": 2.2,
-  "max_nMissingHits": 1,
-  "max_hOverE": 0.005,
-  "max_deltaEtaAtVertex": 0.1,
+  # standard cuts:
+  # "min_pt": 2.0,
+  # "max_absEtaSC": 2.2,
+  # "max_nMissingHits": 1,
+  # "max_hOverE": 0.005,
+  # "max_deltaEtaAtVertex": 0.1,
+
+  # super-clean CHE cuts:
+  "min_pt": 0.0,
+  "max_absEtaSC": 999999,
+  "max_nMissingHits": 999999,
+  "max_hOverE": 999999,
+  "max_deltaEtaAtVertex": 999999,
 
   # we don't apply electron isolation:
   "max_PFChIso_barrel": 999999,
@@ -95,9 +130,15 @@ electronCuts = {
 }
 
 trackCuts = {
-  "min_pt": 0.3,
-  "max_absEta": 2.4,
-  "min_nValidHits": 4,
+  # standard cuts
+  # "min_pt": 0.3,
+  # "max_absEta": 2.4,
+  # "min_nValidHits": 4,
+
+  # super-clean CHE cuts:
+  "min_pt": 0.0,
+  "max_absEta": 999999,
+  "min_nValidHits": 0,
 
   # we don't apply these track selections:
   "max_normalizedChi2": 999999,
@@ -108,8 +149,13 @@ trackCuts = {
 }
 
 muonCuts = {
-  "min_pt": 2.5,
-  "max_absEta": 2.4,
+  # standard cuts
+  # "min_pt": 2.5,
+  # "max_absEta": 2.4,
+
+  # super-clean CHE cuts:
+  "min_pt": 0,
+  "max_absEta": 999999,
 }
 
 # calorimeter cuts
