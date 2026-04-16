@@ -38,7 +38,7 @@ hOverEcut = "_tightHOverE" if (photonCuts["max_hOverE_barrel"] < 0.005 and photo
 
 # suffix = ""
 # suffix = "_goodNEE"
-suffix = "_superCleanNEE"
+suffix = "_superCleanNEE_superCleanCHE"
 
 # build skim name
 skim = f"skimmed_{trigger}_baseSelections{timeCut}{swissCrossCut}{scPhiWidthCut}{VHfractionsCut}{hOverEcut}_zdc{zdcCut}{suffix}"
