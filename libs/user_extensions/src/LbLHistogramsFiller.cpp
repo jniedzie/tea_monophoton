@@ -53,9 +53,11 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Photon> phot
   histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance", photon->GetHorizontalImbalance());
   histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance", photon->GetVerticalImbalance());
   histogramsHandler->Fill("goodPhoton_" + prefix + "swissCross", photon->GetSwissCross());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance_vs_seedTime", photon->GetHorizontalImbalance(),photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance_vs_seedTime", photon->GetHorizontalImbalance(),
+                          photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance_vs_seedTime", photon->GetVerticalImbalance(), photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "et_vs_seedTime", photon->GetEt(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "eta_vs_seedTime", photon->GetEta(), photon->GetSeedTime());
 
   vector<string> defaultBranches = {
       "SCEnergy",         "SCEt",       "SCEta",        "SCEtaWidth",        "SCPhi", "SCPhiWidth", "energy",
@@ -126,10 +128,16 @@ void LbLHistogramsFiller::SaveHighEtPhotonsInfo(const shared_ptr<Event> event, f
   // replace "." with "p" in minEtStr, e.g. "50.0" -> "50p0"
   minEtStr.replace(minEtStr.find("."), 1, "p");
 
-  // histogramsHandler->SetEventWeights({{"default", photon->GetEt()}});
-  histogramsHandler->Fill("goodPhoton_eta_vs_phi_gt"+minEtStr+"GeV", photon->GetEta(), photon->GetPhi());
-  // histogramsHandler->SetEventWeights({{"default", 1.0}});
-  
+  histogramsHandler->Fill("goodPhoton_eta_vs_phi_gt" + minEtStr + "GeV", photon->GetEta(), photon->GetPhi());
+
+  histogramsHandler->Fill("goodPhoton_seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
+
+  if (fabs(photon->GetEta()) > 1.2) {
+    histogramsHandler->Fill("goodPhoton_EndCap_seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
+  } else {
+    histogramsHandler->Fill("goodPhoton_Barrel_seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
+  }
+
   if (!saveTextFile) return;
 
   // open a text file to write the photon information

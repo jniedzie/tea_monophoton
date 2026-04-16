@@ -44,6 +44,8 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     ("goodPhoton", f"{prefix}et", 2000, 0, 1000, ""),
     ("goodPhoton", f"{prefix}logEt", 200, -1, 3, ""),
     ("goodPhoton", f"{prefix}seedTime", 1000, -50, 50, ""),
+    ("goodPhoton", f"{prefix}seedTime_gt30p0GeV", 1000, -50, 50, ""),
+    ("goodPhoton", f"{prefix}seedTime_gt50p0GeV", 1000, -50, 50, ""),
     ("goodPhoton", f"{prefix}topOverCentral", 1000, 0, 10, ""),
     ("goodPhoton", f"{prefix}bottomOverCentral", 1000, 0, 10, ""),
     ("goodPhoton", f"{prefix}leftOverCentral", 1000, 0, 10, ""),
@@ -89,6 +91,7 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     (f"goodPhoton_{prefix}horizontalImbalance_vs_seedTime", 100, -2.0, 2.0, 100, -5.0, 5.0, ""),
     (f"goodPhoton_{prefix}verticalImbalance_vs_seedTime", 100, -2.0, 2.0, 100, -5.0, 5.0, ""),
     (f"goodPhoton_{prefix}et_vs_seedTime", 2000, 0, 1000, 100, -5.0, 5.0, ""),
+    (f"goodPhoton_{prefix}eta_vs_seedTime", 100, -5.0, 5.0, 1000, -50.0, 50.0, ""),
   )
 
 eventsTreeNames = [
