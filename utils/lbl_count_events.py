@@ -4,41 +4,48 @@ import os
 
 from lbl_paths import base_path
 
-directory = f"{base_path}/collisionData/initial"
-pattern = "ntuple_*.root"
+# directory = f"{base_path}/collisionData/initial"
+# pattern = "ntuple_*.root"
 
-# tree_name = "ggHiNtuplizer/EventTree"
-tree_name = "Events"
+# directory = "/eos/cms/store/cmst3/group/lightbylight/EmptyBx_HIForest/HIEmptyBX/pbpb_Emptybx_2018/190527_113416/0000/"  # 1'690'049
+# directory = "/eos/cms/store/group/phys_diffraction/lbyl_2018/HIEmptyBX/pbpb_Emptybx_2018/190527_113416/0000"  # 1'690'049
+directory = "/eos/cms/store/group/phys_diffraction/lbyl_2018/HIEmptyBX/ntuples_3_11_2026/HIEmptyBX/ntuples_emptyBx/260409_135249/0000"  # 55'974'067
+
+# pattern = "HiForestAOD_check_AOD_*.root"
+pattern = "data_HiForwardAOD_*.root"
+
+tree_name = "ggHiNtuplizer/EventTree"
+# tree_name = "Events"
 
 
 def count_tree_entries(directory, pattern, tree_name):
-    total_entries = 0
-    path_pattern = os.path.join(directory, pattern)
+  total_entries = 0
+  path_pattern = os.path.join(directory, pattern)
 
-    file_paths = glob.glob(path_pattern)
+  file_paths = glob.glob(path_pattern)
 
-    print(f"Found {len(file_paths)} files matching pattern {path_pattern}")
+  print(f"Found {len(file_paths)} files matching pattern {path_pattern}")
 
-    for filename in file_paths:
-        print(f"Processing file: {filename}")
-        root_file = ROOT.TFile.Open(filename, "READ")
-        if root_file.IsOpen():
-            tree = root_file.Get(tree_name)
-            if tree:
-                total_entries += tree.GetEntries()
-            else:
-                print(f"Failed to open tree {tree_name}")
-            root_file.Close()
-        else:
-            print(f"Failed to open {filename}")
+  for filename in file_paths:
+    print(f"Processing file: {filename}")
+    root_file = ROOT.TFile.Open(filename, "READ")
+    if root_file.IsOpen():
+      tree = root_file.Get(tree_name)
+      if tree:
+        total_entries += tree.GetEntries()
+      else:
+        print(f"Failed to open tree {tree_name}")
+      root_file.Close()
+    else:
+      print(f"Failed to open {filename}")
 
-    return total_entries
+  return total_entries
 
 
 def main():
-    total = count_tree_entries(directory, pattern, tree_name)
-    print(f"Total entries in all trees: {total}")
+  total = count_tree_entries(directory, pattern, tree_name)
+  print(f"Total entries in all trees: {total}")
 
 
 if __name__ == "__main__":
-    main()
+  main()
