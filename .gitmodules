@@ -1,3 +1,6 @@
 [submodule "tea"]
 	path = tea
 	url = git@github.com:jniedzie/tea.git
+[submodule "external/injection-schemes"]
+	path = external/injection-schemes
+	url = https://gitlab.cern.ch/lhc-injection-scheme/injection-schemes.git
