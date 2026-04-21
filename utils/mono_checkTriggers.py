@@ -1,15 +1,19 @@
 import os
 import ROOT
 
-maxFilesToCheck = 10
+maxFilesToCheck = 1000
 
 # directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/emptyBX/initial_badNames"
 # directory = "../"
-directory = "/eos/cms/store/group/phys_diffraction/lbyl_2018/HIEmptyBX/ntuples_3_11_2026/HIEmptyBX/ntuples_emptyBx/260409_135249/0000"
-
+# directory = "/eos/cms/store/group/phys_diffraction/lbyl_2018/HIEmptyBX/ntuples_3_11_2026/HIEmptyBX/ntuples_emptyBx/260409_135249/0000"
+directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/zeroBias/initial_noTrigger"
 
 # trigger_name = "HLT_HIUPC_SingleEG5_NotMBHF2AND_v1"
-trigger_name = "HLT_HIUPC_SingleEG5_NotMBHF2AND_v1_Prescl"
+# trigger_name = "SingleEG5"
+# trigger_name = "SingleEG5_Prescaled"
+trigger_name = "ZeroBias"
+
+# trigger_name = "HLT_HIUPC_SingleEG5_NotMBHF2AND_v1_Prescl"
 
 
 def countPassingEvents(hlt_tree, total_events):
@@ -40,9 +44,12 @@ def count_trigger_events():
       print(f"Error opening file: {file_path}")
       continue
     hlt_tree = root_file.Get("hltanalysis/HltTree")
-    if hlt_tree is None:
-      print(f"HLT tree not found in file: {file_path}")
-      continue
+    if hlt_tree is None or type(hlt_tree) != ROOT.TTree:
+      hlt_tree = root_file.Get("Events")
+      
+      if hlt_tree is None or type(hlt_tree) != ROOT.TTree:
+        print(f"HLT tree not found in file: {file_path}")
+        continue
 
     passing_events_this_file = countPassingEvents(hlt_tree, total_events)
 

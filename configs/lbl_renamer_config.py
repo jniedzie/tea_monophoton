@@ -150,6 +150,8 @@ branchesNames = {
   "HLT_HIUPC_SingleEG5_NotMBHF2AND_v1_Prescl": ("SingleEG5_Prescaled"      , "SingleEG5_Prescaled/I"),
   "HLT_HIUPC_DoubleEG2_NotMBHF2AND_v1_Prescl": ("DoubleEG2_Prescaled"      , "DoubleEG2_Prescaled/I"),
   "HLT_HIZeroBias_v1"                 : ("ZeroBias"       , "ZeroBias/I"),
+  "L1_UnpairedBunchBptxMinus": ("UnpairedBptxMinus"       , "UnpairedBptxMinus/I"),
+  "L1_UnpairedBunchBptxPlus": ("UnpairedBptxPlus"       , "UnpairedBptxPlus/I"),
 
   # "nCastorTower": ("nCastorTower", "vector<float>"),
   # "CastorTower_hadE": ("CastorTower_hadE", "vector<float>"),

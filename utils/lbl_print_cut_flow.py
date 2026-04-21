@@ -30,7 +30,7 @@ def main():
 
         if process == "cep":
             scale, _ = get_cep_scale(skim)
-        elif process == "collisionData":
+        elif process == "collisionData" or process == "emptyBX" or process == "zeroBias":
             scale = 1
         else:
             scale = luminosity*crossSections[process]*sf
