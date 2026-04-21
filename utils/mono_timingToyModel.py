@@ -1,5 +1,5 @@
 import ROOT
-from math import exp, tan, atan, sin, cos, log
+from math import exp, tan, atan, sin, log
 
 ecal_inner_radius = 1.29  # ECAL inner radius in meters
 c = 3e8  # speed of light in m/s
@@ -56,20 +56,44 @@ def main():
 
   canvas.cd(4)
 
+  # z_distribution = ROOT.TF1("z_distribution", "1", -30, 30)
   # z_distribution = ROOT.TF1("z_distribution", "abs(x) < 5 ? 1 : 0", -30, 30)
   # z_distribution = ROOT.TF1("z_distribution", "gaus", -30, 30)
   # z_distribution.SetParameters(1, 0, 5)  # amplitude, mean, sigma
 
-  beam_intersection_width_nominal = 0.1  # width of the beam intersection region in meters
-  beam_intersection_width_extra = 1.0
-  beams_spacing = 100  # ns
+  beam_intersection_width_nominal = 0.07  # width of the beam intersection region in meters
+  beam_intersection_width_extra = 0.1
+  beams_spacing = 2.5  # ns
   beams_distance = beams_spacing * c * 1e-9  # convert to meters
-  beam_intersection_point = beams_distance/2  # position of the beam intersection point in meters
+  beam_intersection_point = beams_distance / 2  # position of the beam intersection point in meters
 
-  z_distribution = ROOT.TF1("z_distribution", "gaus(0) + gaus(3) + gaus(6)", -3, 3)
-  z_distribution.SetParameters(1, beam_intersection_point, beam_intersection_width_extra,
-                               1, 0, beam_intersection_width_nominal,
-                               1, -beam_intersection_point, beam_intersection_width_extra)  # amplitude1, mean1, sigma1, amplitude2, mean2, sigma2
+  n_gausses = 5
+
+  function = ""
+
+  for i in range(n_gausses):
+    if i > 0:
+      function += " + "
+    function += f"gaus({i*3})"
+
+  z_distribution = ROOT.TF1("z_distribution", function, -3, 3)
+
+  for i in range(n_gausses):
+    # the middle gaussian should be centered at zero, others are spaced equally around it
+    if i == n_gausses // 2:
+      mean = 0  # center the middle gaussian at zero
+      width = beam_intersection_width_nominal
+    else:
+      mean = (i - n_gausses // 2) * beams_distance  # space gaussians equally around zero
+      width = beam_intersection_width_extra
+
+    z_distribution.SetParameter(i * 3, 1)  # amplitude
+    z_distribution.SetParameter(i * 3 + 1, mean)  # mean
+    z_distribution.SetParameter(i * 3 + 2, width)  # sigma
+  # z_distribution.SetParameters(
+  #   1, beam_intersection_point, beam_intersection_width_extra, 1, 0, beam_intersection_width_nominal, 1, -beam_intersection_point,
+  #   beam_intersection_width_extra
+  # )  # amplitude1, mean1, sigma1, amplitude2, mean2, sigma2
 
   z_distribution.SetNpx(1000)
 
@@ -84,7 +108,7 @@ def main():
 
   def get_corrected_time(z_gamma, eta_gamma):
     theta = 2 * atan(exp(-eta_gamma))
-    z_gamma_prime = z_gamma - ecal_inner_radius/tan(theta)
+    z_gamma_prime = z_gamma - ecal_inner_radius / tan(theta)
     d = ecal_inner_radius / sin(theta)
     t_gamma = d / c * 1e9  # convert to ns
     t_smearing = time_smearing.GetRandom()
@@ -96,9 +120,9 @@ def main():
 
   def get_ecal_eta(z_gamma, eta_gamma):
     theta = 2 * atan(exp(-eta_gamma))
-    z_gamma_prime = z_gamma - ecal_inner_radius/tan(theta)
-    theta_zero = atan(ecal_inner_radius/z_gamma_prime)
-    eta_ecal = -sgn(theta_zero) * (log(tan(abs(theta_zero)/2)))
+    z_gamma_prime = z_gamma - ecal_inner_radius / tan(theta)
+    theta_zero = atan(ecal_inner_radius / z_gamma_prime)
+    eta_ecal = -sgn(theta_zero) * (log(tan(abs(theta_zero) / 2)))
     return eta_ecal
 
   eta_zero = ROOT.TH1D("eta_zero", ";#eta_{#gamma};Entries", 200, -10, 10)
@@ -116,13 +140,25 @@ def main():
   for _ in range(n_events):
     z_gamma = z_distribution.GetRandom()
     eta_gamma = eta_gaussian.GetRandom()
+
+    z_gamma_prime = z_gamma - ecal_inner_radius / tan(2 * atan(exp(-eta_gamma)))
+    z_gamma_prime_back = z_gamma - ecal_inner_radius / tan(2 * atan(exp(eta_gamma)))
+
+    # if both photons miss ECAL:
+    if abs(z_gamma_prime) > ecal_half_length and abs(z_gamma_prime_back) > ecal_half_length:
+      continue
+
+    # if both photons withing ECAL:
+    if abs(z_gamma_prime) < ecal_half_length and abs(z_gamma_prime_back) < ecal_half_length:
+      continue
+
     time = get_corrected_time(z_gamma, eta_gamma)
     time_hist_uniform_z.Fill(time)
     eta_dist.Fill(get_ecal_eta(z_gamma, eta_gamma))
-  
-  time_hist_uniform_z.SetLineColor(ROOT.kViolet+2)
-  time_hist_zero_z.SetLineColor(ROOT.kGreen+2)
-  time_hist_zero_z.SetFillColor(ROOT.kGreen+2)
+
+  time_hist_uniform_z.SetLineColor(ROOT.kViolet + 2)
+  time_hist_zero_z.SetLineColor(ROOT.kGreen + 2)
+  time_hist_zero_z.SetFillColor(ROOT.kGreen + 2)
 
   ROOT.gPad.SetLogy()
   ROOT.gStyle.SetOptStat(0)
@@ -144,11 +180,11 @@ def main():
   eta_zero.Rebin(5)
   eta_dist.Rebin(5)
 
-  eta_zero.SetLineColor(ROOT.kGreen+2)
-  eta_zero.SetFillColor(ROOT.kGreen+2)
+  eta_zero.SetLineColor(ROOT.kGreen + 2)
+  eta_zero.SetFillColor(ROOT.kGreen + 2)
   eta_zero.DrawNormalized("hist")
 
-  eta_dist.SetLineColor(ROOT.kViolet+2)
+  eta_dist.SetLineColor(ROOT.kViolet + 2)
   eta_dist.DrawNormalized("samePE")
 
   canvas.SaveAs("../plots/timing_correction_function.pdf")
