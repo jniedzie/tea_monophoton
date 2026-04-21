@@ -382,7 +382,11 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
 void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
   auto photons = event->GetCollection("goodPhoton");
 
-  FillGenLevelHistograms(event);
+  try {
+    FillGenLevelHistograms(event);
+  } catch (const Exception& e) {
+    warn() << "No gen-level information found in event. Skipping gen-level histograms filling." << endl;
+  }
 
   if (photons->size() != 1) {
     fatal() << "Number of good photons != 1. This should never happen." << endl;

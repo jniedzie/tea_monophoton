@@ -1,3 +1,4 @@
+#include "ArgsManager.hpp"
 #include "ConfigManager.hpp"
 #include "CutFlowManager.hpp"
 #include "EventReader.hpp"
@@ -7,11 +8,10 @@
 #include "LbLHistogramsFiller.hpp"
 #include "LbLObjectsManager.hpp"
 #include "Logger.hpp"
-#include "ArgsManager.hpp"
 
 using namespace std;
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   vector<string> requiredArgs = {"config"};
   vector<string> optionalArgs = {"input_path", "output_hists_path"};
   auto args = make_unique<ArgsManager>(argc, argv, requiredArgs, optionalArgs);
@@ -34,8 +34,12 @@ int main(int argc, char **argv) {
     lblObjectsManager->InsertGoodPhotonsCollection(event);
     lblObjectsManager->InsertGoodElectronsCollection(event);
 
-    lblObjectsManager->InsertGenPhotonsCollection(event);
-    lblObjectsManager->InsertGenElectronsCollection(event);
+    try {
+      lblObjectsManager->InsertGenPhotonsCollection(event);
+      lblObjectsManager->InsertGenElectronsCollection(event);
+    } catch (const Exception& e) {
+      warn() << "No gen-level information found in event. Skipping gen-level histograms filling." << endl;
+    }
 
     cutFlowManager->UpdateCutFlow("initial");
     histogramsFiller->FillDefaultVariables(event);
@@ -47,7 +51,7 @@ int main(int argc, char **argv) {
   histogramsFiller->FillCutFlow(cutFlowManager);
   histogramsHandler->SaveHistograms();
 
-  auto &logger = Logger::GetInstance();
+  auto& logger = Logger::GetInstance();
   logger.Print();
   return 0;
 }
