@@ -12,10 +12,11 @@ from lbl_paths import base_path
 # directory = "/eos/cms/store/group/phys_diffraction/lbyl_2018/HIEmptyBX/ntuples_3_11_2026/HIEmptyBX/ntuples_emptyBx/260409_135249/0000"  # 55'974'067
 
 # directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/emptyBX/initial_noTrigger"  # data_*: 56'853'028, HiForestAOD_*: 1'685'816
-directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/emptyBX/initial_UnpairedBptx"  # 31'264'750
+# directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/emptyBX/initial_UnpairedBptx"  # 31'264'750
+directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/initial_singleEG5_unmerged"
 
-# pattern = "HiForestAOD_check_AOD_*.root"
-pattern = "data_HiForwardAOD_*.root"
+
+pattern = "*.root"
 
 # tree_name = "ggHiNtuplizer/EventTree"
 tree_name = "Events"

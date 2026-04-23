@@ -3,14 +3,14 @@ from teaHelpers import get_facility
 from lbl_params import eventCuts, zdcCutNames, photonCuts
 
 # trigger = "doubleEG2"
-# trigger = "singleEG5"
+trigger = "singleEG5"
 # trigger = "UnpairedBptx"
-trigger = "noTrigger"
+# trigger = "noTrigger"
 
-do_trigger_selection = False
+do_trigger_selection = True
 
 processes = (
-  # "collisionData",
+  "collisionData",
   # "ds_from_lbl",
   # "qed_superchic",
   # "qed_starlight",
@@ -21,14 +21,17 @@ processes = (
   # "alps_30",
   # "alps_90",
   # "emptyBX",
-  "zeroBias",
+  # "zeroBias",
 )
 
 qed_names = ["qed_superchic", "qed_starlight"]
 
 if do_trigger_selection:
-  input_skim = "initial_noTrigger"
-  skim = f"initial_{trigger}"
+  # input_skim = "initial_noTrigger"
+  # skim = f"initial_{trigger}"
+  
+  input_skim = "initial_noTrigger_unmerged"
+  skim = f"initial_{trigger}_unmerged"
 else:
   input_skim = f"initial_{trigger}"
 
