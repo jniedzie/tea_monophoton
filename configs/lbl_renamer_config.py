@@ -5,6 +5,7 @@ branchesNames = {
   "run"                   : ("runNumber"                  , "runNumber/I"  ),
   "lumis"                 : ("lumiSection"                , "lumiSection/I"),
   "event"                 : ("eventNumber"                , "eventNumber/I"),
+  "Bx"                    : ("bunchNumber"                , "bunchNumber/I"),
 
   "xVtx"                  : ("vertex_x"                   , "vector<float>"),
   "yVtx"                  : ("vertex_y"                   , "vector<float>"),

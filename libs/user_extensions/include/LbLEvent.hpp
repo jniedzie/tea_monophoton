@@ -1,6 +1,10 @@
 #ifndef LbLEvent_hpp
 #define LbLEvent_hpp
 
+#include <memory>
+#include <optional>
+#include <string>
+
 #include "Event.hpp"
 #include "Helpers.hpp"
 
@@ -20,10 +24,16 @@ class LbLEvent {
   float GetDiphotonAcoplanarity();
   std::vector<std::shared_ptr<PhysicsObject>> GetGenPhotons();
   std::vector<std::shared_ptr<PhysicsObject>> GetGenMatchedRecoPhotons();
+  std::optional<bool> HasCollisionInPreviousBXs(int nBXs);
 
   bool IsData() { return GetAs<int>("runNumber") != 1; }
 
  private:
+  struct MonoCollisionCache;
+  static const MonoCollisionCache& GetMonoCollisionCache();
+  static std::string GetMonoUtilsDir();
+  static MonoCollisionCache LoadMonoCollisionCache();
+
   std::shared_ptr<Event> event;
 };
 
