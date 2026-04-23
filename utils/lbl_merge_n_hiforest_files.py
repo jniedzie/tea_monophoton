@@ -4,14 +4,15 @@ import os
 # input_path = "/eos/cms/store/cmst3/group/lightbylight/Pranati/Final_afterTrigger/Data/Data_29thJune"
 # input_pattern = "ntuples_loose_selections_*.root"
 
-base_path = "/data/dust/user/jniedzie/monophoton/"
+# base_path = "/data/dust/user/jniedzie/monophoton/"
+base_path = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/"
 
 # sample = "qed_superchic"
-# sample = "collisionData"
-sample = "qed_mg1gamma"
+sample = "collisionData"
+# sample = "qed_mg1gamma"
 
-dir = "noTrigger"
-# dir = "initial_singleEG5"
+# dir = "noTrigger"
+dir = "initial_singleEG5_unmerged"
 
 
 input_path = f"{base_path}/{sample}/{dir}"

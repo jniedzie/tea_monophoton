@@ -30,8 +30,12 @@ if do_trigger_selection:
   # input_skim = "initial_noTrigger"
   # skim = f"initial_{trigger}"
   
-  input_skim = "initial_noTrigger_unmerged"
-  skim = f"initial_{trigger}_unmerged"
+  # input_skim = "initial_noTrigger_unmerged"
+  # skim = f"initial_{trigger}_unmerged"
+  
+  input_skim = "bad_names_noTrigger"
+  skim = f"bad_names_{trigger}"
+  
 else:
   input_skim = f"initial_{trigger}"
 
