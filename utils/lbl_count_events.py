@@ -14,20 +14,20 @@ from lbl_paths import base_path
 # directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/emptyBX/initial_noTrigger"  # data_*: 56'853'028, HiForestAOD_*: 1'685'816
 # directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/emptyBX/initial_UnpairedBptx"  # 31'264'750
 
-
 # Collision data samples:
 # directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/bad_names_noTrigger"  # 577'628'726
-directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/bad_names_singleEG5_old"
-# directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/bad_names_singleEG5"
-
+# directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/bad_names_singleEG5_old"  # 59'780'048
+# directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/bad_names_singleEG5"  # 59`780`048
+directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/initial_singleEG5"  #
 
 pattern = "*.root"
 
-tree_name = "ggHiNtuplizer/EventTree"
-# tree_name = "Events"
 
+def count_tree_entries(directory, pattern):
 
-def count_tree_entries(directory, pattern, tree_name):
+  tree_name_1 = "ggHiNtuplizer/EventTree"
+  tree_name_2 = "Events"
+
   total_entries = 0
   path_pattern = os.path.join(directory, pattern)
 
@@ -43,11 +43,15 @@ def count_tree_entries(directory, pattern, tree_name):
       print(f"Error opening file {filename}")
       continue
     if root_file.IsOpen():
-      tree = root_file.Get(tree_name)
+      tree = root_file.Get(tree_name_1)
       if tree:
         total_entries += tree.GetEntries()
       else:
-        print(f"Failed to open tree {tree_name}")
+        tree = root_file.Get(tree_name_2)
+        if tree:
+          total_entries += tree.GetEntries()
+        else:
+          print(f"Failed to open tree {tree_name_1} or {tree_name_2}")
       root_file.Close()
     else:
       print(f"Failed to open {filename}")
@@ -56,7 +60,7 @@ def count_tree_entries(directory, pattern, tree_name):
 
 
 def main():
-  total = count_tree_entries(directory, pattern, tree_name)
+  total = count_tree_entries(directory, pattern)
   print(f"Total entries in all trees: {total}")
 
 
