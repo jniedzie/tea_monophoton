@@ -27,16 +27,16 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
   auto photon = asPhoton(photons->at(0));
 
   if (asLbLEvent(event)->IsData() && photon->GetEt() > dataBlinding["max_et"]) return;
-  FillMonoPhotonHistograms(photon);
+  FillMonoPhotonHistograms(event, photon);
 
   if (fabs(photon->GetEta()) > 1.2) {
-    FillMonoPhotonHistograms(photon, "EndCap_");
+    FillMonoPhotonHistograms(event, photon, "EndCap_");
   } else {
-    FillMonoPhotonHistograms(photon, "Barrel_");
+    FillMonoPhotonHistograms(event, photon, "Barrel_");
   }
 }
 
-void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Photon> photon, string prefix) {
+void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event, const shared_ptr<Photon> photon, string prefix) {
   histogramsHandler->Fill("goodPhoton_" + prefix + "absEta_vs_et", fabs(photon->GetEta()), photon->GetEt());
   histogramsHandler->Fill("goodPhoton_" + prefix + "eta_vs_et", photon->GetEta(), photon->GetEt());
   histogramsHandler->Fill("goodPhoton_" + prefix + "eta_vs_phi", photon->GetEta(), photon->GetPhi());
@@ -53,11 +53,7 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Photon> phot
   histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance", photon->GetHorizontalImbalance());
   histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance", photon->GetVerticalImbalance());
   histogramsHandler->Fill("goodPhoton_" + prefix + "swissCross", photon->GetSwissCross());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance_vs_seedTime", photon->GetHorizontalImbalance(),
-                          photon->GetSeedTime());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance_vs_seedTime", photon->GetVerticalImbalance(), photon->GetSeedTime());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "et_vs_seedTime", photon->GetEt(), photon->GetSeedTime());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "eta_vs_seedTime", photon->GetEta(), photon->GetSeedTime());
+  
 
   vector<string> defaultBranches = {
       "SCEnergy",         "SCEt",       "SCEta",        "SCEtaWidth",        "SCPhi", "SCPhiWidth", "energy",
@@ -68,6 +64,49 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Photon> phot
   for (string branch : defaultBranches) {
     histogramsHandler->Fill("goodPhoton_" + prefix + branch, photon->GetAs<float>(branch));
   }
+
+  // fill all 2D histograms of variables vs seed time, similar to the 1D histograms above:
+  histogramsHandler->Fill("goodPhoton_" + prefix + "absEta_vs_seedTime", fabs(photon->GetEta()), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "eta_vs_seedTime", photon->GetEta(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "phi_vs_seedTime", photon->GetPhi(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "et_vs_seedTime", photon->GetEt(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "hOverE_vs_seedTime", photon->GetAs<float>("hOverE"), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "sigmaEta2012_vs_seedTime", photon->GetAs<float>("sigmaEta2012"), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "sigmaIEtaIEta2012_vs_seedTime", photon->GetAs<float>("sigmaIEtaIEta2012"), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "maxEnergyCrystal_vs_seedTime", photon->GetAs<float>("maxEnergyCrystal"), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "energyTop_vs_seedTime", photon->GetEnergyTop(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "energyBottom_vs_seedTime", photon->GetEnergyBottom(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "energyLeft_vs_seedTime", photon->GetEnergyLeft(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "energyRight_vs_seedTime", photon->GetEnergyRight(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "topOverCentral_vs_seedTime", photon->GetEnergyTop() / photon->GetEnergyCentral(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "bottomOverCentral_vs_seedTime", photon->GetEnergyBottom() / photon->GetEnergyCentral(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "leftOverCentral_vs_seedTime", photon->GetEnergyLeft() / photon->GetEnergyCentral(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "rightOverCentral_vs_seedTime", photon->GetEnergyRight() / photon->GetEnergyCentral(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "minOverCentral_vs_seedTime", photon->GetMinEnergy() / photon->GetEnergyCentral(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "verticalOverCentral_vs_seedTime", photon->GetVerticalOverCentralEnergy(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalOverCentral_vs_seedTime", photon->GetHorizontalOverCentralEnergy(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance_vs_seedTime", photon->GetHorizontalImbalance(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance_vs_seedTime", photon->GetVerticalImbalance(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "swissCross_vs_seedTime", photon->GetSwissCross(), photon->GetSeedTime());
+
+  // check if this event had another collision within the max_distance previous collisions
+  int max_distance = 5;  // how many BXs before do we want to check for collisions
+  
+  auto lblEvent = asLbLEvent(event);
+
+  auto hasCollisionInPreviousBXs = lblEvent->HasCollisionInPreviousBXs(max_distance);
+
+  if (!hasCollisionInPreviousBXs.has_value()) {
+    warn() << "Could not determine whether the event has collisions in previous " << max_distance << " BXs" << endl;
+  } else {
+    info() << "Event has collisions in previous " << max_distance << " BXs: "
+           << (*hasCollisionInPreviousBXs ? "Yes" : "No") << endl;
+  }
+
+  // int runNumber = event->GetAs<int>("runNumber");
+  // int bx = event->GetAs<int>("bx");
+
+
 }
 
 void LbLHistogramsFiller::FillEGammaHistograms(const shared_ptr<Event> event) {
@@ -370,8 +409,8 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
         totalEnergyMinus += zdcEnergy->GetEnergy();
       }
     }
-    histogramsHandler->Fill("event_ZDCenergyPlus", totalEnergyPlus);
-    histogramsHandler->Fill("event_ZDCenergyMinus", totalEnergyMinus);
+    // histogramsHandler->Fill("event_ZDCenergyPlus", totalEnergyPlus);
+    // histogramsHandler->Fill("event_ZDCenergyMinus", totalEnergyMinus);
     histogramsHandler->Fill("event_ZDCenergyPlusLogX", TMath::Log10(totalEnergyPlus));
     histogramsHandler->Fill("event_ZDCenergyMinusLogX", TMath::Log10(totalEnergyMinus));
   } catch (const Exception& e) {
@@ -389,16 +428,15 @@ void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
   }
 
   if (photons->size() != 1) {
-    fatal() << "Number of good photons != 1. This should never happen." << endl;
+    // fatal() << "Number of good photons != 1. This should never happen." << endl;
     // exit(13);
   } else {
     FillMonoPhotonHistograms(event);
     FillEGammaHistograms(event);
     FillEventLevelHistograms(event);
-  }
-
-  // auto photon = asPhoton(photons->at(0));
+    // auto photon = asPhoton(photons->at(0));
   // float et = photon->Get("et");
-  SaveHighEtPhotonsInfo(event, 30.0, false);
-  SaveHighEtPhotonsInfo(event, 50.0, false);
+    SaveHighEtPhotonsInfo(event, 30.0, false);
+    SaveHighEtPhotonsInfo(event, 50.0, false);
+  }
 }

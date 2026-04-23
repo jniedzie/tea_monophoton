@@ -22,8 +22,8 @@ defaultHistParams = (
 histParams = (
   # event
   ("event", "deltaEt", 100, 0, 1, ""),
-  ("event", "ZDCenergyPlus", 1e6, 0, 1e6, ""),
-  ("event", "ZDCenergyMinus", 1e6, 0, 1e6, ""),
+  # ("event", "ZDCenergyPlus", 1e6, 0, 1e6, ""),
+  # ("event", "ZDCenergyMinus", 1e6, 0, 1e6, ""),
   ("event", "ZDCenergyPlusLogX", 1000, 0, 6, ""),
   ("event", "ZDCenergyMinusLogX", 1000, 0, 6, ""),
   ("monophoton", "egamma_deltaEta", 1000, -10, 10, ""),
@@ -34,10 +34,7 @@ histParams = (
   ("monophoton", "egamma_deltaR_gt50GeV", 1000, -10, 10, ""),
 )
 
-histParams2D = (
-  ("egamma_et_vs_goodPhoton_et", 1000, 0, 1000, 1000, 0, 1000, ""), 
-  
-)
+histParams2D = (("egamma_et_vs_goodPhoton_et", 1000, 0, 1000, 1000, 0, 1000, ""), )
 
 for prefix in ["", "Barrel_", "EndCap_"]:
   histParams += (
@@ -56,7 +53,6 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     ("goodPhoton", f"{prefix}horizontalImbalance", 100, -2, 2, ""),
     ("goodPhoton", f"{prefix}verticalImbalance", 100, -2, 2, ""),
     ("goodPhoton", f"{prefix}swissCross", 1200, 0, 1.2, ""),
-    
     ("goodPhoton", f"{prefix}SCEnergy", 1000, 0, 1000, ""),
     ("goodPhoton", f"{prefix}SCEt", 1000, 0, 1000, ""),
     ("goodPhoton", f"{prefix}SCEta", 100, -5, 5, ""),
@@ -70,13 +66,14 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     ("goodPhoton", f"{prefix}energyTop", 1000, 0, 1000, ""),
     ("goodPhoton", f"{prefix}energyMin", 1000, 0, 1000, ""),
     ("goodPhoton", f"{prefix}eta", 100, -5, 5, ""),
+    ("goodPhoton", f"{prefix}absEta", 50, 0, 5, ""),
     ("goodPhoton", f"{prefix}hOverE", 1000, 0, 1.0, ""),
     ("goodPhoton", f"{prefix}hasConversionTracks", 2, 0, 1, ""),
     ("goodPhoton", f"{prefix}maxEnergyCrystal", 1000, 0, 1000, ""),
     ("goodPhoton", f"{prefix}phi", 100, -5, 5, ""),
     ("goodPhoton", f"{prefix}sigmaEta2012", 100, 0, 0.1, ""),
     ("goodPhoton", f"{prefix}sigmaIEtaIEta2012", 100, 0, 0.1, ""),
-    
+
     # gen-level
     ("genPhoton", f"{prefix}et", 2000, 0, 1000, ""),
   )
@@ -88,11 +85,19 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     (f"goodPhoton_{prefix}eta_vs_phi_vs_et", 1000, -3.0, 3.0, 1000, -4.0, 4.0, ""),
     (f"goodPhoton_{prefix}eta_vs_phi_gt30p0GeV", 100, -3.0, 3.0, 100, -4.0, 4.0, ""),
     (f"goodPhoton_{prefix}eta_vs_phi_gt50p0GeV", 100, -3.0, 3.0, 100, -4.0, 4.0, ""),
-    (f"goodPhoton_{prefix}horizontalImbalance_vs_seedTime", 100, -2.0, 2.0, 100, -5.0, 5.0, ""),
-    (f"goodPhoton_{prefix}verticalImbalance_vs_seedTime", 100, -2.0, 2.0, 100, -5.0, 5.0, ""),
-    (f"goodPhoton_{prefix}et_vs_seedTime", 2000, 0, 1000, 100, -5.0, 5.0, ""),
-    (f"goodPhoton_{prefix}eta_vs_seedTime", 100, -5.0, 5.0, 1000, -50.0, 50.0, ""),
+    # (f"goodPhoton_{prefix}horizontalImbalance_vs_seedTime", 100, -2.0, 2.0, 100, -5.0, 5.0, ""),
+    # (f"goodPhoton_{prefix}verticalImbalance_vs_seedTime", 100, -2.0, 2.0, 100, -5.0, 5.0, ""),
+    # (f"goodPhoton_{prefix}et_vs_seedTime", 2000, 0, 1000, 100, -5.0, 5.0, ""),
+    # (f"goodPhoton_{prefix}eta_vs_seedTime", 100, -5.0, 5.0, 1000, -50.0, 50.0, ""),
   )
+
+for prefix in ["", "Barrel_", "EndCap_"]:
+  for params in (histParams, defaultHistParams):
+    for collection, variable, bins, xmin, xmax, _ in params:
+      if variable.startswith(f"{prefix}seedTime"):
+        continue  # Skip seedTime vs. seedTime
+      histName = f"goodPhoton_{prefix}{variable}_vs_seedTime"
+      histParams2D += ((histName, bins, xmin, xmax, 200, -50.0, 50.0, ""), )
 
 eventsTreeNames = [
   "Events",
