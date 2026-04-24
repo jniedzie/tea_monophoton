@@ -18,7 +18,9 @@ from lbl_paths import base_path
 # directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/bad_names_noTrigger"  # 577'628'726
 # directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/bad_names_singleEG5_old"  # 59'780'048
 # directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/bad_names_singleEG5"  # 59`780`048
-directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/initial_singleEG5"  #
+# directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/initial_singleEG5"  # 59`780`048
+
+directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/skimmed_singleEG5_baseSelections"  #  
 
 pattern = "*.root"
 
