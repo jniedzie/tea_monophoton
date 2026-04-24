@@ -1,6 +1,7 @@
 from lbl_params import *
 
 nEvents = -1
+previousBxMaxDistance = 100
 
 defaultHistParams = (
   # collection      variable          bins    xmin     xmax     dir
@@ -90,6 +91,15 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     # (f"goodPhoton_{prefix}et_vs_seedTime", 2000, 0, 1000, 100, -5.0, 5.0, ""),
     # (f"goodPhoton_{prefix}eta_vs_seedTime", 100, -5.0, 5.0, 1000, -50.0, 50.0, ""),
   )
+
+for bxPrefix in ["afterCollisionBX_", "withoutCollisionBX_"]:
+  for detectorPrefix in ["", "Barrel_", "EndCap_"]:
+    prefix = f"{bxPrefix}{detectorPrefix}"
+    histParams += (
+      ("goodPhoton", f"{prefix}seedTime", 1000, -50, 50, ""),
+      ("goodPhoton", f"{prefix}seedTime_gt30p0GeV", 1000, -50, 50, ""),
+      ("goodPhoton", f"{prefix}seedTime_gt50p0GeV", 1000, -50, 50, ""),
+    )
 
 for prefix in ["", "Barrel_", "EndCap_"]:
   for params in (histParams, defaultHistParams):

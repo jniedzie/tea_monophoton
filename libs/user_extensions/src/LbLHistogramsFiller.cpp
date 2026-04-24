@@ -6,6 +6,15 @@
 
 using namespace std;
 
+namespace {
+int previousBxMaxDistance = 5;
+
+string GetBxPrefix(const optional<bool>& hasCollisionInPreviousBXs) {
+  if (!hasCollisionInPreviousBXs.has_value()) return "";
+  return *hasCollisionInPreviousBXs ? "afterCollisionBX_" : "withoutCollisionBX_";
+}
+}  // namespace
+
 LbLHistogramsFiller::LbLHistogramsFiller(shared_ptr<HistogramsHandler> histogramsHandler_) : histogramsHandler(histogramsHandler_) {
   // Create a config manager
   auto& config = ConfigManager::GetInstance();
@@ -15,6 +24,12 @@ LbLHistogramsFiller::LbLHistogramsFiller(shared_ptr<HistogramsHandler> histogram
   } catch (const Exception& e) {
     warn() << "No data blinding parameters found. Will not apply any data blinding." << endl;
     dataBlinding["max_et"] = 9999;
+  }
+
+  try {
+    config.GetValue("previousBxMaxDistance", previousBxMaxDistance);
+  } catch (const Exception& e) {
+    warn() << "No previousBxMaxDistance found in config. Using default value of " << previousBxMaxDistance << "." << endl;
   }
 
   eventProcessor = make_unique<EventProcessor>();
@@ -27,12 +42,25 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
   auto photon = asPhoton(photons->at(0));
 
   if (asLbLEvent(event)->IsData() && photon->GetEt() > dataBlinding["max_et"]) return;
-  FillMonoPhotonHistograms(event, photon);
 
-  if (fabs(photon->GetEta()) > 1.2) {
-    FillMonoPhotonHistograms(event, photon, "EndCap_");
+  auto lblEvent = asLbLEvent(event);
+  auto hasCollisionInPreviousBXs = lblEvent->HasCollisionInPreviousBXs(previousBxMaxDistance);
+  auto bxPrefix = GetBxPrefix(hasCollisionInPreviousBXs);
+
+  if (!hasCollisionInPreviousBXs.has_value()) {
+    warn() << "Could not determine whether the event has collisions in previous " << previousBxMaxDistance << " BXs" << endl;
   } else {
-    FillMonoPhotonHistograms(event, photon, "Barrel_");
+    info() << "Event has collisions in previous " << previousBxMaxDistance << " BXs: "
+           << (*hasCollisionInPreviousBXs ? "Yes" : "No") << endl;
+  }
+
+  string detectorPrefix = fabs(photon->GetEta()) > 1.2 ? "EndCap_" : "Barrel_";
+  FillMonoPhotonHistograms(event, photon);
+  FillMonoPhotonHistograms(event, photon, detectorPrefix);
+
+  if (!bxPrefix.empty()) {
+    histogramsHandler->Fill("goodPhoton_" + bxPrefix + "seedTime", photon->GetSeedTime());
+    histogramsHandler->Fill("goodPhoton_" + bxPrefix + detectorPrefix + "seedTime", photon->GetSeedTime());
   }
 }
 
@@ -88,25 +116,6 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
   histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance_vs_seedTime", photon->GetHorizontalImbalance(), photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance_vs_seedTime", photon->GetVerticalImbalance(), photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "swissCross_vs_seedTime", photon->GetSwissCross(), photon->GetSeedTime());
-
-  // check if this event had another collision within the max_distance previous collisions
-  int max_distance = 5;  // how many BXs before do we want to check for collisions
-  
-  auto lblEvent = asLbLEvent(event);
-
-  auto hasCollisionInPreviousBXs = lblEvent->HasCollisionInPreviousBXs(max_distance);
-
-  if (!hasCollisionInPreviousBXs.has_value()) {
-    warn() << "Could not determine whether the event has collisions in previous " << max_distance << " BXs" << endl;
-  } else {
-    info() << "Event has collisions in previous " << max_distance << " BXs: "
-           << (*hasCollisionInPreviousBXs ? "Yes" : "No") << endl;
-  }
-
-  // int runNumber = event->GetAs<int>("runNumber");
-  // int bx = event->GetAs<int>("bx");
-
-
 }
 
 void LbLHistogramsFiller::FillEGammaHistograms(const shared_ptr<Event> event) {
@@ -167,14 +176,16 @@ void LbLHistogramsFiller::SaveHighEtPhotonsInfo(const shared_ptr<Event> event, f
   // replace "." with "p" in minEtStr, e.g. "50.0" -> "50p0"
   minEtStr.replace(minEtStr.find("."), 1, "p");
 
+  auto bxPrefix = GetBxPrefix(asLbLEvent(event)->HasCollisionInPreviousBXs(previousBxMaxDistance));
+  string detectorPrefix = fabs(photon->GetEta()) > 1.2 ? "EndCap_" : "Barrel_";
+
   histogramsHandler->Fill("goodPhoton_eta_vs_phi_gt" + minEtStr + "GeV", photon->GetEta(), photon->GetPhi());
-
   histogramsHandler->Fill("goodPhoton_seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + detectorPrefix + "seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
 
-  if (fabs(photon->GetEta()) > 1.2) {
-    histogramsHandler->Fill("goodPhoton_EndCap_seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
-  } else {
-    histogramsHandler->Fill("goodPhoton_Barrel_seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
+  if (!bxPrefix.empty()) {
+    histogramsHandler->Fill("goodPhoton_" + bxPrefix + "seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
+    histogramsHandler->Fill("goodPhoton_" + bxPrefix + detectorPrefix + "seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
   }
 
   if (!saveTextFile) return;
