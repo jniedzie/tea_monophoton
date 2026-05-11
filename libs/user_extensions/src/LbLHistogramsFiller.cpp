@@ -82,6 +82,11 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
   histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance", photon->GetVerticalImbalance());
   histogramsHandler->Fill("goodPhoton_" + prefix + "swissCross", photon->GetSwissCross());
   
+  float phi = photon->GetPhi();
+
+  if (fabs(phi) > 1.0 and fabs(phi) < 2.5){
+    histogramsHandler->Fill("goodPhoton_" + prefix + "seedTime_offPhiPeaks", photon->GetSeedTime());
+  }
 
   vector<string> defaultBranches = {
       "SCEnergy",         "SCEt",       "SCEta",        "SCEtaWidth",        "SCPhi", "SCPhiWidth", "energy",

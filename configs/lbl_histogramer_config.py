@@ -1,7 +1,7 @@
 from lbl_params import *
 
 nEvents = -1
-previousBxMaxDistance = 100
+previousBxMaxDistance = 150
 
 defaultHistParams = (
   # collection      variable          bins    xmin     xmax     dir
@@ -44,6 +44,7 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     ("goodPhoton", f"{prefix}seedTime", 1000, -50, 50, ""),
     ("goodPhoton", f"{prefix}seedTime_gt30p0GeV", 1000, -50, 50, ""),
     ("goodPhoton", f"{prefix}seedTime_gt50p0GeV", 1000, -50, 50, ""),
+    ("goodPhoton", f"{prefix}seedTime_offPhiPeaks", 1000, -50, 50, ""),
     ("goodPhoton", f"{prefix}topOverCentral", 1000, 0, 10, ""),
     ("goodPhoton", f"{prefix}bottomOverCentral", 1000, 0, 10, ""),
     ("goodPhoton", f"{prefix}leftOverCentral", 1000, 0, 10, ""),

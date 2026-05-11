@@ -3,7 +3,8 @@ from Sample import Sample, SampleType
 from Legend import Legend
 from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
-from lbl_helpers import get_cep_scale
+from mono_helpers import get_cep_scale
+from lbl_histogramer_config import histParams2D as histogramer_histParams2D
 from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, total_uncertainty_qed, total_uncertainty_lbl_run2
 from lbl_paths import base_path, processes, skim
 
@@ -167,6 +168,182 @@ y_label = "Events"
 default_lumi = NormalizationType.to_lumi
 # default_lumi = NormalizationType.to_data
 
+axis_labels = {
+  "absEta": "|#eta^{#gamma}|",
+  "bottomOverCentral": "E_{bottom}/E_{max}",
+  "deltaEtaAtVertex": "#Delta#eta at vertex",
+  "deltaEt": "#DeltaE_{T}",
+  "egamma_deltaEta": "#Delta#eta(e/#gamma, #gamma)",
+  "egamma_deltaPhi": "#Delta#phi(e/#gamma, #gamma)",
+  "egamma_deltaR": "#DeltaR(e/#gamma, #gamma)",
+  "egamma_deltaEta_gt50GeV": "#Delta#eta(e/#gamma, #gamma)",
+  "egamma_deltaPhi_gt50GeV": "#Delta#phi(e/#gamma, #gamma)",
+  "egamma_deltaR_gt50GeV": "#DeltaR(e/#gamma, #gamma)",
+  "energy": "E^{#gamma} (GeV)",
+  "energyBottom": "E_{bottom} (GeV)",
+  "energyLeft": "E_{left} (GeV)",
+  "energyMin": "E_{min} (GeV)",
+  "energyRight": "E_{right} (GeV)",
+  "energyTop": "E_{top} (GeV)",
+  "et": "E_{T}^{#gamma} (GeV)",
+  "eta": "#eta^{#gamma}",
+  "hOverE": "H/E",
+  "hasConversionTracks": "Has conversion tracks",
+  "horizontalImbalance": "E_{left-right}/E_{left+right}",
+  "horizontalOverCentral": "E_{right+left}/(2*E_{max})",
+  "leftOverCentral": "E_{left}/E_{max}",
+  "logEt": "log_{10}[E_{T}^{#gamma} (GeV)]",
+  "maxEnergyCrystal": "E_{max crystal} (GeV)",
+  "minOverCentral": "E_{min}/E_{max}",
+  "nMissHits": "Missing hits",
+  "phi": "#phi^{#gamma}",
+  "pt": "p_{T} (GeV)",
+  "rightOverCentral": "E_{right}/E_{max}",
+  "runNumber": "Run number",
+  "SCEnergy": "E^{SC} (GeV)",
+  "SCEt": "E_{T}^{SC} (GeV)",
+  "SCEta": "#eta^{SC}",
+  "SCEtaWidth": "#eta^{SC} width",
+  "SCPhi": "#phi^{SC}",
+  "SCPhiWidth": "#phi^{SC} width",
+  "seedTime": "Photon seed time (ns)",
+  "seedTime_gt30p0GeV": "Photon seed time (ns)",
+  "seedTime_gt50p0GeV": "Photon seed time (ns)",
+  "sigmaEta2012": "#sigma_{#eta, 2012}",
+  "sigmaIEtaIEta2012": "#sigma_{i#eta i#eta, 2012}",
+  "swissCross": "Swiss cross",
+  "topOverCentral": "E_{top}/E_{max}",
+  "verticalImbalance": "E_{top-bottom}/E_{top+bottom}",
+  "verticalOverCentral": "E_{top+bottom}/(2*E_{max})",
+  "ZDCenergyMinusLogX": "log[#sum E_{ZDC}^{-} (GeV)]",
+  "ZDCenergyPlusLogX": "log[#sum E_{ZDC}^{+} (GeV)]",
+}
+
+axis_range_overrides = {
+  "absEta": (0.0, 2.5),
+  "bottomOverCentral": (0.0, 0.5),
+  "energy": (0.0, 120.0),
+  "energyBottom": (0.0, 25.0),
+  "energyLeft": (0.0, 25.0),
+  "energyMin": (0.0, 25.0),
+  "energyRight": (0.0, 25.0),
+  "energyTop": (0.0, 25.0),
+  "et": (0.0, 120.0),
+  "eta": (-2.5, 2.5),
+  "hOverE": (0.0, 0.05),
+  "horizontalImbalance": (-1.1, 1.1),
+  "horizontalOverCentral": (0.0, 0.05),
+  "leftOverCentral": (0.0, 0.5),
+  "logEt": (-0.5, 2.5),
+  "maxEnergyCrystal": (0.0, 120.0),
+  "minOverCentral": (0.0, 0.05),
+  "phi": (-4.0, 4.0),
+  "rightOverCentral": (0.0, 0.5),
+  "SCEnergy": (0.0, 120.0),
+  "SCEt": (0.0, 120.0),
+  "SCEta": (-2.5, 2.5),
+  "SCEtaWidth": (0.0, 0.03),
+  "SCPhi": (-4.0, 4.0),
+  "SCPhiWidth": (0.0, 0.05),
+  "seedTime": (-20.0, 20.0),
+  "seedTime_gt30p0GeV": (-20.0, 20.0),
+  "seedTime_gt50p0GeV": (-20.0, 20.0),
+  "sigmaEta2012": (0.0, 0.06),
+  "sigmaIEtaIEta2012": (0.0, 0.06),
+  "swissCross": (0.0, 1.2),
+  "topOverCentral": (0.0, 0.5),
+  "verticalImbalance": (-1.1, 1.1),
+  "verticalOverCentral": (0.0, 0.05),
+}
+
+
+def get_axis_label(variable):
+  return axis_labels.get(variable, variable.replace("_", " "))
+
+
+def get_axis_range(variable, booked_min, booked_max):
+  return axis_range_overrides.get(variable, (booked_min, booked_max))
+
+
+def normalize_axis_variable(variable):
+  for prefix in ["afterCollisionBX_", "withoutCollisionBX_", "Barrel_", "EndCap_"]:
+    if variable.startswith(prefix):
+      return normalize_axis_variable(variable.removeprefix(prefix))
+
+  if variable.endswith("_gt30p0GeV"):
+    return normalize_axis_variable(variable.removesuffix("_gt30p0GeV"))
+
+  if variable.endswith("_gt50p0GeV"):
+    return normalize_axis_variable(variable.removesuffix("_gt50p0GeV"))
+
+  return variable
+
+
+def guess_rebin(variable, n_bins):
+  if variable in {"eta", "phi", "seedTime"} and n_bins >= 1000:
+    return 5
+  if variable in {"et", "energy", "SCEnergy", "SCEt", "maxEnergyCrystal"} and n_bins >= 1000:
+    return 10
+  if n_bins >= 1000:
+    return 10
+  if n_bins >= 200:
+    return 2
+  return 1
+
+
+def get_2d_plot(name, x_bins, booked_xmin, booked_xmax, y_bins, booked_ymin, booked_ymax, _directory=""):
+  if name == "egamma_et_vs_goodPhoton_et":
+    return Histogram2D(
+      name, "", False, False, False, default_lumi, 10, 10, 0, 120, 0, 120, 0, 1e3, "e/#gamma E_{T} (GeV)", "reco-#gamma E_{T} (GeV)", "Counts"
+    )
+
+  if "eta_vs_phi_vs_et" in name:
+    return Histogram2D(
+      name, "", False, False, False, default_lumi, 5, 5, -2.5, 2.5, -4.0, 4.0, 0, 2e3, "#eta^{#gamma}", "#phi^{#gamma}", "#sum E_{T}^{#gamma} (GeV)"
+    )
+
+  x_var, y_var = name.split("_vs_", 1)
+  x_var = x_var.replace("goodPhoton_Barrel_", "").replace("goodPhoton_EndCap_", "").replace("goodPhoton_", "")
+  y_var = y_var.split("_vs_", 1)[0]
+  x_var = normalize_axis_variable(x_var)
+  y_var = normalize_axis_variable(y_var)
+
+  x_min, x_max = get_axis_range(x_var, booked_xmin, booked_xmax)
+  y_min, y_max = get_axis_range(y_var, booked_ymin, booked_ymax)
+
+  z_max = 20 if y_var.startswith("seedTime") else 1e3
+
+  return Histogram2D(
+    name,
+    "",
+    False,
+    False,
+    False,
+    default_lumi,
+    guess_rebin(x_var, x_bins),
+    guess_rebin(y_var, y_bins),
+    x_min,
+    x_max,
+    y_min,
+    y_max,
+    0,
+    z_max,
+    get_axis_label(x_var),
+    get_axis_label(y_var),
+    "Counts",
+  )
+
+
+seen_2d_histograms = set()
+
+
+def booked_2d_histograms():
+  for histogram in histogramer_histParams2D:
+    if histogram[0] in seen_2d_histograms:
+      continue
+    seen_2d_histograms.add(histogram[0])
+    yield histogram
+
 histograms = (
   #           name              title  logx logy    norm_type               rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
   Histogram("cutFlow", "", False, True, NormalizationType.to_data, 1, 0, 10, 1e-5, 1e13, "Selection", "#sum genWeight"),
@@ -177,8 +354,7 @@ histograms = (
 )
 
 histograms2D = (
-  #   #           name                      title logs              norm          rebins  x_range  y_range  z_range   labels
-  #   Histogram2D("egamma_et_vs_goodPhoton_et", "", False, False, False, default_lumi, 1,  1,  0,  12,  0,  12,  0, 50,  "e/#gamma E_{T} (GeV)", "reco-#gamma E_{T} (GeV)", "Counts"),
+  # 2D plots are generated from the histogramer config so every booked histogram has a matching plot entry.
 )
 
 for prefix in ["", "Barrel_", "EndCap_"]:
@@ -196,9 +372,12 @@ for prefix in ["", "Barrel_", "EndCap_"]:
       f"goodPhoton_{prefix}swissCross", "", False, True, default_lumi, 20, 0, 1.5, 1e-2, 5e10, "Swiss cross", y_label, "", lbl_error
     ),
     Histogram(f"goodPhoton_{prefix}eta", "", False, True, default_lumi, 1, -3, 3, 1e-2, 5e5, "#eta^{#gamma}", y_label, "", lbl_error),
-    Histogram(f"goodPhoton_{prefix}phi", "", False, True, default_lumi, 2, -4, 4, 1e-2, 5e5, "#phi^{#gamma}", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 200, "#phi^{#gamma}", y_label, "", lbl_error),
     Histogram(
       f"goodPhoton_{prefix}seedTime", "", False, True, default_lumi, 10, -30, 30, 1e-2, 5e6, "Photon seed time (ns)", y_label, "", lbl_error
+    ),
+    Histogram(
+      f"goodPhoton_{prefix}seedTime_offPhiPeaks", "", False, True, default_lumi, 10, -30, 30, 1e-2, 5e6, "Photon seed time (ns)", y_label, "", lbl_error
     ),
     Histogram(
       f"goodPhoton_{prefix}seedTime_gt30p0GeV", "", False, True, default_lumi, 2, -4, 4, 1e-2, 5e6, "Photon seed time (ns)", y_label, "",
@@ -259,18 +438,7 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     # Histogram(f"genPhoton_{prefix}et", "", False, True, default_lumi, 5,   0, 100, 1e-5, 5e5, "E_{T}^{gen #gamma} (GeV)", y_label, "", lbl_error),
   )
 
-  histograms2D += (
-    #   #           name                      title logs              norm          rebins  x_range  y_range  z_range   labels
-    Histogram2D(
-      f"goodPhoton_{prefix}eta_vs_phi", "", False, False, False, default_lumi, 5, 5, -3, 3, -4, 4, 0, 1e3, "#eta", "#phi", "Counts"
-    ),
-    #   Histogram2D(f"goodPhoton_{prefix}horizontalImbalance_vs_seedTime", "", False, False, False, default_lumi, 1,  1,  -2.0,  2.0,  -4,  4,  0, 1e3,  "E_{left-right}/E_{left+right}", "Photon seed time (ns)", "Counts"),
-    #   Histogram2D(f"goodPhoton_{prefix}verticalImbalance_vs_seedTime", "", False, False, False, default_lumi, 1,  1,  -2.0,  2.0,  -4,  4,  0, 1e3,  "E_{top-bottom}/E_{top+bottom}", "Photon seed time (ns)", "Counts"),
-    Histogram2D(
-      f"goodPhoton_{prefix}eta_vs_seedTime", "", False, False, False, default_lumi, 1, 5, -2.5, 2.5, -20.0, 20.0, 0, 20, "#eta",
-      "Photon seed time (ns)", "Counts"
-    ),
-  )
+histograms2D = tuple(get_2d_plot(*histogram) for histogram in booked_2d_histograms())
 
 histogramsRatio = []
 
