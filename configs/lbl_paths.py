@@ -7,7 +7,7 @@ trigger = "singleEG5"
 # trigger = "UnpairedBptx"
 # trigger = "noTrigger"
 
-do_trigger_selection = True
+do_trigger_selection = False
 
 processes = (
   "collisionData",
@@ -56,8 +56,8 @@ else:
   # # build skim name
   # skim = f"skimmed_{trigger}_baseSelections{timeCut}{swissCrossCut}{scPhiWidthCut}{VHfractionsCut}{hOverEcut}_zdc{zdcCut}{suffix}"
   
-  # skim = f"skimmed_{trigger}_baseSelections"
-  skim = f"skimmed_{trigger}_baseSelections_noCHE"
+  skim = f"skimmed_{trigger}_baseSelections"
+  # skim = f"skimmed_{trigger}_baseSelections_noCHE"
 
 if get_facility() == "naf":
   base_path = "/data/dust/user/jniedzie/monophoton/"

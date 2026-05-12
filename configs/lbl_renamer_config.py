@@ -7,6 +7,11 @@ branchesNames = {
   "event"                 : ("eventNumber"                , "eventNumber/I"),
   "Bx"                    : ("bunchNumber"                , "bunchNumber/I"),
 
+  "beamHaloLoose"                 : ("isBeamHaloLoose"                , "beamHaloLoose/O"               ),
+  "beamHaloTight"                 : ("isBeamHaloTight"                , "beamHaloTight/O"               ),
+  "beamHaloGlobalTight2016"       : ("isBeamHaloGlobalTight2016"      , "beamHaloGlobalTight2016/O"     ),
+  "beamHaloGlobalSuperTight2016"  : ("isbeamHaloGlobalSuperTight2016" , "beamHaloGlobalSuperTight2016/O"),
+
   "xVtx"                  : ("vertex_x"                   , "vector<float>"),
   "yVtx"                  : ("vertex_y"                   , "vector<float>"),
   "zVtx"                  : ("vertex_z"                   , "vector<float>"),
@@ -129,6 +134,13 @@ branchesNames = {
   "muSCEt"                : ("muon_SCEt"                  , "vector<float>"),
   "muSCPhi"               : ("muon_SCPhi"                 , "vector<float>"),
   "muSCEn"                : ("muon_SCEn"                  , "vector<float>"),
+
+  "muStandalonePt"        : ("standaloneMuon_pt"          , "vector<float>"),
+  "muStandaloneEta"       : ("standaloneMuon_eta"         , "vector<float>"),
+  "muStandalonePhi"       : ("standaloneMuon_phi"         , "vector<float>"),
+  "muStandaloneCharge"    : ("standaloneMuon_charge"      , "vector<int>"  ),
+  "muStandaloneType"      : ("standaloneMuon_type"        , "vector<int>"  ),
+  "muStandaloneIsGood"    : ("standaloneMuon_isGood"      , "vector<int>"  ),
 
   "egEt"                  : ("egamma_et"                  , "vector<float>"),
   "egEta"                 : ("egamma_eta"                 , "vector<float>"),

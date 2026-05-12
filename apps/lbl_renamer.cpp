@@ -11,6 +11,7 @@ map<string, uint> uints;
 map<string, ULong64_t> longs;
 map<string, float[9999]> floats;
 map<string, int[9999]> ints;
+map<string, bool[9999]> bools;
 
 void SetupBranchesForMerging(TTree* tree, TTree* outputTree, map<string, vector<string>>& renameMap) {
   TObjArray* branches = tree->GetListOfBranches();
@@ -55,6 +56,10 @@ void SetupBranchesForMerging(TTree* tree, TTree* outputTree, map<string, vector<
       // floats[branchName] = {0};
       tree->SetBranchAddress(branchName.c_str(), &floats[branchName]);
       outputTree->Branch(newBranchName.c_str(), &floats[branchName], renameMap[branchName][1].c_str());
+    } else if (renameMap[branchName][1].find("/O") != string::npos) {
+      // bools[branchName] = false;
+      tree->SetBranchAddress(branchName.c_str(), &bools[branchName]);
+      outputTree->Branch(newBranchName.c_str(), &bools[branchName], renameMap[branchName][1].c_str());
     } else {
       error() << "Not clear how to handle branch: " << branchName << " with type: " << renameMap[branchName][1] << endl;
     }
