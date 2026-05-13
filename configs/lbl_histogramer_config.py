@@ -2,6 +2,13 @@ from lbl_params import *
 
 nEvents = -1
 previousBxMaxDistance = 150
+runHistograms2D = False
+
+beamHaloFlag = None
+# beamHaloFlag = "isBeamHaloLoose"
+# beamHaloFlag = "isBeamHaloTight"
+# beamHaloFlag = "isBeamHaloGlobalTight2016"
+# beamHaloFlag = "isbeamHaloGlobalSuperTight2016"
 
 defaultHistParams = (
   # collection      variable          bins    xmin     xmax     dir
@@ -35,9 +42,24 @@ histParams = (
   ("monophoton", "egamma_deltaR_gt50GeV", 1000, -10, 10, ""),
 )
 
-histParams2D = (("egamma_et_vs_goodPhoton_et", 1000, 0, 1000, 1000, 0, 1000, ""), )
+if runHistograms2D:
+  histParams2D = (("egamma_et_vs_goodPhoton_et", 1000, 0, 1000, 1000, 0, 1000, ""), )
+else:
+  histParams2D = ()
 
-for prefix in ["", "Barrel_", "EndCap_"]:
+detectorPrefixes = ["", "Barrel_", "EndCap_"]
+beamHaloPrefixes = ["beamHalo_", "noBeamHalo_"]
+
+goodPhotonPrefixes = detectorPrefixes 
+
+if beamHaloFlag:
+  goodPhotonPrefixes += [
+    f"{beamHaloPrefix}{detectorPrefix}"
+    for beamHaloPrefix in beamHaloPrefixes
+    for detectorPrefix in detectorPrefixes
+  ]
+
+for prefix in goodPhotonPrefixes:
   histParams += (
     ("goodPhoton", f"{prefix}et", 2000, 0, 1000, ""),
     ("goodPhoton", f"{prefix}logEt", 200, -1, 3, ""),
@@ -75,26 +97,30 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     ("goodPhoton", f"{prefix}phi", 100, -5, 5, ""),
     ("goodPhoton", f"{prefix}sigmaEta2012", 100, 0, 0.1, ""),
     ("goodPhoton", f"{prefix}sigmaIEtaIEta2012", 100, 0, 0.1, ""),
+  )
 
+  if runHistograms2D:
+    histParams2D += (
+      (f"goodPhoton_{prefix}absEta_vs_et", 100, 0, 3.0, 1000, 0, 1000, ""),
+      (f"goodPhoton_{prefix}eta_vs_et", 100, -3.0, 3.0, 1000, 0, 1000, ""),
+      (f"goodPhoton_{prefix}eta_vs_phi", 1000, -3.0, 3.0, 1000, -4.0, 4.0, ""),
+      (f"goodPhoton_{prefix}eta_vs_phi_vs_et", 1000, -3.0, 3.0, 1000, -4.0, 4.0, ""),
+      (f"goodPhoton_{prefix}eta_vs_phi_gt30p0GeV", 100, -3.0, 3.0, 100, -4.0, 4.0, ""),
+      (f"goodPhoton_{prefix}eta_vs_phi_gt50p0GeV", 100, -3.0, 3.0, 100, -4.0, 4.0, ""),
+      # (f"goodPhoton_{prefix}horizontalImbalance_vs_seedTime", 100, -2.0, 2.0, 100, -5.0, 5.0, ""),
+      # (f"goodPhoton_{prefix}verticalImbalance_vs_seedTime", 100, -2.0, 2.0, 100, -5.0, 5.0, ""),
+      # (f"goodPhoton_{prefix}et_vs_seedTime", 2000, 0, 1000, 100, -5.0, 5.0, ""),
+      # (f"goodPhoton_{prefix}eta_vs_seedTime", 100, -5.0, 5.0, 1000, -50.0, 50.0, ""),
+    )
+
+for prefix in detectorPrefixes:
+  histParams += (
     # gen-level
     ("genPhoton", f"{prefix}et", 2000, 0, 1000, ""),
   )
 
-  histParams2D += (
-    (f"goodPhoton_{prefix}absEta_vs_et", 100, 0, 3.0, 1000, 0, 1000, ""),
-    (f"goodPhoton_{prefix}eta_vs_et", 100, -3.0, 3.0, 1000, 0, 1000, ""),
-    (f"goodPhoton_{prefix}eta_vs_phi", 1000, -3.0, 3.0, 1000, -4.0, 4.0, ""),
-    (f"goodPhoton_{prefix}eta_vs_phi_vs_et", 1000, -3.0, 3.0, 1000, -4.0, 4.0, ""),
-    (f"goodPhoton_{prefix}eta_vs_phi_gt30p0GeV", 100, -3.0, 3.0, 100, -4.0, 4.0, ""),
-    (f"goodPhoton_{prefix}eta_vs_phi_gt50p0GeV", 100, -3.0, 3.0, 100, -4.0, 4.0, ""),
-    # (f"goodPhoton_{prefix}horizontalImbalance_vs_seedTime", 100, -2.0, 2.0, 100, -5.0, 5.0, ""),
-    # (f"goodPhoton_{prefix}verticalImbalance_vs_seedTime", 100, -2.0, 2.0, 100, -5.0, 5.0, ""),
-    # (f"goodPhoton_{prefix}et_vs_seedTime", 2000, 0, 1000, 100, -5.0, 5.0, ""),
-    # (f"goodPhoton_{prefix}eta_vs_seedTime", 100, -5.0, 5.0, 1000, -50.0, 50.0, ""),
-  )
-
 for bxPrefix in ["afterCollisionBX_", "withoutCollisionBX_"]:
-  for detectorPrefix in ["", "Barrel_", "EndCap_"]:
+  for detectorPrefix in detectorPrefixes:
     prefix = f"{bxPrefix}{detectorPrefix}"
     histParams += (
       ("goodPhoton", f"{prefix}seedTime", 1000, -50, 50, ""),
@@ -102,13 +128,14 @@ for bxPrefix in ["afterCollisionBX_", "withoutCollisionBX_"]:
       ("goodPhoton", f"{prefix}seedTime_gt50p0GeV", 1000, -50, 50, ""),
     )
 
-for prefix in ["", "Barrel_", "EndCap_"]:
-  for params in (histParams, defaultHistParams):
-    for collection, variable, bins, xmin, xmax, _ in params:
-      if variable.startswith(f"{prefix}seedTime"):
-        continue  # Skip seedTime vs. seedTime
-      histName = f"goodPhoton_{prefix}{variable}_vs_seedTime"
-      histParams2D += ((histName, bins, xmin, xmax, 200, -50.0, 50.0, ""), )
+if runHistograms2D:
+  for prefix in goodPhotonPrefixes:
+    for params in (histParams, defaultHistParams):
+      for collection, variable, bins, xmin, xmax, _ in params:
+        if variable.startswith(f"{prefix}seedTime"):
+          continue  # Skip seedTime vs. seedTime
+        histName = f"goodPhoton_{prefix}{variable}_vs_seedTime"
+        histParams2D += ((histName, bins, xmin, xmax, 200, -50.0, 50.0, ""), )
 
 eventsTreeNames = [
   "Events",

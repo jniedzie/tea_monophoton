@@ -4,7 +4,8 @@ from Legend import Legend
 from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 from mono_helpers import get_cep_scale
-from lbl_histogramer_config import histParams2D as histogramer_histParams2D
+
+from lbl_histogramer_config import histParams2D
 from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, total_uncertainty_qed, total_uncertainty_lbl_run2
 from lbl_paths import base_path, processes, skim
 
@@ -338,7 +339,7 @@ seen_2d_histograms = set()
 
 
 def booked_2d_histograms():
-  for histogram in histogramer_histParams2D:
+  for histogram in histParams2D:
     if histogram[0] in seen_2d_histograms:
       continue
     seen_2d_histograms.add(histogram[0])
@@ -362,9 +363,8 @@ for prefix in ["", "Barrel_", "EndCap_"]:
   histograms += (
     #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
     # Histogram(f"goodPhoton_{prefix}et", "", False, True, default_lumi, 1,   0, 20, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
-    Histogram(
-      f"goodPhoton_{prefix}et", "", False, True, default_lumi, 5, 0, 100, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error
-    ),
+    Histogram(f"goodPhoton_{prefix}et", "", False, True, default_lumi, 5, 0, 100, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_noBeamHalo_{prefix}et", "", False, True, default_lumi, 5, 0, 100, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
     # Histogram(f"goodPhoton_{prefix}et", "", False, True, default_lumi, 40,   0, 20, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "_normCheck", lbl_error),
     # # Histogram(f"goodPhoton_{prefix}logEt", "", False, True, default_lumi, 5,   0.3, 2.6, 1e-2, 5e3, "log_{10}[E_{T}^{#gamma} (GeV)]", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}hOverE", "", False, True, default_lumi, 1, 0, 0.025, 1e-2, 5e5, "H/E", y_label, "", lbl_error),
@@ -373,9 +373,11 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     ),
     Histogram(f"goodPhoton_{prefix}eta", "", False, True, default_lumi, 1, -3, 3, 1e-2, 5e5, "#eta^{#gamma}", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 200, "#phi^{#gamma}", y_label, "", lbl_error),
-    Histogram(
-      f"goodPhoton_{prefix}seedTime", "", False, True, default_lumi, 10, -30, 30, 1e-2, 5e6, "Photon seed time (ns)", y_label, "", lbl_error
-    ),
+    Histogram(f"goodPhoton_noBeamHalo_{prefix}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 200, "#phi^{#gamma}", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_beamHalo_{prefix}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 200, "#phi^{#gamma}", y_label, "", lbl_error),
+    
+    Histogram(f"goodPhoton_{prefix}seedTime", "", False, True, default_lumi, 10, -30, 30, 1e-2, 5e6, "Photon seed time (ns)", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_noBeamHalo_{prefix}seedTime", "", False, True, default_lumi, 10, -30, 30, 1e-2, 5e6, "Photon seed time (ns)", y_label, "", lbl_error),
     Histogram(
       f"goodPhoton_{prefix}seedTime_offPhiPeaks", "", False, True, default_lumi, 10, -30, 30, 1e-2, 5e6, "Photon seed time (ns)", y_label, "", lbl_error
     ),
@@ -438,7 +440,7 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     # Histogram(f"genPhoton_{prefix}et", "", False, True, default_lumi, 5,   0, 100, 1e-5, 5e5, "E_{T}^{gen #gamma} (GeV)", y_label, "", lbl_error),
   )
 
-histograms2D = tuple(get_2d_plot(*histogram) for histogram in booked_2d_histograms())
+# histograms2D = tuple(get_2d_plot(*histogram) for histogram in booked_2d_histograms())
 
 histogramsRatio = []
 

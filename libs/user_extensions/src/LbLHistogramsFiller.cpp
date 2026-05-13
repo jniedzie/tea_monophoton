@@ -6,15 +6,6 @@
 
 using namespace std;
 
-namespace {
-int previousBxMaxDistance = 5;
-
-string GetBxPrefix(const optional<bool>& hasCollisionInPreviousBXs) {
-  if (!hasCollisionInPreviousBXs.has_value()) return "";
-  return *hasCollisionInPreviousBXs ? "afterCollisionBX_" : "withoutCollisionBX_";
-}
-}  // namespace
-
 LbLHistogramsFiller::LbLHistogramsFiller(shared_ptr<HistogramsHandler> histogramsHandler_) : histogramsHandler(histogramsHandler_) {
   // Create a config manager
   auto& config = ConfigManager::GetInstance();
@@ -30,6 +21,18 @@ LbLHistogramsFiller::LbLHistogramsFiller(shared_ptr<HistogramsHandler> histogram
     config.GetValue("previousBxMaxDistance", previousBxMaxDistance);
   } catch (const Exception& e) {
     warn() << "No previousBxMaxDistance found in config. Using default value of " << previousBxMaxDistance << "." << endl;
+  }
+
+  try {
+    config.GetValue("runHistograms2D", runHistograms2D);
+  } catch (const Exception& e) {
+    warn() << "No runHistograms2D found in config. Using default value of " << runHistograms2D << "." << endl;
+  }
+
+  try {
+    config.GetValue("beamHaloFlag", beamHaloFlag);
+  } catch (const Exception& e) {
+    warn() << "No beamHaloFlag found in config. Using default value of " << beamHaloFlag << "." << endl;
   }
 
   eventProcessor = make_unique<EventProcessor>();
@@ -49,14 +52,27 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
 
   if (!hasCollisionInPreviousBXs.has_value()) {
     warn() << "Could not determine whether the event has collisions in previous " << previousBxMaxDistance << " BXs" << endl;
-  } else {
-    info() << "Event has collisions in previous " << previousBxMaxDistance << " BXs: "
-           << (*hasCollisionInPreviousBXs ? "Yes" : "No") << endl;
   }
 
   string detectorPrefix = fabs(photon->GetEta()) > 1.2 ? "EndCap_" : "Barrel_";
+
   FillMonoPhotonHistograms(event, photon);
   FillMonoPhotonHistograms(event, photon, detectorPrefix);
+  if (runHistograms2D) {
+    FillMonoPhotonHistograms2D(event, photon);
+    FillMonoPhotonHistograms2D(event, photon, detectorPrefix);
+  }
+
+  if (beamHaloFlag != "") {
+    string beamHaloLoosePrefix = GetBeamHaloLoosePrefix(event);
+    FillMonoPhotonHistograms(event, photon, beamHaloLoosePrefix);
+    FillMonoPhotonHistograms(event, photon, beamHaloLoosePrefix + detectorPrefix);
+
+    if (runHistograms2D) {
+      FillMonoPhotonHistograms2D(event, photon, beamHaloLoosePrefix);
+      FillMonoPhotonHistograms2D(event, photon, beamHaloLoosePrefix + detectorPrefix);
+    }
+  }
 
   if (!bxPrefix.empty()) {
     histogramsHandler->Fill("goodPhoton_" + bxPrefix + "seedTime", photon->GetSeedTime());
@@ -65,9 +81,6 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
 }
 
 void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event, const shared_ptr<Photon> photon, string prefix) {
-  histogramsHandler->Fill("goodPhoton_" + prefix + "absEta_vs_et", fabs(photon->GetEta()), photon->GetEt());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "eta_vs_et", photon->GetEta(), photon->GetEt());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "eta_vs_phi", photon->GetEta(), photon->GetPhi());
   histogramsHandler->Fill("goodPhoton_" + prefix + "et", photon->GetEt());
   histogramsHandler->Fill("goodPhoton_" + prefix + "logEt", TMath::Log10(photon->GetEt()));
   histogramsHandler->Fill("goodPhoton_" + prefix + "seedTime", photon->GetSeedTime());
@@ -81,10 +94,10 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
   histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance", photon->GetHorizontalImbalance());
   histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance", photon->GetVerticalImbalance());
   histogramsHandler->Fill("goodPhoton_" + prefix + "swissCross", photon->GetSwissCross());
-  
+
   float phi = photon->GetPhi();
 
-  if (fabs(phi) > 1.0 and fabs(phi) < 2.5){
+  if (fabs(phi) > 1.0 and fabs(phi) < 2.5) {
     histogramsHandler->Fill("goodPhoton_" + prefix + "seedTime_offPhiPeaks", photon->GetSeedTime());
   }
 
@@ -97,28 +110,42 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
   for (string branch : defaultBranches) {
     histogramsHandler->Fill("goodPhoton_" + prefix + branch, photon->GetAs<float>(branch));
   }
+}
 
-  // fill all 2D histograms of variables vs seed time, similar to the 1D histograms above:
+void LbLHistogramsFiller::FillMonoPhotonHistograms2D(const shared_ptr<Event> event, const shared_ptr<Photon> photon, string prefix) {
+  histogramsHandler->Fill("goodPhoton_" + prefix + "absEta_vs_et", fabs(photon->GetEta()), photon->GetEt());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "eta_vs_et", photon->GetEta(), photon->GetEt());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "eta_vs_phi", photon->GetEta(), photon->GetPhi());
   histogramsHandler->Fill("goodPhoton_" + prefix + "absEta_vs_seedTime", fabs(photon->GetEta()), photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "eta_vs_seedTime", photon->GetEta(), photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "phi_vs_seedTime", photon->GetPhi(), photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "et_vs_seedTime", photon->GetEt(), photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "hOverE_vs_seedTime", photon->GetAs<float>("hOverE"), photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "sigmaEta2012_vs_seedTime", photon->GetAs<float>("sigmaEta2012"), photon->GetSeedTime());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "sigmaIEtaIEta2012_vs_seedTime", photon->GetAs<float>("sigmaIEtaIEta2012"), photon->GetSeedTime());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "maxEnergyCrystal_vs_seedTime", photon->GetAs<float>("maxEnergyCrystal"), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "sigmaIEtaIEta2012_vs_seedTime", photon->GetAs<float>("sigmaIEtaIEta2012"),
+                          photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "maxEnergyCrystal_vs_seedTime", photon->GetAs<float>("maxEnergyCrystal"),
+                          photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "energyTop_vs_seedTime", photon->GetEnergyTop(), photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "energyBottom_vs_seedTime", photon->GetEnergyBottom(), photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "energyLeft_vs_seedTime", photon->GetEnergyLeft(), photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "energyRight_vs_seedTime", photon->GetEnergyRight(), photon->GetSeedTime());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "topOverCentral_vs_seedTime", photon->GetEnergyTop() / photon->GetEnergyCentral(), photon->GetSeedTime());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "bottomOverCentral_vs_seedTime", photon->GetEnergyBottom() / photon->GetEnergyCentral(), photon->GetSeedTime());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "leftOverCentral_vs_seedTime", photon->GetEnergyLeft() / photon->GetEnergyCentral(), photon->GetSeedTime());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "rightOverCentral_vs_seedTime", photon->GetEnergyRight() / photon->GetEnergyCentral(), photon->GetSeedTime());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "minOverCentral_vs_seedTime", photon->GetMinEnergy() / photon->GetEnergyCentral(), photon->GetSeedTime());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "verticalOverCentral_vs_seedTime", photon->GetVerticalOverCentralEnergy(), photon->GetSeedTime());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalOverCentral_vs_seedTime", photon->GetHorizontalOverCentralEnergy(), photon->GetSeedTime());
-  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance_vs_seedTime", photon->GetHorizontalImbalance(), photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "topOverCentral_vs_seedTime", photon->GetEnergyTop() / photon->GetEnergyCentral(),
+                          photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "bottomOverCentral_vs_seedTime", photon->GetEnergyBottom() / photon->GetEnergyCentral(),
+                          photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "leftOverCentral_vs_seedTime", photon->GetEnergyLeft() / photon->GetEnergyCentral(),
+                          photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "rightOverCentral_vs_seedTime", photon->GetEnergyRight() / photon->GetEnergyCentral(),
+                          photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "minOverCentral_vs_seedTime", photon->GetMinEnergy() / photon->GetEnergyCentral(),
+                          photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "verticalOverCentral_vs_seedTime", photon->GetVerticalOverCentralEnergy(),
+                          photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalOverCentral_vs_seedTime", photon->GetHorizontalOverCentralEnergy(),
+                          photon->GetSeedTime());
+  histogramsHandler->Fill("goodPhoton_" + prefix + "horizontalImbalance_vs_seedTime", photon->GetHorizontalImbalance(),
+                          photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance_vs_seedTime", photon->GetVerticalImbalance(), photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "swissCross_vs_seedTime", photon->GetSwissCross(), photon->GetSeedTime());
 }
@@ -184,9 +211,23 @@ void LbLHistogramsFiller::SaveHighEtPhotonsInfo(const shared_ptr<Event> event, f
   auto bxPrefix = GetBxPrefix(asLbLEvent(event)->HasCollisionInPreviousBXs(previousBxMaxDistance));
   string detectorPrefix = fabs(photon->GetEta()) > 1.2 ? "EndCap_" : "Barrel_";
 
-  histogramsHandler->Fill("goodPhoton_eta_vs_phi_gt" + minEtStr + "GeV", photon->GetEta(), photon->GetPhi());
+  if (beamHaloFlag != "") {
+    string beamHaloLoosePrefix = GetBeamHaloLoosePrefix(event);
+    histogramsHandler->Fill("goodPhoton_" + beamHaloLoosePrefix + "seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
+    histogramsHandler->Fill("goodPhoton_" + beamHaloLoosePrefix + detectorPrefix + "seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
+    if (runHistograms2D) {
+      histogramsHandler->Fill("goodPhoton_" + beamHaloLoosePrefix + "eta_vs_phi_gt" + minEtStr + "GeV", photon->GetEta(), photon->GetPhi());
+      histogramsHandler->Fill("goodPhoton_" + beamHaloLoosePrefix + detectorPrefix + "eta_vs_phi_gt" + minEtStr + "GeV", photon->GetEta(),
+                              photon->GetPhi());
+    }
+  }
+
   histogramsHandler->Fill("goodPhoton_seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + detectorPrefix + "seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
+
+  if (runHistograms2D) {
+    histogramsHandler->Fill("goodPhoton_eta_vs_phi_gt" + minEtStr + "GeV", photon->GetEta(), photon->GetPhi());
+  }
 
   if (!bxPrefix.empty()) {
     histogramsHandler->Fill("goodPhoton_" + bxPrefix + "seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
@@ -434,6 +475,15 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
   }
 }
 
+string LbLHistogramsFiller::GetBxPrefix(const optional<bool>& hasCollisionInPreviousBXs) {
+  if (!hasCollisionInPreviousBXs.has_value()) return "";
+  return *hasCollisionInPreviousBXs ? "afterCollisionBX_" : "withoutCollisionBX_";
+}
+
+string LbLHistogramsFiller::GetBeamHaloLoosePrefix(const shared_ptr<Event> event) {
+  return event->GetAs<bool>(beamHaloFlag) ? "beamHalo_" : "noBeamHalo_";
+}
+
 void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
   auto photons = event->GetCollection("goodPhoton");
 
@@ -451,7 +501,7 @@ void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
     FillEGammaHistograms(event);
     FillEventLevelHistograms(event);
     // auto photon = asPhoton(photons->at(0));
-  // float et = photon->Get("et");
+    // float et = photon->Get("et");
     SaveHighEtPhotonsInfo(event, 30.0, false);
     SaveHighEtPhotonsInfo(event, 50.0, false);
   }

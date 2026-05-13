@@ -20,12 +20,19 @@ class LbLHistogramsFiller {
 
   void FillMonoPhotonHistograms(const std::shared_ptr<Event> event);
   void FillMonoPhotonHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<Photon> photon, std::string prefix="");
+  void FillMonoPhotonHistograms2D(const std::shared_ptr<Event> event, const std::shared_ptr<Photon> photon, std::string prefix="");
   void FillEGammaHistograms(const std::shared_ptr<Event> event);
   void FillGenLevelHistograms(const std::shared_ptr<Event> event);
   void FillEventLevelHistograms(const std::shared_ptr<Event> event);
   void SaveHighEtPhotonsInfo(const std::shared_ptr<Event> event, float minEt, bool saveTextFile);
 
+  std::string GetBxPrefix(const std::optional<bool>& hasCollisionInPreviousBXs);
+  std::string GetBeamHaloLoosePrefix(const std::shared_ptr<Event> event);
+
   std::map<std::string, float> dataBlinding;
+  int previousBxMaxDistance;
+  bool runHistograms2D = false;
+  std::string beamHaloFlag;
 };
 
 #endif /* LbLHistogramsFiller_hpp */
