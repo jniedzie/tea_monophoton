@@ -42,15 +42,16 @@ else:
   histParams2D = ()
 
 detectorPrefixes = ["", "Barrel_", "EndCap_"]
-etaWidthPrefixes = ["", "HighSCEtaWidth_", "LowSCEtaWidth_"]
+etaWidthPrefixes = ["HighSCEtaWidth_", "LowSCEtaWidth_"]
 
-goodPhotonPrefixes = detectorPrefixes
+goodPhotonPrefixes = detectorPrefixes.copy()
 
 for etaWidthPrefix in etaWidthPrefixes:
   for detectorPrefix in detectorPrefixes:
-    prefix = f"{etaWidthPrefix}{detectorPrefix}"
-    goodPhotonPrefixes.append(prefix)
-    
+    prefix = f"{detectorPrefix}{etaWidthPrefix}"
+    if prefix not in goodPhotonPrefixes:
+      goodPhotonPrefixes.append(prefix)
+  
 
 for prefix in goodPhotonPrefixes:
   histParams += (

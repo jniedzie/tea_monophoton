@@ -368,8 +368,13 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     Histogram(f"goodPhoton_{prefix}et", "", False, True, default_lumi, 5, 0, 100, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}eta", "", False, True, default_lumi, 1, -3, 3, 1e-2, 5e5, "#eta^{#gamma}", y_label, "_log", lbl_error),
     Histogram(f"goodPhoton_{prefix}eta", "", False, False, default_lumi, 1, -3, 3, 0, 50, "#eta^{#gamma}", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}LowSCEtaWidth_eta", "", False, False, default_lumi, 1, -3, 3, 0, 50, "#eta^{#gamma}", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}HighSCEtaWidth_eta", "", False, False, default_lumi, 1, -3, 3, 0, 50, "#eta^{#gamma}", y_label, "", lbl_error),
+    
     Histogram(f"goodPhoton_{prefix}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 50, "#phi^{#gamma}", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}seedTime", "", False, True, default_lumi, 10, -30, 30, 1e-2, 5e6, "Photon seed time (ns)", y_label, "", lbl_error),
+    
+    
     
   
     # Histogram(f"goodPhoton_{prefix}et", "", False, True, default_lumi, 40,   0, 20, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "_normCheck", lbl_error),
