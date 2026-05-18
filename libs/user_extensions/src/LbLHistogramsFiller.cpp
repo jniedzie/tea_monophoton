@@ -29,12 +29,6 @@ LbLHistogramsFiller::LbLHistogramsFiller(shared_ptr<HistogramsHandler> histogram
     warn() << "No runHistograms2D found in config. Using default value of " << runHistograms2D << "." << endl;
   }
 
-  try {
-    config.GetValue("beamHaloFlag", beamHaloFlag);
-  } catch (const Exception& e) {
-    warn() << "No beamHaloFlag found in config. Using default value of " << beamHaloFlag << "." << endl;
-  }
-
   eventProcessor = make_unique<EventProcessor>();
 }
 
@@ -56,22 +50,18 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
 
   string detectorPrefix = fabs(photon->GetEta()) > 1.2 ? "EndCap_" : "Barrel_";
 
+  auto standaloneMuons = event->GetCollection("standaloneMuon");
+
+  string standaloneMuonPrefix = standaloneMuons->size() > 0 ? "withStandaloneMuon_" : "withoutStandaloneMuon_";
+
   FillMonoPhotonHistograms(event, photon);
   FillMonoPhotonHistograms(event, photon, detectorPrefix);
+  FillMonoPhotonHistograms(event, photon, standaloneMuonPrefix);
+
   if (runHistograms2D) {
     FillMonoPhotonHistograms2D(event, photon);
     FillMonoPhotonHistograms2D(event, photon, detectorPrefix);
-  }
-
-  if (beamHaloFlag != "") {
-    string beamHaloLoosePrefix = GetBeamHaloLoosePrefix(event);
-    FillMonoPhotonHistograms(event, photon, beamHaloLoosePrefix);
-    FillMonoPhotonHistograms(event, photon, beamHaloLoosePrefix + detectorPrefix);
-
-    if (runHistograms2D) {
-      FillMonoPhotonHistograms2D(event, photon, beamHaloLoosePrefix);
-      FillMonoPhotonHistograms2D(event, photon, beamHaloLoosePrefix + detectorPrefix);
-    }
+    FillMonoPhotonHistograms2D(event, photon, standaloneMuonPrefix);
   }
 
   if (!bxPrefix.empty()) {
@@ -210,17 +200,6 @@ void LbLHistogramsFiller::SaveHighEtPhotonsInfo(const shared_ptr<Event> event, f
 
   auto bxPrefix = GetBxPrefix(asLbLEvent(event)->HasCollisionInPreviousBXs(previousBxMaxDistance));
   string detectorPrefix = fabs(photon->GetEta()) > 1.2 ? "EndCap_" : "Barrel_";
-
-  if (beamHaloFlag != "") {
-    string beamHaloLoosePrefix = GetBeamHaloLoosePrefix(event);
-    histogramsHandler->Fill("goodPhoton_" + beamHaloLoosePrefix + "seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
-    histogramsHandler->Fill("goodPhoton_" + beamHaloLoosePrefix + detectorPrefix + "seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
-    if (runHistograms2D) {
-      histogramsHandler->Fill("goodPhoton_" + beamHaloLoosePrefix + "eta_vs_phi_gt" + minEtStr + "GeV", photon->GetEta(), photon->GetPhi());
-      histogramsHandler->Fill("goodPhoton_" + beamHaloLoosePrefix + detectorPrefix + "eta_vs_phi_gt" + minEtStr + "GeV", photon->GetEta(),
-                              photon->GetPhi());
-    }
-  }
 
   histogramsHandler->Fill("goodPhoton_seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + detectorPrefix + "seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
@@ -478,10 +457,6 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
 string LbLHistogramsFiller::GetBxPrefix(const optional<bool>& hasCollisionInPreviousBXs) {
   if (!hasCollisionInPreviousBXs.has_value()) return "";
   return *hasCollisionInPreviousBXs ? "afterCollisionBX_" : "withoutCollisionBX_";
-}
-
-string LbLHistogramsFiller::GetBeamHaloLoosePrefix(const shared_ptr<Event> event) {
-  return event->GetAs<bool>(beamHaloFlag) ? "beamHalo_" : "noBeamHalo_";
 }
 
 void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {

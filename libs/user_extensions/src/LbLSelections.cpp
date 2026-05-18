@@ -205,6 +205,36 @@ bool LbLSelections::PassesDiphotonPt(shared_ptr<Event> event, shared_ptr<CutFlow
   return true;
 }
 
+bool LbLSelections::PassesBeamHaloFilters(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  map<int, string> options = {
+    {0, "none"},
+    {1, "isBeamHaloLoose"},
+    {2, "isBeamHaloTight"},
+    {3, "isBeamHaloGlobalTight2016"},
+    {4, "isbeamHaloGlobalSuperTight2016"},
+  };
+  int option = eventCuts.at("beamHaloFilter");
+  
+  if (options.find(option) == options.end()) {
+    fatal() << "Invalid beam halo filter option: " << option << ". Valid options are: " << endl;
+    for (const auto& opt : options) {
+      fatal() << opt.first << ": " << opt.second << endl;
+    }
+    exit(0);
+  }
+
+  string beamHaloOption = options.at(option);
+  if (beamHaloOption == "none") {
+    cutFlowManager->UpdateCutFlow("beamHaloFilters");
+    return true;
+  }
+  
+  if (event->GetAs<bool>(beamHaloOption)) return false;
+  cutFlowManager->UpdateCutFlow("beamHaloFilters");
+  
+  return true;
+}
+
 bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   if (eventCuts.at("ZDC_cut") == 0) {
     cutFlowManager->UpdateCutFlow("ZDC");
@@ -326,3 +356,6 @@ bool LbLSelections::PassesAcoplanaritySelection(shared_ptr<Event> event, shared_
 
   return true;
 }
+
+
+

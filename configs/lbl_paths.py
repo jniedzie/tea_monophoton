@@ -56,12 +56,14 @@ else:
   # # build skim name
   # skim = f"skimmed_{trigger}_baseSelections{timeCut}{swissCrossCut}{scPhiWidthCut}{VHfractionsCut}{hOverEcut}_zdc{zdcCut}{suffix}"
   
-  skim = f"skimmed_{trigger}_baseSelections"
+  # skim = f"skimmed_{trigger}_baseSelections"
+  skim = f"skimmed_{trigger}_baseSelections_haloFlags_3nsCut"
   # skim = f"skimmed_{trigger}_baseSelections_noCHE"
 
 if get_facility() == "naf":
   base_path = "/data/dust/user/jniedzie/monophoton/"
 elif get_facility() == "lxplus":
   base_path = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/"
+  # base_path = "/eos/cms/store/cmst3/group/lightbylight/tea_samples/"
 
 merged_histograms_path = base_path + "/{}/merged_{}_histograms.root"

@@ -30,6 +30,7 @@ int main(int argc, char** argv) {
   auto lblObjectsManager = make_unique<LbLObjectsManager>();
 
   cutFlowManager->RegisterCut("initial");
+  cutFlowManager->RegisterCut("beamHaloFilters");
   cutFlowManager->RegisterCut("singlePhoton");
   cutFlowManager->RegisterCut("nElectrons");
   cutFlowManager->RegisterCut("nTracks");
@@ -68,6 +69,7 @@ int main(int argc, char** argv) {
     lblObjectsManager->InsertGoodMuonsCollection(event);
 
     cutFlowManager->UpdateCutFlow("initial");
+    if (!lblSelections->PassesBeamHaloFilters(event, cutFlowManager)) continue;
     if (!lblSelections->PassesSinglePhotonSelection(event, cutFlowManager)) continue;
     if (!lblSelections->PassesChargedExclusivity(event, cutFlowManager)) continue;
     if (!lblSelections->PassesNeutralExclusivity(event, cutFlowManager)) continue;

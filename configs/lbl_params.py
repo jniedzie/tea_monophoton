@@ -5,6 +5,7 @@ eventCuts = {
   "max_Ntracks": 0,
   "max_Nmuons": 0,
   "max_Ntowers": 0,
+  "beamHaloFilter": 1  # 0: none, 1: loose, 2: tight, 3: global tight 2016, 4: global super tight 2016
 }
 
 zdcCutNames = {
@@ -40,8 +41,8 @@ photonCuts = {
   # "min_verticalOverCentral": 0.0,
   # "min_horizontalOverCentral": 0.0,
   "max_absEta": 2.2,
-  # "min_seedTime": -3.0,
-  # "max_seedTime": 3.0,
+  "min_seedTime": -3.0,
+  "max_seedTime": 3.0,
   "max_sigmaIEtaIEta_endcap": 0.06,
 
   # Tightened cuts:
@@ -60,8 +61,8 @@ photonCuts = {
   # "max_SCPhiWidth_barrel": 0.01,
 
   # loosened cuts:
-  "min_seedTime": -999,
-  "max_seedTime": 999,
+  # "min_seedTime": -999,
+  # "max_seedTime": 999,
 }
 
 # good object definitions
