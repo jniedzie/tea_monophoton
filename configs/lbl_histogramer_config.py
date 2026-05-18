@@ -2,13 +2,7 @@ from lbl_params import *
 
 nEvents = -1
 previousBxMaxDistance = 150
-runHistograms2D = False
-
-beamHaloFlag = None
-# beamHaloFlag = "isBeamHaloLoose"
-# beamHaloFlag = "isBeamHaloTight"
-# beamHaloFlag = "isBeamHaloGlobalTight2016"
-# beamHaloFlag = "isbeamHaloGlobalSuperTight2016"
+runHistograms2D = True
 
 defaultHistParams = (
   # collection      variable          bins    xmin     xmax     dir
@@ -48,16 +42,10 @@ else:
   histParams2D = ()
 
 detectorPrefixes = ["", "Barrel_", "EndCap_"]
-beamHaloPrefixes = ["beamHalo_", "noBeamHalo_"]
+standaloneMuonPrefixes = ["withStandaloneMuon_", "withoutStandaloneMuon_"]
 
 goodPhotonPrefixes = detectorPrefixes 
-
-if beamHaloFlag:
-  goodPhotonPrefixes += [
-    f"{beamHaloPrefix}{detectorPrefix}"
-    for beamHaloPrefix in beamHaloPrefixes
-    for detectorPrefix in detectorPrefixes
-  ]
+goodPhotonPrefixes += standaloneMuonPrefixes
 
 for prefix in goodPhotonPrefixes:
   histParams += (
