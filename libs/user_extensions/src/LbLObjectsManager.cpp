@@ -107,24 +107,24 @@ void LbLObjectsManager::InsertGoodTracksCollection(shared_ptr<Event> event) {
   event->AddCollection("goodTrack", goodTracks);
 }
 
-void LbLObjectsManager::InsertGoodMuonsCollection(shared_ptr<Event> event) {
+void LbLObjectsManager::InsertGoodMuonsCollection(shared_ptr<Event> event, bool isStandalone) {
   shared_ptr<PhysicsObjects> muons;
 
   try {
-    muons = event->GetCollection("muon");
+    muons = event->GetCollection(isStandalone ? "standaloneMuon" : "muon");
   } catch (const Exception& e) {
-    error() << "No muon collection found in event. Will not insert goodMuon collection." << endl;
+    error() << "No muon collection found in event. Will not insert " << (isStandalone ? "goodStandaloneMuon" : "goodMuon") <<" collection." << endl;
     return;
   }
   auto goodMuons = make_shared<PhysicsObjects>();
 
   for (auto physicsObject : *muons) {
-    auto muon = asMuon(physicsObject);
+    auto muon = asMuon(physicsObject, isStandalone);
     if (!IsGoodMuon(muon)) continue;
     goodMuons->push_back(physicsObject);
   }
 
-  event->AddCollection("goodMuon", goodMuons);
+  event->AddCollection(isStandalone ? "goodStandaloneMuon" : "goodMuon", goodMuons);
 }
 
 void LbLObjectsManager::InsertGenPhotonsCollection(shared_ptr<Event> event) {

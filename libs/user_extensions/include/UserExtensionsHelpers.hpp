@@ -30,8 +30,8 @@ inline std::shared_ptr<Track> asTrack(const std::shared_ptr<PhysicsObject> physi
   return std::make_shared<Track>(physicsObject);
 }
 
-inline std::shared_ptr<Muon> asMuon(const std::shared_ptr<PhysicsObject> physicsObject) {
-  return std::make_shared<Muon>(physicsObject);
+inline std::shared_ptr<Muon> asMuon(const std::shared_ptr<PhysicsObject> physicsObject, bool isStandalone) {
+  return std::make_shared<Muon>(physicsObject, isStandalone);
 }
 
 inline std::shared_ptr<ZDCEnergy> asZDCEnergy(const std::shared_ptr<PhysicsObject> physicsObject) {

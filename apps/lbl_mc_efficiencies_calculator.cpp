@@ -171,7 +171,7 @@ int main(int argc, char **argv) {
     lblObjectsManager->InsertGoodPhotonsCollection(event);
     lblObjectsManager->InsertGoodElectronsCollection(event);
     lblObjectsManager->InsertGoodTracksCollection(event);
-    lblObjectsManager->InsertGoodMuonsCollection(event);
+    lblObjectsManager->InsertGoodMuonsCollection(event, false);
     lblObjectsManager->InsertGenPhotonsCollection(event);
     lblObjectsManager->InsertGenElectronsCollection(event);
 

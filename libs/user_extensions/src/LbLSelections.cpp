@@ -186,6 +186,10 @@ bool LbLSelections::PassesChargedExclusivity(shared_ptr<Event> event, shared_ptr
   if (nMuons > eventCuts.at("max_Nmuons")) return false;
   if (cutFlowManager) cutFlowManager->UpdateCutFlow("nMuons");
 
+  int nStandaloneMuons = event->GetCollection("standaloneMuon")->size();
+  if (nStandaloneMuons > eventCuts.at("max_NstandaloneMuons")) return false;
+  if (cutFlowManager) cutFlowManager->UpdateCutFlow("nStandaloneMuons");
+
   return true;
 }
 

@@ -35,6 +35,7 @@ int main(int argc, char** argv) {
   cutFlowManager->RegisterCut("nElectrons");
   cutFlowManager->RegisterCut("nTracks");
   cutFlowManager->RegisterCut("nMuons");
+  cutFlowManager->RegisterCut("nStandaloneMuons");
   cutFlowManager->RegisterCut("neutralExclusivity");
   cutFlowManager->RegisterCut("ZDC");
 
@@ -66,7 +67,8 @@ int main(int argc, char** argv) {
     lblObjectsManager->InsertGoodPhotonsCollection(event, singlePhotonCutFlow);
     lblObjectsManager->InsertGoodElectronsCollection(event);
     lblObjectsManager->InsertGoodTracksCollection(event);
-    lblObjectsManager->InsertGoodMuonsCollection(event);
+    lblObjectsManager->InsertGoodMuonsCollection(event, false);
+    lblObjectsManager->InsertGoodMuonsCollection(event, true);
 
     cutFlowManager->UpdateCutFlow("initial");
     if (!lblSelections->PassesBeamHaloFilters(event, cutFlowManager)) continue;

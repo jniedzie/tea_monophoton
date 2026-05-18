@@ -42,10 +42,8 @@ else:
   histParams2D = ()
 
 detectorPrefixes = ["", "Barrel_", "EndCap_"]
-standaloneMuonPrefixes = ["withStandaloneMuon_", "withoutStandaloneMuon_"]
 
 goodPhotonPrefixes = detectorPrefixes 
-goodPhotonPrefixes += standaloneMuonPrefixes
 
 for prefix in goodPhotonPrefixes:
   histParams += (

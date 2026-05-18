@@ -4,9 +4,11 @@
 
 using namespace std;
 
-Muon::Muon(shared_ptr<PhysicsObject> physicsObject_) : physicsObject(physicsObject_) {
+Muon::Muon(shared_ptr<PhysicsObject> physicsObject_, bool isStandalone_) : 
+  physicsObject(physicsObject_),
+  isStandalone(isStandalone_) {
   auto &config = ConfigManager::GetInstance();
-  config.GetMap("muonCuts", muonCuts);
+  config.GetMap(isStandalone ? "standaloneMuonCuts" : "muonCuts", muonCuts);
   config.GetMap("detectorParams", detectorParams);
   config.GetMap("caloEtaEdges", caloEtaEdges);
 

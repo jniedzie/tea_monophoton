@@ -50,18 +50,12 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
 
   string detectorPrefix = fabs(photon->GetEta()) > 1.2 ? "EndCap_" : "Barrel_";
 
-  auto standaloneMuons = event->GetCollection("standaloneMuon");
-
-  string standaloneMuonPrefix = standaloneMuons->size() > 0 ? "withStandaloneMuon_" : "withoutStandaloneMuon_";
-
   FillMonoPhotonHistograms(event, photon);
   FillMonoPhotonHistograms(event, photon, detectorPrefix);
-  FillMonoPhotonHistograms(event, photon, standaloneMuonPrefix);
 
   if (runHistograms2D) {
     FillMonoPhotonHistograms2D(event, photon);
     FillMonoPhotonHistograms2D(event, photon, detectorPrefix);
-    FillMonoPhotonHistograms2D(event, photon, standaloneMuonPrefix);
   }
 
   if (!bxPrefix.empty()) {
@@ -350,7 +344,7 @@ void LbLHistogramsFiller::SaveHighEtPhotonsInfo(const shared_ptr<Event> event, f
     photonFile << "\n\nMuons information:" << endl;
     if (muons) {
       for (const auto& muonObj : *muons) {
-        auto muon = asMuon(muonObj);
+        auto muon = asMuon(muonObj, false);
         photonFile << "\nmuon_pt: " << muon->GetAs<float>("pt") << endl;
         photonFile << "muon_eta: " << muon->GetAs<float>("eta") << endl;
         photonFile << "muon_phi: " << muon->GetAs<float>("phi") << endl;

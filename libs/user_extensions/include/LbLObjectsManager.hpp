@@ -13,7 +13,7 @@ class LbLObjectsManager {
   void InsertGoodPhotonsCollection(std::shared_ptr<Event> event, std::shared_ptr<std::map<std::string, int>> cutFlow = nullptr);
   void InsertGoodElectronsCollection(std::shared_ptr<Event> event);
   void InsertGoodTracksCollection(std::shared_ptr<Event> event);
-  void InsertGoodMuonsCollection(std::shared_ptr<Event> event);
+  void InsertGoodMuonsCollection(std::shared_ptr<Event> event, bool isStandalone);
 
   void InsertGenPhotonsCollection(std::shared_ptr<Event> event);
   void InsertGenElectronsCollection(std::shared_ptr<Event> event);

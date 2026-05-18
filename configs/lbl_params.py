@@ -4,6 +4,7 @@ eventCuts = {
   "max_Nelectrons": 0,
   "max_Ntracks": 0,
   "max_Nmuons": 0,
+  "max_NstandaloneMuons": 0,
   "max_Ntowers": 0,
   "beamHaloFilter": 1  # 0: none, 1: loose, 2: tight, 3: global tight 2016, 4: global super tight 2016
 }
@@ -157,6 +158,11 @@ muonCuts = {
   # super-clean CHE cuts:
   "min_pt": 0,
   "max_absEta": 999999,
+}
+
+standaloneMuonCuts = {
+  "min_pt": 0,
+  "max_absEta": 999999, 
 }
 
 # calorimeter cuts

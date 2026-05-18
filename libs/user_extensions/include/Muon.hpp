@@ -9,7 +9,7 @@ typedef Collection<std::shared_ptr<Muon>> Muons;
 
 class Muon {
  public:
-  Muon(std::shared_ptr<PhysicsObject> physicsObject_);
+  Muon(std::shared_ptr<PhysicsObject> physicsObject_, bool isStandalone_);
 
   auto Get(std::string branchName, bool verbose=true) { return physicsObject->Get(branchName, verbose); }
   
@@ -23,6 +23,7 @@ class Muon {
 
  private:
   std::shared_ptr<PhysicsObject> physicsObject;
+  bool isStandalone;
 
   std::map<std::string, float> muonCuts, detectorParams, caloEtaEdges;
   float eta, phi, pt, absEta;
