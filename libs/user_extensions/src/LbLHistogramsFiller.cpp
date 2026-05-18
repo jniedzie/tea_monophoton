@@ -49,13 +49,18 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
   }
 
   string detectorPrefix = fabs(photon->GetEta()) > 1.2 ? "EndCap_" : "Barrel_";
+  string etaWidthPrefix = GetEtaWidthPrefix(photon);
 
   FillMonoPhotonHistograms(event, photon);
   FillMonoPhotonHistograms(event, photon, detectorPrefix);
+  FillMonoPhotonHistograms(event, photon, etaWidthPrefix);
+  FillMonoPhotonHistograms(event, photon, detectorPrefix + etaWidthPrefix);
 
   if (runHistograms2D) {
     FillMonoPhotonHistograms2D(event, photon);
     FillMonoPhotonHistograms2D(event, photon, detectorPrefix);
+    FillMonoPhotonHistograms2D(event, photon, etaWidthPrefix);
+    FillMonoPhotonHistograms2D(event, photon, detectorPrefix + etaWidthPrefix);
   }
 
   if (!bxPrefix.empty()) {
@@ -451,6 +456,10 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
 string LbLHistogramsFiller::GetBxPrefix(const optional<bool>& hasCollisionInPreviousBXs) {
   if (!hasCollisionInPreviousBXs.has_value()) return "";
   return *hasCollisionInPreviousBXs ? "afterCollisionBX_" : "withoutCollisionBX_";
+}
+
+string LbLHistogramsFiller::GetEtaWidthPrefix(shared_ptr<Photon> photon) {
+  return photon->GetAs<float>("SCEtaWidth") > 0.015 ? "HighSCEtaWidth_" : "LowSCEtaWidth_";
 }
 
 void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {

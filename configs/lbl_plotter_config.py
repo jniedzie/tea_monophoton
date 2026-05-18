@@ -355,8 +355,8 @@ histograms = (
 )
 
 histograms2D = (
-  Histogram2D("goodPhoton_withoutStandaloneMuon_eta_vs_phi", "", False, False, False, default_lumi,
-    20, 20, -3, 3, -3.5, 3.5, 0, 1000, "#eta_{#gamma}", "#phi_{#gamma}","Counts",
+  Histogram2D("goodPhoton_eta_vs_phi", "", False, False, True, default_lumi,
+    5, 5, 1.5, 1.8, -1.0, -0.5, 1e-1, 5e1, "#eta_{#gamma}", "#phi_{#gamma}","Counts",
   ),
 )
 
@@ -366,18 +366,12 @@ for prefix in ["", "Barrel_", "EndCap_"]:
     #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
     # Histogram(f"goodPhoton_{prefix}et", "", False, True, default_lumi, 1,   0, 20, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}et", "", False, True, default_lumi, 5, 0, 100, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
-    Histogram(f"goodPhoton_withoutStandaloneMuon_{prefix}et", "", False, True, default_lumi, 5, 0, 100, 1e-2, 5e3, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
-    
-    Histogram(f"goodPhoton_{prefix}eta", "", False, True, default_lumi, 1, -3, 3, 1e-2, 5e5, "#eta^{#gamma}", y_label, "", lbl_error),
-    Histogram(f"goodPhoton_withoutStandaloneMuon_{prefix}eta", "", False, True, default_lumi, 2, -3, 3, 1e-2, 5e3, "#eta^{#gamma}", y_label, "", lbl_error),
-    
-    Histogram(f"goodPhoton_{prefix}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 100, "#phi^{#gamma}", y_label, "", lbl_error),
-    Histogram(f"goodPhoton_withoutStandaloneMuon_{prefix}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 80, "#phi^{#gamma}", y_label, "", lbl_error),
-    
+    Histogram(f"goodPhoton_{prefix}eta", "", False, True, default_lumi, 1, -3, 3, 1e-2, 5e5, "#eta^{#gamma}", y_label, "_log", lbl_error),
+    Histogram(f"goodPhoton_{prefix}eta", "", False, False, default_lumi, 1, -3, 3, 0, 50, "#eta^{#gamma}", y_label, "", lbl_error),
+    Histogram(f"goodPhoton_{prefix}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 50, "#phi^{#gamma}", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}seedTime", "", False, True, default_lumi, 10, -30, 30, 1e-2, 5e6, "Photon seed time (ns)", y_label, "", lbl_error),
-    Histogram(f"goodPhoton_withoutStandaloneMuon_{prefix}seedTime", "", False, True, default_lumi, 4, -5, 5, 1e-1, 5e3, "Photon seed time (ns)", y_label, "", lbl_error),
     
-    
+  
     # Histogram(f"goodPhoton_{prefix}et", "", False, True, default_lumi, 40,   0, 20, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "_normCheck", lbl_error),
     # # Histogram(f"goodPhoton_{prefix}logEt", "", False, True, default_lumi, 5,   0.3, 2.6, 1e-2, 5e3, "log_{10}[E_{T}^{#gamma} (GeV)]", y_label, "", lbl_error),
     Histogram(f"goodPhoton_{prefix}hOverE", "", False, True, default_lumi, 1, 0, 0.025, 1e-2, 5e5, "H/E", y_label, "", lbl_error),

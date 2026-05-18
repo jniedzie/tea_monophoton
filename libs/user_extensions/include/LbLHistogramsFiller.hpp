@@ -27,6 +27,7 @@ class LbLHistogramsFiller {
   void SaveHighEtPhotonsInfo(const std::shared_ptr<Event> event, float minEt, bool saveTextFile);
 
   std::string GetBxPrefix(const std::optional<bool>& hasCollisionInPreviousBXs);
+  std::string GetEtaWidthPrefix(std::shared_ptr<Photon> photon);
   std::string GetBeamHaloLoosePrefix(const std::shared_ptr<Event> event);
 
   std::map<std::string, float> dataBlinding;
