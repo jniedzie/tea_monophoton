@@ -7,8 +7,8 @@ triggerSelection = (
     # "SingleEG5_Prescaled",
     # "UnpairedBptxMinus",
     # "UnpairedBptxPlus",
-    # "HLT_HIUPC_SingleEG5_NotMBHF2AND_v1",
-    "HLT_HIUPC_DoubleEG2_NotMBHF2AND_v1",
+    "HLT_HIUPC_SingleEG5_NotMBHF2AND_v1",
+    # "HLT_HIUPC_DoubleEG2_NotMBHF2AND_v1",
 )
 
 eventCuts = {}

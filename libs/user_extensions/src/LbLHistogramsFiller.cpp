@@ -49,18 +49,20 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
   }
 
   string detectorPrefix = fabs(photon->GetEta()) > 1.2 ? "EndCap_" : "Barrel_";
-  string etaWidthPrefix = photon->GetAs<float>("SCEtaWidth") > 0.015 ? "HighSCEtaWidth_" : "LowSCEtaWidth_";
+
+  float seedTime = photon->Get("seedTime");
+  string timingPrefix = fabs(seedTime) < 3.0 ? "timingSR_" : "timingCR_";
 
   FillMonoPhotonHistograms(event, photon);
   FillMonoPhotonHistograms(event, photon, detectorPrefix);
-  FillMonoPhotonHistograms(event, photon, etaWidthPrefix);
-  FillMonoPhotonHistograms(event, photon, detectorPrefix + etaWidthPrefix);
+  FillMonoPhotonHistograms(event, photon, timingPrefix);
+  FillMonoPhotonHistograms(event, photon, detectorPrefix + timingPrefix);
 
   if (runHistograms2D) {
     FillMonoPhotonHistograms2D(event, photon);
     FillMonoPhotonHistograms2D(event, photon, detectorPrefix);
-    FillMonoPhotonHistograms2D(event, photon, etaWidthPrefix);
-    FillMonoPhotonHistograms2D(event, photon, detectorPrefix + etaWidthPrefix);
+    FillMonoPhotonHistograms2D(event, photon, timingPrefix);
+    FillMonoPhotonHistograms2D(event, photon, detectorPrefix + timingPrefix);
   }
 
   if (!bxPrefix.empty()) {

@@ -2,9 +2,12 @@ from teaHelpers import get_facility
 
 from lbl_params import eventCuts, zdcCutNames, photonCuts
 
+facility = get_facility()
+
 # trigger = "doubleEG2"
 trigger = "singleEG5"
 # trigger = "UnpairedBptx"
+# trigger = "noTrigger"
 # trigger = "noTrigger"
 
 do_trigger_selection = False
@@ -12,6 +15,7 @@ do_trigger_selection = False
 processes = (
   "collisionData",
   # "ds_from_lbl",
+  # "ds_from_lbl_noTrigger",
   # "qed_superchic",
   # "qed_starlight",
   # "lbl",
@@ -56,11 +60,12 @@ else:
   # # build skim name
   # skim = f"skimmed_{trigger}_baseSelections{timeCut}{swissCrossCut}{scPhiWidthCut}{VHfractionsCut}{hOverEcut}_zdc{zdcCut}{suffix}"
   
-  skim = f"skimmed_{trigger}_baseSelections"
+  # skim = f"skimmed_{trigger}_baseSelections"
+  skim = f"skimmed_{trigger}_baseSelections_noTimeCut"
 
-if get_facility() == "naf":
+if facility == "naf":
   base_path = "/data/dust/user/jniedzie/monophoton/"
-elif get_facility() == "lxplus":
+elif facility == "lxplus":
   base_path = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/"
   # base_path = "/eos/cms/store/cmst3/group/lightbylight/tea_samples/"
 
