@@ -243,8 +243,10 @@ electronTrackMatching = {
 
 #  scaling parameters
 
-luminosity = 1647.180726  # μb^-1, with ZDC
+# luminosity = 1647.180726  # μb^-1, with ZDC
 # luminosity = 1647.2  # μb^-1, without ZDC
+luminosity = 1583.902  # μb^-1, new calculation with brilcalc
+
 luminosity_err = luminosity * 0.015  # 1.5% uncertainty
 
 reference_alp_cross_section = 10e-3  # μb
@@ -356,8 +358,8 @@ nGenEvents = {
   "alps_30": 719000,
   "alps_90": 449000,
   
-  # "qed_mg1gamma": 10228329,
-  # "qed_mg2gamma": 6457150,
+  "qed_mg1gamma": 10228329,
+  "qed_mg2gamma": 6457150,
 }
 
 knownPids = [11, 22, 1000822080]

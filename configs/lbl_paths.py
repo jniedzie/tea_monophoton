@@ -5,18 +5,18 @@ from lbl_params import eventCuts, zdcCutNames, photonCuts
 facility = get_facility()
 
 # trigger = "doubleEG2"
-# trigger = "singleEG5"
+trigger = "singleEG5"
 # trigger = "UnpairedBptx"
-trigger = "noTrigger"
+# trigger = "noTrigger"
 # trigger = "noTrigger"
 
 do_trigger_selection = False
 
 processes = (
-  # "collisionData",
+  "collisionData",
   # "ds_from_lbl",
-  "qed_superchic",
-  "qed_starlight",
+  # "qed_superchic",
+  # "qed_starlight",
   # "lbl",
   # "cep",
   # "alps_5",

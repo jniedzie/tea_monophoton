@@ -89,7 +89,7 @@ for prefix in goodPhotonPrefixes:
     ("goodPhoton", f"{prefix}energyMin", 1000, 0, 1000, ""),
     ("goodPhoton", f"{prefix}eta", 100, -5, 5, ""),
     ("goodPhoton", f"{prefix}absEta", 50, 0, 5, ""),
-    ("goodPhoton", f"{prefix}hOverE", 1000, 0, 1.0, ""),
+    ("goodPhoton", f"{prefix}hOverE", 10000, 0, 1.0, ""),
     ("goodPhoton", f"{prefix}hasConversionTracks", 2, 0, 1, ""),
     ("goodPhoton", f"{prefix}maxEnergyCrystal", 1000, 0, 1000, ""),
     ("goodPhoton", f"{prefix}phi", 100, -5, 5, ""),
