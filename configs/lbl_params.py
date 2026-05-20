@@ -349,13 +349,15 @@ nGenEvents = {
   "lbl": 466000,
   "ds_from_lbl": 466000,
   "cep": 668000,  # we scale it to data
-  "qed_superchic": 59260000,
+  "qed_superchic": 65693200,
   "qed_starlight": 66750000,
-  "qed_mg1gamma": 10228329,
-  "qed_mg2gamma": 6457150,
+  
   "alps_5": 754000,
   "alps_30": 719000,
   "alps_90": 449000,
+  
+  # "qed_mg1gamma": 10228329,
+  # "qed_mg2gamma": 6457150,
 }
 
 knownPids = [11, 22, 1000822080]
