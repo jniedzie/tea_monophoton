@@ -2,7 +2,7 @@ import ROOT
 from collections import OrderedDict
 
 from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor
-from lbl_helpers import get_cep_scale
+from mono_helpers import get_cep_scale
 from lbl_paths import base_path, processes, skim
 
 

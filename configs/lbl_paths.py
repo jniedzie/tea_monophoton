@@ -4,16 +4,16 @@ from lbl_params import eventCuts, zdcCutNames, photonCuts
 
 facility = get_facility()
 
-# trigger = "doubleEG2"
-trigger = "singleEG5"
+trigger = "doubleEG2"
+# trigger = "singleEG5"
 # trigger = "UnpairedBptx"
 # trigger = "noTrigger"
-# trigger = "noTrigger"
 
-do_trigger_selection = False
+do_trigger_selection = True
 
 processes = (
-  "collisionData",
+  "collisionDataNewNtuples",
+  # "collisionData",
   # "ds_from_lbl",
   # "qed_superchic",
   # "qed_starlight",
@@ -31,14 +31,14 @@ processes = (
 qed_names = ["qed_superchic", "qed_starlight"]
 
 if do_trigger_selection:
-  input_skim = "initial_noTrigger"
-  skim = f"initial_{trigger}"
+  # input_skim = "initial_noTrigger"
+  # skim = f"initial_{trigger}"
   
   # input_skim = "initial_noTrigger_unmerged"
   # skim = f"initial_{trigger}_unmerged"
   
-  # input_skim = "bad_names_noTrigger"
-  # skim = f"bad_names_{trigger}"
+  input_skim = "bad_names_noTrigger"
+  skim = f"bad_names_{trigger}"
   
 else:
   input_skim = f"initial_{trigger}"
@@ -65,7 +65,7 @@ else:
 if facility == "naf":
   base_path = "/data/dust/user/jniedzie/monophoton/"
 elif facility == "lxplus":
-  base_path = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/"
-  # base_path = "/eos/cms/store/cmst3/group/lightbylight/tea_samples/"
+  # base_path = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/"
+  base_path = "/eos/cms/store/cmst3/group/lightbylight/tea_samples/"
 
 merged_histograms_path = base_path + "/{}/merged_{}_histograms.root"

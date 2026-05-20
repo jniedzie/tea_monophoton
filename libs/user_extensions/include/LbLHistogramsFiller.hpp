@@ -32,7 +32,6 @@ class LbLHistogramsFiller {
   int previousBxMaxDistance;
   bool runHistograms2D = false;
   bool runExtraPrefix = false;
-  std::string beamHaloFlag;
 };
 
 #endif /* LbLHistogramsFiller_hpp */
