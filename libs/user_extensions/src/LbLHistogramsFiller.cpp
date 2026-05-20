@@ -29,6 +29,12 @@ LbLHistogramsFiller::LbLHistogramsFiller(shared_ptr<HistogramsHandler> histogram
     warn() << "No runHistograms2D found in config. Using default value of " << runHistograms2D << "." << endl;
   }
 
+  try {
+    config.GetValue("runExtraPrefix", runExtraPrefix);
+  } catch (const Exception& e) {
+    warn() << "No runExtraPrefix found in config. Using default value of " << runExtraPrefix << "." << endl;
+  }
+
   eventProcessor = make_unique<EventProcessor>();
 }
 
@@ -51,18 +57,26 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
   string detectorPrefix = fabs(photon->GetEta()) > 1.2 ? "EndCap_" : "Barrel_";
 
   float seedTime = photon->Get("seedTime");
-  string timingPrefix = fabs(seedTime) < 3.0 ? "timingSR_" : "timingCR_";
+
+  // Change that to whatever the extra prefix should be (same as in config)
+  string extraPrefix = fabs(seedTime) < 3.0 ? "timingSR_" : "timingCR_";
 
   FillMonoPhotonHistograms(event, photon);
   FillMonoPhotonHistograms(event, photon, detectorPrefix);
-  FillMonoPhotonHistograms(event, photon, timingPrefix);
-  FillMonoPhotonHistograms(event, photon, detectorPrefix + timingPrefix);
+
+  if (runExtraPrefix) {
+    FillMonoPhotonHistograms(event, photon, extraPrefix);
+    FillMonoPhotonHistograms(event, photon, detectorPrefix + extraPrefix);
+  }
 
   if (runHistograms2D) {
     FillMonoPhotonHistograms2D(event, photon);
     FillMonoPhotonHistograms2D(event, photon, detectorPrefix);
-    FillMonoPhotonHistograms2D(event, photon, timingPrefix);
-    FillMonoPhotonHistograms2D(event, photon, detectorPrefix + timingPrefix);
+
+    if (runExtraPrefix) {
+      FillMonoPhotonHistograms2D(event, photon, extraPrefix);
+      FillMonoPhotonHistograms2D(event, photon, detectorPrefix + extraPrefix);
+    }
   }
 
   if (!bxPrefix.empty()) {

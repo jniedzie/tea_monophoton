@@ -27,11 +27,11 @@ class LbLHistogramsFiller {
   void SaveHighEtPhotonsInfo(const std::shared_ptr<Event> event, float minEt, bool saveTextFile);
 
   std::string GetBxPrefix(const std::optional<bool>& hasCollisionInPreviousBXs);
-  std::string GetBeamHaloLoosePrefix(const std::shared_ptr<Event> event);
 
   std::map<std::string, float> dataBlinding;
   int previousBxMaxDistance;
   bool runHistograms2D = false;
+  bool runExtraPrefix = false;
   std::string beamHaloFlag;
 };
 

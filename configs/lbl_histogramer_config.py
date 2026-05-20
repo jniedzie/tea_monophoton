@@ -3,6 +3,7 @@ from lbl_params import *
 nEvents = -1
 previousBxMaxDistance = 150
 runHistograms2D = True
+runExtraPrefix = False
 
 defaultHistParams = (
   # collection      variable          bins    xmin     xmax     dir
@@ -42,15 +43,18 @@ else:
   histParams2D = ()
 
 detectorPrefixes = ["", "Barrel_", "EndCap_"]
-timingPrefixes = ["timingSR_", "timingCR_"]
 
 goodPhotonPrefixes = detectorPrefixes.copy()
 
-for timingPrefix in timingPrefixes:
-  for detectorPrefix in detectorPrefixes:
-    prefix = f"{detectorPrefix}{timingPrefix}"
-    if prefix not in goodPhotonPrefixes:
-      goodPhotonPrefixes.append(prefix)
+
+if runExtraPrefix:
+  extraPrefixes = ["timingSR_", "timingCR_"]
+
+  for extraPrefix in extraPrefixes:
+    for detectorPrefix in detectorPrefixes:
+      prefix = f"{detectorPrefix}{extraPrefix}"
+      if prefix not in goodPhotonPrefixes:
+        goodPhotonPrefixes.append(prefix)
   
 
 for prefix in goodPhotonPrefixes:
