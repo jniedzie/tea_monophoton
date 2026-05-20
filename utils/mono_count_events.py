@@ -20,7 +20,16 @@ from lbl_paths import base_path
 # directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/bad_names_singleEG5"  # 59`780`048
 # directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/initial_singleEG5"  # 59`780`048
 
-directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/skimmed_singleEG5_baseSelections"  #  
+# directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/collisionData/skimmed_singleEG5_baseSelections"  #  
+
+# MC samples
+# directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/lbl/bad_names_noTrigger"  # 466000
+# directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/cep/bad_names_noTrigger"  # 668000
+# directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/qed_starlight/bad_names_noTrigger"  # 66750000
+# directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/qed_superchic/bad_names_noTrigger"  # 65693200
+# directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/alps_5/bad_names_noTrigger"  # 754000
+# directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/alps_30/bad_names_noTrigger"  # 719000
+directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/alps_90/bad_names_noTrigger"  # 449000
 
 pattern = "*.root"
 

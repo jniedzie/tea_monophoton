@@ -11,12 +11,8 @@ elif facility == "lxplus":
 input_sample = "lbl"
 output_sample = f"ds_from_lbl_{trigger}"
 
-if trigger == "singleEG5":
-  file_name = "ntuples_loose_selections_1.root"
-elif trigger == "doubleEG2":
-  file_name = "ntuple_2.root"
-elif trigger == "noTrigger":
-  file_name = "mc_HiForestAOD_3.root"
+
+file_name = "mc_HiForestAOD_1.root"
 
 
 inputFilePath = f"{base_path}/{input_sample}/initial_{trigger}/{file_name}"

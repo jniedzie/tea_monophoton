@@ -378,13 +378,13 @@ for prefix in ["", "Barrel_", "EndCap_"]:
       Histogram(f"goodPhoton_{prefix}{prefixExtra}SCEtaWidth", "", False, False, default_lumi, 5, 0, 0.03, 0, 50, "#eta^{SC} width", y_label, "", lbl_error),
       Histogram(f"goodPhoton_{prefix}{prefixExtra}SCPhiWidth", "", False, True, default_lumi, 5, 0, 0.05, 1e-2, 5e5, "#phi^{SC} width", y_label, "", lbl_error),
 
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}verticalOverCentral", "", False, True, default_lumi, 1, 0, 0.05, 1e-2, 3e5, "E_{right+left}/(2*E_{max})", y_label, "", lbl_error),
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}horizontalOverCentral", "", False, True, default_lumi, 1, 0, 0.05, 1e-2, 3e5, "E_{top+bottom}/(2*E_{max})", y_label, "", lbl_error),
-
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}verticalImbalance", "", False, True, default_lumi, 1, -1.1, 1.1, 1e-3, 3e5, "E_{top-bottom}/E_{top+bottom}", y_label, "", lbl_error),
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}horizontalImbalance", "", False, True, default_lumi, 1, -1.1, 1.1, 1e-3, 3e5, "E_{left-right}/E_{left+right}", y_label, "", lbl_error),
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}sigmaEta2012", "", False, True, default_lumi, 1, 0, 0.06, 1e-1, 3e5, "#sigma_{#eta, 2012}", y_label, "", lbl_error),
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}sigmaIEtaIEta2012", "", False, True, default_lumi, 1, 0, 0.06, 1e-1, 3e5, "#sigma_{i#eta i#eta, 2012}", y_label, "", lbl_error),
+      Histogram(f"goodPhoton_{prefix}{prefixExtra}verticalOverCentral", "", False, True, default_lumi, 20, 0, 1.0, 1e-1, 3e3, "E_{right+left}/(2*E_{max})", y_label, "", lbl_error),
+      Histogram(f"goodPhoton_{prefix}{prefixExtra}verticalImbalance", "", False, True, default_lumi, 5, -2, 2, 1e-1, 3e3, "E_{top-bottom}/E_{top+bottom}", y_label, "", lbl_error),
+      Histogram(f"goodPhoton_{prefix}{prefixExtra}horizontalOverCentral", "", False, True, default_lumi, 20, 0, 1.0, 1e-1, 3e3, "E_{top+bottom}/(2*E_{max})", y_label, "", lbl_error),
+      Histogram(f"goodPhoton_{prefix}{prefixExtra}horizontalImbalance", "", False, True, default_lumi, 5, -2, 2, 1e-1, 3e3, "E_{left-right}/E_{left+right}", y_label, "", lbl_error),
+      
+      Histogram(f"goodPhoton_{prefix}{prefixExtra}sigmaEta2012", "", False, True, default_lumi, 1, 0, 0.1, 1e-1, 3e5, "#sigma_{#eta, 2012}", y_label, "", lbl_error),
+      Histogram(f"goodPhoton_{prefix}{prefixExtra}sigmaIEtaIEta2012", "", False, True, default_lumi, 2, 0, 0.1, 1e-1, 3e5, "#sigma_{i#eta i#eta, 2012}", y_label, "", lbl_error),
     )
 
 # histograms2D = tuple(get_2d_plot(*histogram) for histogram in booked_2d_histograms())

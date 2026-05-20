@@ -5,25 +5,25 @@ from lbl_params import eventCuts, zdcCutNames, photonCuts
 facility = get_facility()
 
 # trigger = "doubleEG2"
-trigger = "singleEG5"
+# trigger = "singleEG5"
 # trigger = "UnpairedBptx"
-# trigger = "noTrigger"
+trigger = "noTrigger"
 # trigger = "noTrigger"
 
 do_trigger_selection = False
 
 processes = (
-  "collisionData",
+  # "collisionData",
   # "ds_from_lbl",
-  # "ds_from_lbl_noTrigger",
-  # "qed_superchic",
-  # "qed_starlight",
+  "qed_superchic",
+  "qed_starlight",
   # "lbl",
   # "cep",
-  # "qed_mg1gamma",
   # "alps_5",
   # "alps_30",
   # "alps_90",
+  
+  # "qed_mg1gamma",
   # "emptyBX",
   # "zeroBias",
 )
@@ -31,14 +31,14 @@ processes = (
 qed_names = ["qed_superchic", "qed_starlight"]
 
 if do_trigger_selection:
-  # input_skim = "initial_noTrigger"
-  # skim = f"initial_{trigger}"
+  input_skim = "initial_noTrigger"
+  skim = f"initial_{trigger}"
   
   # input_skim = "initial_noTrigger_unmerged"
   # skim = f"initial_{trigger}_unmerged"
   
-  input_skim = "bad_names_noTrigger"
-  skim = f"bad_names_{trigger}"
+  # input_skim = "bad_names_noTrigger"
+  # skim = f"bad_names_{trigger}"
   
 else:
   input_skim = f"initial_{trigger}"
@@ -60,8 +60,7 @@ else:
   # # build skim name
   # skim = f"skimmed_{trigger}_baseSelections{timeCut}{swissCrossCut}{scPhiWidthCut}{VHfractionsCut}{hOverEcut}_zdc{zdcCut}{suffix}"
   
-  # skim = f"skimmed_{trigger}_baseSelections"
-  skim = f"skimmed_{trigger}_baseSelections_noTimeCut"
+  skim = f"skimmed_{trigger}_baseSelections"
 
 if facility == "naf":
   base_path = "/data/dust/user/jniedzie/monophoton/"
