@@ -18,6 +18,8 @@ class LbLObjectsManager {
   void InsertGenPhotonsCollection(std::shared_ptr<Event> event);
   void InsertGenElectronsCollection(std::shared_ptr<Event> event);
 
+  void InsertGoodCaloTowerCollection(std::shared_ptr<Event> event);
+
   bool IsGoodPhoton(const std::shared_ptr<Photon> photon, std::shared_ptr<std::map<std::string, int>> cutFlow = nullptr);
 
  private:

@@ -139,6 +139,34 @@ void LbLObjectsManager::InsertGenElectronsCollection(shared_ptr<Event> event) {
   event->AddCollection("genElectron", genPhotons);
 }
 
+void LbLObjectsManager::InsertGoodCaloTowerCollection(shared_ptr<Event> event) {
+  auto towers = event->GetCollection("CaloTower");
+  auto goodTowers = make_shared<PhysicsObjects>();
+
+  for (auto physicsObject : *towers) {
+    auto tower = asCaloTower(physicsObject);
+    string detectorType = tower->GetDetectorType();
+
+    if (detectorType == "HCAL") {
+      if (!tower->IsHadronicEnergyAboveNoiseThreshold()) continue;
+    }
+    else if (detectorType == "ECAL") {
+      if (tower->OverlapsWithOtherObjects(event->GetCollection("goodPhoton"))) continue;
+      if (!tower->IsElectromagneticEnergyAboveNoiseThreshold()) continue;
+    }
+    else if (detectorType == "HF") {
+      if (!tower->IsHadronicEnergyAboveNoiseThreshold()) continue;
+    }
+    else {
+      fatal() << "Unknown detector type for calo tower: " << detectorType << endl;
+      exit(0);
+    }
+    goodTowers->push_back(physicsObject);
+  }
+
+  event->AddCollection("goodCaloTower", goodTowers);
+}
+
 shared_ptr<PhysicsObjects> LbLObjectsManager::GetGenParticles(const shared_ptr<Event> event, int pid) {
   auto mcParticles = event->GetCollection("genParticle");
   auto genParticles = make_shared<PhysicsObjects>();

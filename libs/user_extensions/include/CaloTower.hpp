@@ -18,6 +18,9 @@ class CaloTower {
   std::string GetOriginalCollection() { return physicsObject->GetOriginalCollection(); }
   void Reset() { physicsObject->Reset(); }
 
+  float GetEta() { return eta; }
+  float GetPhi() { return phi; }
+  
   // Can return: ECAL, HCAL, HF, crack, unknown
   std::string GetDetectorType();
 
