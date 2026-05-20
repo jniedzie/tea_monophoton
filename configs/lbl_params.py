@@ -245,7 +245,7 @@ electronTrackMatching = {
 
 # luminosity = 1647.180726  # μb^-1, with ZDC
 # luminosity = 1647.2  # μb^-1, without ZDC
-luminosity = 1583.902  # μb^-1, new calculation with brilcalc
+luminosity = 1583.902  # μb^-1, brilcalc for 2026 ntuples with BH and SAmu
 
 luminosity_err = luminosity * 0.015  # 1.5% uncertainty
 

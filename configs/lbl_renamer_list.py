@@ -2,8 +2,11 @@ from lbl_paths import processes, base_path
 samples = processes
 sample_path = ""
 
-input_dir_name = "bad_names_singleEG5"
-output_dir_name = "initial_singleEG5"
+input_dir_name = "bad_names_doubleEG2"
+output_dir_name = "initial_doubleEG2"
+
+# input_dir_name = "bad_names_singleEG5"
+# output_dir_name = "initial_singleEG5"
 
 # input_dir_name = "bad_names_noTrigger"
 # output_dir_name = "initial_noTrigger"

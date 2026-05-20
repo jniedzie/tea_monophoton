@@ -9,11 +9,10 @@ trigger = "doubleEG2"
 # trigger = "UnpairedBptx"
 # trigger = "noTrigger"
 
-do_trigger_selection = True
+do_trigger_selection = False
 
 processes = (
-  "collisionDataNewNtuples",
-  # "collisionData",
+  "collisionData",
   # "ds_from_lbl",
   # "qed_superchic",
   # "qed_starlight",
@@ -66,6 +65,6 @@ if facility == "naf":
   base_path = "/data/dust/user/jniedzie/monophoton/"
 elif facility == "lxplus":
   # base_path = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/"
-  base_path = "/eos/cms/store/cmst3/group/lightbylight/tea_samples/"
+  base_path = "/eos/cms/store/cmst3/group/lightbylight/new_tea_samples/"
 
 merged_histograms_path = base_path + "/{}/merged_{}_histograms.root"
