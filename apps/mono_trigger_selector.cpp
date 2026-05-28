@@ -11,14 +11,13 @@
 #include "LbLSelections.hpp"
 #include "Logger.hpp"
 #include "Profiler.hpp"
-#include "UserExtensionsHelpers.hpp"
-
 #include "TClass.h"
 #include "TDirectory.h"
 #include "TFile.h"
 #include "TKey.h"
 #include "TTree.h"
 #include "TTreeFormula.h"
+#include "UserExtensionsHelpers.hpp"
 
 using namespace std;
 
@@ -62,9 +61,7 @@ void CopyTreeWithSelection(TTree* inputTree, TDirectory* outputDir, const vector
   outputTree->Write();
 }
 
-void CopyDirectoryContents(TDirectory* inputDir,
-                           TDirectory* outputDir,
-                           const vector<long long>& selectedEntries,
+void CopyDirectoryContents(TDirectory* inputDir, TDirectory* outputDir, const vector<long long>& selectedEntries,
                            const string& directoryPath = "") {
   TIter nextKey(inputDir->GetListOfKeys());
   TKey* key = nullptr;
@@ -96,6 +93,60 @@ void CopyDirectoryContents(TDirectory* inputDir,
   }
 }
 
+TFile* OpenFile(string inputFilePath) {
+  auto& config = ConfigManager::GetInstance();
+
+  TFile *inputFile;
+
+  if ((inputFilePath.find("root://") == string::npos) && (inputFilePath.rfind("/store/", 0) == 0)) {
+    vector<string> redirectors = {
+        "xrootd-cms.infn.it",
+        "cms-xrd-global.cern.ch",
+        "cmsxrootd.fnal.gov",
+    };
+
+    string customRedirector = "";
+    try {
+      config.GetValue("redirector", customRedirector);
+    } catch (const Exception& e) {
+      info() << "No custom redirector found from config file" << endl;
+    }
+    if (customRedirector != "") redirectors.insert(redirectors.begin(), customRedirector);
+
+    
+    string tmpInputFilePath;
+    for (string redirector : redirectors) {
+      info() << "Trying to read ROOT file with redirector:" << redirector << endl;
+      tmpInputFilePath = "root://" + redirector + "/" + inputFilePath;
+
+      gSystem->RedirectOutput("/dev/null", "a");
+      inputFile = TFile::Open(tmpInputFilePath.c_str());
+      gSystem->RedirectOutput(0);
+
+      if (!inputFile || inputFile->IsZombie()) {
+        warn() << "Failed to read ROOT file with redirector: " << redirector << endl;
+      } else {
+        break;
+      }
+    }
+    if (!inputFile || inputFile->IsZombie()) {
+      fatal() << "All redirectors failed" << endl;
+      exit(1);
+    }
+    inputFilePath = tmpInputFilePath;
+  } else {
+    gSystem->RedirectOutput("/dev/null", "a");
+    inputFile = TFile::Open(inputFilePath.c_str());
+    gSystem->RedirectOutput(0);
+
+    if (!inputFile || inputFile->IsZombie()) {
+      fatal() << "Local file corrupted: " << inputFilePath << endl;
+      exit(1);
+    }
+  }
+  return inputFile;
+}
+
 int RunDirectOnHIForest(const vector<string>& triggerNames) {
   auto& config = ConfigManager::GetInstance();
 
@@ -110,13 +161,8 @@ int RunDirectOnHIForest(const vector<string>& triggerNames) {
   info() << "Input file path: " << inputFilePath << endl;
 
   gSystem->RedirectOutput("/dev/null", "a");
-  auto* inputFile = TFile::Open(inputFilePath.c_str());
-  gSystem->RedirectOutput(0);
-  if (!inputFile || inputFile->IsZombie()) {
-    fatal() << "Couldn't open input file: " << inputFilePath << endl;
-    return 1;
-  }
-
+  auto* inputFile = OpenFile(inputFilePath);
+  
   auto* inputTree = dynamic_cast<TTree*>(inputFile->Get(treePath.c_str()));
   if (!inputTree) {
     fatal() << "Couldn't load HIForest tree: " << treePath << endl;
@@ -158,6 +204,10 @@ int RunDirectOnHIForest(const vector<string>& triggerNames) {
   selectedEntries.reserve(nEvents);
   long long nPassed = 0;
   for (long long iEvent = 0; iEvent < nEvents; ++iEvent) {
+    if (iEvent % 1000 == 0) {
+      float progress = static_cast<float>(iEvent) / nEvents * 100;
+      cout << "\rProcessing event " << iEvent << " / " << nEvents << " (" << progress << "%)" << flush;
+    }
     inputTree->GetEntry(iEvent);
 
     bool passesTrigger = false;
@@ -173,7 +223,9 @@ int RunDirectOnHIForest(const vector<string>& triggerNames) {
     selectedEntries.push_back(iEvent);
     ++nPassed;
   }
+  cout << "\rProcessing event " << nEvents << " / " << nEvents << " (100%)" << endl;
 
+  cout << "Copying selected events to output file..." << endl;
   CopyDirectoryContents(inputFile, outputFile, selectedEntries);
 
   outputFile->Close();
@@ -185,7 +237,7 @@ int RunDirectOnHIForest(const vector<string>& triggerNames) {
 }  // namespace
 
 int main(int argc, char** argv) {
-  vector<string> requiredArgs = {"config"}; 
+  vector<string> requiredArgs = {"config"};
   vector<string> optionalArgs = {"input_path", "output_trees_path"};
   auto args = make_unique<ArgsManager>(argc, argv, requiredArgs, optionalArgs);
   ConfigManager::Initialize(args);
@@ -212,7 +264,7 @@ int main(int argc, char** argv) {
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
-    if(!eventProcessor->PassesTriggerCuts(event)) continue;
+    if (!eventProcessor->PassesTriggerCuts(event)) continue;
 
     for (string eventsTreeName : eventsTreeNames) {
       eventWriter->AddCurrentEvent(eventsTreeName);
