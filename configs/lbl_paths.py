@@ -1,15 +1,15 @@
 from teaHelpers import get_facility
 
 from lbl_params import eventCuts, zdcCutNames, photonCuts
+import os, sys
+from Logger import info
 
 facility = get_facility()
 
-trigger = "doubleEG2"
-# trigger = "singleEG5"
+# trigger = "doubleEG2"
+trigger = "singleEG5"
 # trigger = "UnpairedBptx"
 # trigger = "noTrigger"
-
-do_trigger_selection = False
 
 processes = (
   "collisionData",
@@ -29,6 +29,21 @@ processes = (
 
 qed_names = ["qed_superchic", "qed_starlight"]
 
+# Check if this is to preselect on trigger:
+command = [os.readlink("/proc/self/exe")]
+command.append(sys.argv)
+
+if "trigger_selector" in command:
+  info("\n\nRunning trigger selection\n\n")
+  do_trigger_selection = True
+  bad_names_input = True
+else:
+  info("\n\nRunning non-trigger apps\n\n")
+  do_trigger_selection = False
+  bad_names_input = None
+
+
+# Figure out input/output paths
 if do_trigger_selection:
   # input_skim = "initial_noTrigger"
   # skim = f"initial_{trigger}"
@@ -40,31 +55,26 @@ if do_trigger_selection:
   skim = f"bad_names_{trigger}"
   
 else:
-  input_skim = f"initial_{trigger}"
-
-  # figure out cuts combination
-  # zdcCut = zdcCutNames[eventCuts["ZDC_cut"]]
-  # timeCut = "_noTimeCut" if (photonCuts["min_seedTime"] < -900 and photonCuts["max_seedTime"] > 900) else ""
-  # swissCrossCut = "_noSwissCrossCut" if photonCuts["max_swissCross"] >= 1.0 else ""
-  # scPhiWidthCut = "_tightPhiWidth" if photonCuts["max_SCPhiWidth_barrel"] < 0.15 else ""
-  # VHfractionsCut = "_noVHfractionsCut" if (photonCuts["min_verticalOverCentral"] == 0.0 and photonCuts["min_horizontalOverCentral"] == 0) else ""
-  # hOverEcut = "_tightHOverE" if (photonCuts["max_hOverE_barrel"] < 0.005 and photonCuts["max_hOverE_endcap"] < 0.005) else ""
-
-  # # suffix = ""
-  # # suffix = "_goodNEE"
-  # suffix = "_superCleanNEE_superCleanCHE"
-
-  # # suffix += "_noPhotonCuts"
-
-  # # build skim name
-  # skim = f"skimmed_{trigger}_baseSelections{timeCut}{swissCrossCut}{scPhiWidthCut}{VHfractionsCut}{hOverEcut}_zdc{zdcCut}{suffix}"
-  
+  input_skim = f"initial_{trigger}"  
   skim = f"skimmed_{trigger}_baseSelections"
 
 if facility == "naf":
-  base_path = "/data/dust/user/jniedzie/monophoton/"
+  input_base_path = "/data/dust/user/jniedzie/monophoton/"
+  output_base_path = "/data/dust/user/jniedzie/monophoton/"
 elif facility == "lxplus":
   # base_path = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/"
-  base_path = "/eos/cms/store/cmst3/group/lightbylight/new_tea_samples/"
+  input_base_path = "/eos/cms/store/cmst3/group/lightbylight/new_tea_samples/"
+  output_base_path = "/eos/cms/store/cmst3/group/lightbylight/new_tea_samples/"
+elif facility == "vub":
+  # input_base_path = "/store/group/phys_diffraction/lbyl_2018/ntuples_2026_muonSegments/HIForward/ntuples_muonSegments/260526_120651/0000"
+  # input_base_path = "/store/group/phys_diffraction/lbyl_2018/ntuples_2026_muonSegments/HIForward/ntuples_muonSegments/260526_120651/0001"
+  # input_base_path = "/store/group/phys_diffraction/lbyl_2018/ntuples_2026_muonSegments/HIForward/ntuples_muonSegments/260526_120651/0002"
+  # input_base_path = "/store/group/phys_diffraction/lbyl_2018/ntuples_2026_muonSegments/HIForward/ntuples_muonSegments/260526_120651/0003"
+  # input_base_path = "/store/group/phys_diffraction/lbyl_2018/ntuples_2026_muonSegments/HIForward/ntuples_muonSegments/260526_120651/0004"
+  input_base_path = "/store/group/phys_diffraction/lbyl_2018/ntuples_2026_muonSegments/HIForward/ntuples_muonSegments/260526_120651/0005"
+  output_base_path = "/pnfs/iihe/cms/store/user/jniedzie/upc"
+  base_path = "/pnfs/iihe/cms/store/user/jniedzie/upc"
+  redirector = "eoscms.cern.ch"
 
-merged_histograms_path = base_path + "/{}/merged_{}_histograms.root"
+merged_histograms_path = output_base_path + "/{}/merged_{}_histograms.root"
+

@@ -49,8 +49,11 @@ int main(int argc, char** argv) {
   info() << "Finishing up" << endl;
   cutFlowManager->Print();
   histogramsFiller->FillCutFlow(cutFlowManager);
+
+  info() << "Saving histograms" << endl;
   histogramsHandler->SaveHistograms();
 
+  info() << "Logger:" << endl;
   auto& logger = Logger::GetInstance();
   logger.Print();
   return 0;
