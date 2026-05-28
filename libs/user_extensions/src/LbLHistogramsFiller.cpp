@@ -58,15 +58,31 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
 
   float seedTime = photon->Get("seedTime");
 
-  // Change that to whatever the extra prefix should be (same as in config)
-  string extraPrefix = fabs(seedTime) < 3.0 ? "timingSR_" : "timingCR_";
-
   FillMonoPhotonHistograms(event, photon);
   FillMonoPhotonHistograms(event, photon, detectorPrefix);
+  
+  string extraPrefix_1, extraPrefix_2, extraPrefix_3, extraPrefix_4;
 
   if (runExtraPrefix) {
-    FillMonoPhotonHistograms(event, photon, extraPrefix);
-    FillMonoPhotonHistograms(event, photon, detectorPrefix + extraPrefix);
+    // Change that to whatever the extra prefix should be (same as in config)
+    int nAdditionalMuonDTsegments = event->Get("nAdditionalMuonDTsegments");
+    int nAdditionalMuonCSCsegments = event->Get("nAdditionalMuonCSCsegments");
+    int nAdditionalMuonDTsegmentsCosmic = event->Get("nAdditionalMuonDTsegmentsCosmic");
+    int nAdditionalMuonSegments = nAdditionalMuonDTsegments + nAdditionalMuonCSCsegments + nAdditionalMuonDTsegmentsCosmic;
+
+    extraPrefix_1 = nAdditionalMuonDTsegments == 0 ? "noDTsegments_" : "withDTsegments_";
+    extraPrefix_2 = nAdditionalMuonCSCsegments == 0 ? "noCSCsegments_" : "withCSCsegments_";
+    extraPrefix_3 = nAdditionalMuonDTsegmentsCosmic == 0 ? "noDTcosmicSegments_" : "withDTcosmicSegments_";
+    extraPrefix_4 = nAdditionalMuonSegments == 0 ? "noMuonSegments_" : "withMuonSegments_";
+
+    FillMonoPhotonHistograms(event, photon, extraPrefix_1);
+    FillMonoPhotonHistograms(event, photon, extraPrefix_2);
+    FillMonoPhotonHistograms(event, photon, extraPrefix_3);
+    FillMonoPhotonHistograms(event, photon, extraPrefix_4);
+    FillMonoPhotonHistograms(event, photon, detectorPrefix + extraPrefix_1);
+    FillMonoPhotonHistograms(event, photon, detectorPrefix + extraPrefix_2);
+    FillMonoPhotonHistograms(event, photon, detectorPrefix + extraPrefix_3);
+    FillMonoPhotonHistograms(event, photon, detectorPrefix + extraPrefix_4);
   }
 
   if (runHistograms2D) {
@@ -74,8 +90,14 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
     FillMonoPhotonHistograms2D(event, photon, detectorPrefix);
 
     if (runExtraPrefix) {
-      FillMonoPhotonHistograms2D(event, photon, extraPrefix);
-      FillMonoPhotonHistograms2D(event, photon, detectorPrefix + extraPrefix);
+      FillMonoPhotonHistograms2D(event, photon, extraPrefix_1);
+      FillMonoPhotonHistograms2D(event, photon, extraPrefix_2);
+      FillMonoPhotonHistograms2D(event, photon, extraPrefix_3);
+      FillMonoPhotonHistograms2D(event, photon, extraPrefix_4);
+      FillMonoPhotonHistograms2D(event, photon, detectorPrefix + extraPrefix_1);
+      FillMonoPhotonHistograms2D(event, photon, detectorPrefix + extraPrefix_2);
+      FillMonoPhotonHistograms2D(event, photon, detectorPrefix + extraPrefix_3);
+      FillMonoPhotonHistograms2D(event, photon, detectorPrefix + extraPrefix_4);
     }
   }
 

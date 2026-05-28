@@ -6,6 +6,10 @@ branchesNames = {
   "lumis"                 : ("lumiSection"                , "lumiSection/I"),
   "event"                 : ("eventNumber"                , "eventNumber/I"),
   "Bx"                    : ("bunchNumber"                , "bunchNumber/I"),
+  
+  "nAdditionalMuonDTsegments"       : ("nAdditionalMuonDTsegments"        , "nAdditionalMuonDTsegments/I"       ),
+  "nAdditionalMuonDTsegmentsCosmic" : ("nAdditionalMuonDTsegmentsCosmic"  , "nAdditionalMuonDTsegmentsCosmic/I" ),
+  "nAdditionalMuonCSCsegments"      : ("nAdditionalMuonCSCsegments"       , "nAdditionalMuonCSCsegments/I"      ),
 
   "beamHaloLoose"                 : ("isBeamHaloLoose"                , "beamHaloLoose/O"               ),
   "beamHaloTight"                 : ("isBeamHaloTight"                , "beamHaloTight/O"               ),

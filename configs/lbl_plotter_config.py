@@ -361,6 +361,12 @@ histograms2D = (
 )
 
 extraPrefixes = [""]
+# extraPrefixes = [
+#     "noDTsegments_", "withDTsegments_", 
+#     "noDTcosmicSegments_", "withDTcosmicSegments_", 
+#     "noCSCsegments_", "withCSCsegments_", 
+#     "noMuonSegments_", "withMuonSegments_"
+#   ]
 
 for prefix in ["", "Barrel_", "EndCap_"]:
   for prefixExtra in extraPrefixes:
