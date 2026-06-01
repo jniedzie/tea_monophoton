@@ -174,6 +174,10 @@ bool LbLSelections::PassesDielectronChargedExclusivity(shared_ptr<Event> event, 
 }
 
 bool LbLSelections::PassesChargedExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  int nAdditionalMuonSegmentsCSC = event->Get("nAdditionalMuonCSCsegments");
+  if (nAdditionalMuonSegmentsCSC > eventCuts.at("max_NmuonSegmentsCSC")) return false;
+  if (cutFlowManager) cutFlowManager->UpdateCutFlow("nMuonSegmentsCSC");
+  
   int nElectrons = event->GetCollection("goodElectron")->size();
   if (nElectrons > eventCuts.at("max_Nelectrons")) return false;
   if (cutFlowManager) cutFlowManager->UpdateCutFlow("nElectrons");

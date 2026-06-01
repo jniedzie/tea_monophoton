@@ -32,6 +32,7 @@ int main(int argc, char** argv) {
   cutFlowManager->RegisterCut("initial");
   cutFlowManager->RegisterCut("beamHaloFilters");
   cutFlowManager->RegisterCut("singlePhoton");
+  cutFlowManager->RegisterCut("nMuonSegmentsCSC");
   cutFlowManager->RegisterCut("nElectrons");
   cutFlowManager->RegisterCut("nTracks");
   cutFlowManager->RegisterCut("nMuons");
