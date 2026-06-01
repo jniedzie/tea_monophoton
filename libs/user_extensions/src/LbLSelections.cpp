@@ -58,132 +58,38 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
   return true;
 }
 
-bool LbLSelections::PassesZeroPhotonAndElectronSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+bool LbLSelections::PassesPhotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   auto goodPhotons = event->GetCollection("goodPhoton");
   int nPhotons = goodPhotons->size();
-  if (nPhotons != 0) return false;
+  if (nPhotons < eventCuts.at("min_Nphotons") || nPhotons > eventCuts.at("max_Nphotons")) return false;
 
-  auto electrons = event->GetCollection("goodElectron");
-  int nElectrons = electrons->size();
-  if (nElectrons != 0) return false;
-
-  cutFlowManager->UpdateCutFlow("zeroPhotonElectron");
+  cutFlowManager->UpdateCutFlow("nPhotons");
   return true;
 }
 
-bool LbLSelections::PassesSinglePhotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  auto goodPhotons = event->GetCollection("goodPhoton");
-  int nPhotons = goodPhotons->size();
-  if (nPhotons != 1) return false;
-
-  cutFlowManager->UpdateCutFlow("singlePhoton");
-  return true;
-}
-
-bool LbLSelections::PassesThreePhotonsSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  auto goodPhotons = event->GetCollection("goodPhoton");
-  int nPhotons = goodPhotons->size();
-  if (nPhotons != 3) return false;
-
-  cutFlowManager->UpdateCutFlow("threePhotons");
-  return true;
-}
-
-bool LbLSelections::PassesDiphotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager,
-                                            shared_ptr<map<string, int>> cutFlow) {
-  auto genMatchedPhotons = asLbLEvent(event)->GetGenMatchedRecoPhotons();
-  cutFlow->at("00_initial") += 2;
-  cutFlow->at("01_genMatched") += genMatchedPhotons.size();
-
-  if (genMatchedPhotons.size() != 2) {
-    warn() << "Number of gen-matched reco photons != 2" << endl;
-  } else {
-    lblObjectsManager->IsGoodPhoton(asPhoton(genMatchedPhotons.at(0)), cutFlow);
-    lblObjectsManager->IsGoodPhoton(asPhoton(genMatchedPhotons.at(1)), cutFlow);
+bool LbLSelections::PassesChargedExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+  
+  try {
+    int nAdditionalMuonSegmentsCSC = event->Get("nAdditionalMuonCSCsegments");
+    if (nAdditionalMuonSegmentsCSC > eventCuts.at("max_NmuonSegmentsCSC")) return false;
+    if (cutFlowManager) cutFlowManager->UpdateCutFlow("nMuonSegmentsCSC");
   }
-
-  auto goodPhotons = event->GetCollection("goodPhoton");
-  int nPhotons = goodPhotons->size();
-  if (nPhotons != 2) return false;
-
-  cutFlowManager->UpdateCutFlow("twoGoodPhotons");
-
-  if (nPhotons < 2) {
-    fatal() << "Requested diphoton selections, but <2 good photons found in event." << endl;
-    exit(0);
+  catch (Exception& e) {
+    error() << "nAdditionalMuonCSCsegments not found in event. Skipping this cut." << endl;
   }
-  auto photon1 = goodPhotons->at(0);
-  auto photon2 = goodPhotons->at(1);
-  TLorentzVector photon1vec, photon2vec;
-  photon1vec.SetPtEtaPhiM(photon1->Get("et"), photon1->Get("eta"), photon1->Get("phi"), 0);
-  photon2vec.SetPtEtaPhiM(photon2->Get("et"), photon2->Get("eta"), photon2->Get("phi"), 0);
+  
+  int nElectrons = event->GetCollection("goodElectron")->size();
+  if (nElectrons > eventCuts.at("max_Nelectrons") || nElectrons < eventCuts.at("min_Nelectrons")) return false;
+  if (cutFlowManager) cutFlowManager->UpdateCutFlow("nElectrons");
 
-  auto diphoton = photon1vec + photon2vec;
-  if (diphoton.M() < eventCuts.at("min_diphotonMass")) return false;
-  cutFlowManager->UpdateCutFlow("diphotonMass");
-  return true;
-}
-
-bool LbLSelections::PassesDielectronSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager, bool sameCharge) {
-  auto electrons = event->GetCollection("goodElectron");
-
-  // check number of electrons
-  int nElectrons = electrons->size();
-  if (nElectrons != 2) return false;
-  cutFlowManager->UpdateCutFlow("twoGoodElectrons");
-
-  // check electron charge
-  auto electron1 = electrons->at(0);
-  auto electron2 = electrons->at(1);
-  if (((int)electron1->Get("charge") * (int)electron2->Get("charge") > 0) && !sameCharge) return false;
-  if (((int)electron1->Get("charge") * (int)electron2->Get("charge") < 0) && sameCharge) return false;
-  cutFlowManager->UpdateCutFlow("electronCharge");
-
-  // check charge exclusivity
-  if (!PassesDielectronChargedExclusivity(event, cutFlowManager)) return false;
-
-  TLorentzVector electron1vec, electron2vec;
-  electron1vec.SetPtEtaPhiM(electron1->Get("pt"), electron1->Get("eta"), electron1->Get("phi"), 0);
-  electron2vec.SetPtEtaPhiM(electron2->Get("pt"), electron2->Get("eta"), electron2->Get("phi"), 0);
-
-  // check dielectron mass
-  auto dielectron = electron1vec + electron2vec;
-  if (dielectron.M() < eventCuts.at("min_dielectronMass")) return false;
-  cutFlowManager->UpdateCutFlow("dielectronMass");
-
-  // check dielectron pt
-  if (dielectron.Pt() > eventCuts.at("max_dielectronPt")) return false;
-  cutFlowManager->UpdateCutFlow("dielectronPt");
-
-  return true;
-}
-
-bool LbLSelections::PassesDielectronChargedExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  auto electrons = event->GetCollection("goodElectron");
   auto tracks = event->GetCollection("goodTrack");
-
+  auto electrons = event->GetCollection("goodElectron");
   int nNonOverlappingTracks = 0;
   for (auto physicsObject : *tracks) {
     auto track = asTrack(physicsObject);
     if (!track->OverlapsWithOtherObjects(electrons)) nNonOverlappingTracks++;
   }
   if (nNonOverlappingTracks > eventCuts.at("max_Ntracks")) return false;
-  if (cutFlowManager) cutFlowManager->UpdateCutFlow("nTracks");
-
-  return true;
-}
-
-bool LbLSelections::PassesChargedExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  int nAdditionalMuonSegmentsCSC = event->Get("nAdditionalMuonCSCsegments");
-  if (nAdditionalMuonSegmentsCSC > eventCuts.at("max_NmuonSegmentsCSC")) return false;
-  if (cutFlowManager) cutFlowManager->UpdateCutFlow("nMuonSegmentsCSC");
-  
-  int nElectrons = event->GetCollection("goodElectron")->size();
-  if (nElectrons > eventCuts.at("max_Nelectrons")) return false;
-  if (cutFlowManager) cutFlowManager->UpdateCutFlow("nElectrons");
-
-  int nTracks = event->GetCollection("goodTrack")->size();
-  if (nTracks > eventCuts.at("max_Ntracks")) return false;
   if (cutFlowManager) cutFlowManager->UpdateCutFlow("nTracks");
 
   int nMuons = event->GetCollection("goodMuon")->size();
@@ -193,22 +99,6 @@ bool LbLSelections::PassesChargedExclusivity(shared_ptr<Event> event, shared_ptr
   int nStandaloneMuons = event->GetCollection("standaloneMuon")->size();
   if (nStandaloneMuons > eventCuts.at("max_NstandaloneMuons")) return false;
   if (cutFlowManager) cutFlowManager->UpdateCutFlow("nStandaloneMuons");
-
-  return true;
-}
-
-bool LbLSelections::PassesDiphotonPt(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  if (event->GetCollection("goodPhoton")->size() != 2) return false;
-
-  auto photon1 = event->GetCollection("goodPhoton")->at(0);
-  auto photon2 = event->GetCollection("goodPhoton")->at(1);
-  TLorentzVector photon1vec, photon2vec;
-  photon1vec.SetPtEtaPhiM(photon1->Get("et"), photon1->Get("eta"), photon1->Get("phi"), 0);
-  photon2vec.SetPtEtaPhiM(photon2->Get("et"), photon2->Get("eta"), photon2->Get("phi"), 0);
-
-  auto diphoton = photon1vec + photon2vec;
-  if (diphoton.Pt() > eventCuts.at("max_diphotonPt")) return false;
-  cutFlowManager->UpdateCutFlow("diphotonPt");
 
   return true;
 }
@@ -316,54 +206,3 @@ bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager
 
   return true;
 }
-
-bool LbLSelections::PassesTracksPlusPhotonsSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  if (!PassesDiphotonSelection(event, cutFlowManager)) return false;
-  if (cutFlowManager) cutFlowManager->UpdateCutFlow("twoGoodPhotons");
-
-  auto photons = event->GetCollection("goodPhoton");
-  auto electrons = event->GetCollection("goodElectron");
-  auto tracks = event->GetCollection("track");
-  auto photon1 = asPhoton(photons->at(0));
-  auto photon2 = asPhoton(photons->at(1));
-
-  shared_ptr<Track> track1 = nullptr;
-  shared_ptr<Track> track2 = nullptr;
-
-  for (auto physicsObject : *tracks) {
-    auto track = asTrack(physicsObject);
-    if (track->OverlapsWithOtherObjects(photons) && !track->OverlapsWithOtherObjects(electrons)) {
-      if (track1 == nullptr)
-        track1 = track;
-      else if (track2 == nullptr)
-        track2 = track;
-      else
-        return false;
-    }
-  }
-
-  if (track1 == nullptr || track2 == nullptr) return false;
-  if (cutFlowManager) cutFlowManager->UpdateCutFlow("twoGoodTracks");
-
-  return true;
-}
-
-bool LbLSelections::PassesAcoplanaritySelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
-  if (event->GetCollection("goodPhoton")->size() != 2) return false;
-
-  auto photon1 = event->GetCollection("goodPhoton")->at(0);
-  auto photon2 = event->GetCollection("goodPhoton")->at(1);
-  TLorentzVector photon1vec, photon2vec;
-  photon1vec.SetPtEtaPhiM(photon1->Get("et"), photon1->Get("eta"), photon1->Get("phi"), 0);
-  photon2vec.SetPtEtaPhiM(photon2->Get("et"), photon2->Get("eta"), photon2->Get("phi"), 0);
-
-  double deltaPhi = fabs(photon1vec.DeltaPhi(photon2vec));
-  double acoplanarity = 1 - (deltaPhi / TMath::Pi());
-  if (acoplanarity > eventCuts.at("max_diphotonAcoplanarity")) return false;
-  cutFlowManager->UpdateCutFlow("diphotonAcoplanarity");
-
-  return true;
-}
-
-
-

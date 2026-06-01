@@ -11,6 +11,8 @@ from lbl_paths import base_path, processes, skim
 
 output_path = f"../plots/{skim.replace('skimmed_', '')}/"
 
+mono_electron = "monoElectronSelections" in skim
+
 do_photons = True
 do_alps = True
 
@@ -108,7 +110,11 @@ samples = [
   ),
 ]
 
-custom_stacks_order = ["qed_mg1gamma", "cep", "lbl", "qed_starlight", "qed_superchic", "ds_from_lbl", "data"]
+
+if mono_electron:
+  custom_stacks_order = ["qed_mg1gamma", "cep", "lbl", "ds_from_lbl", "qed_starlight", "qed_superchic", "data"]
+else:
+  custom_stacks_order = ["qed_mg1gamma", "cep", "lbl", "qed_starlight", "qed_superchic", "ds_from_lbl", "data"]
 
 alp_colors = (
   ROOT.kGray + 2,
@@ -360,45 +366,53 @@ histograms2D = (
   # ),
 )
 
-# extraPrefixes = [""]
-extraPrefixes = [
-  "",
-    "noDTsegments_", "withDTsegments_", 
-    "noDTcosmicSegments_", "withDTcosmicSegments_", 
-    "noCSCsegments_", "withCSCsegments_", 
-    "noMuonSegments_", "withMuonSegments_"
-  ]
+extraPrefixes = [""]
+# extraPrefixes = [
+#   "","lowSigmaEta_", "highSigmaEta_", 
+# ]
 
-# for prefix in ["", "Barrel_", "EndCap_"]:
-for prefix in [""]:
+for prefix in ["", "Barrel_", "EndCap_"]:
+# for prefix in [""]:
   for prefixExtra in extraPrefixes:
-    histograms += (
-      #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}et", "", False, True, default_lumi, 2, 0, 40, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
-      
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}eta", "", False, True, default_lumi, 2, -3, 3, 1e-2, 5e5, "#eta^{#gamma}", y_label, "_log", lbl_error),
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}eta", "", False, False, default_lumi, 2, -3, 3, 0, 50, "#eta^{#gamma}", y_label, "", lbl_error),
-      
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}phi", "", False, True, default_lumi, 4, -4, 4, 1e-4, 5e5, "#phi^{#gamma}", y_label, "_log", lbl_error),
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 20, "#phi^{#gamma}", y_label, "", lbl_error),
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}seedTime", "", False, True, default_lumi, 5, -5, 5, 1e-2, 5e6, "Photon seed time (ns)", y_label, "", lbl_error),
-      
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}hOverE", "", False, True, default_lumi, 1, 0, 0.025, 1e-2, 5e5, "H/E", y_label, "", lbl_error),
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}swissCross", "", False, True, default_lumi, 40, 0, 1.5, 1e-2, 5e5, "Swiss cross", y_label, "", lbl_error),
-      
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}SCEtaWidth", "", False, True, default_lumi, 5, 0, 0.03, 1e-2, 5e5, "#eta^{SC} width", y_label, "_log", lbl_error),
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}SCEtaWidth", "", False, False, default_lumi, 5, 0, 0.03, 0, 50, "#eta^{SC} width", y_label, "", lbl_error),
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}SCPhiWidth", "", False, True, default_lumi, 10, 0, 0.05, 1e-2, 5e5, "#phi^{SC} width", y_label, "", lbl_error),
+    if mono_electron:
+      histograms += (
+        Histogram(f"goodElectron_{prefix}{prefixExtra}pt", "", False, True, default_lumi, 2, 0, 25, 1e-2, 5e2, "p_{T}^{#e} (GeV)", y_label, "", lbl_error),
+        
+        Histogram(f"goodElectron_{prefix}{prefixExtra}eta", "", False, True, default_lumi, 2, -3, 3, 1e-2, 5e5, "#eta^{#e}", y_label, "_log", lbl_error),
+        # Histogram(f"goodElectron_{prefix}{prefixExtra}eta", "", False, False, default_lumi, 10, -3, 3, 0, 50, "#eta^{#e}", y_label, "", lbl_error),
+        Histogram(f"goodElectron_{prefix}{prefixExtra}eta", "", False, False, default_lumi, 1, -3, 3, 0, 50, "#eta^{#e}", y_label, "", lbl_error),
+        
+        Histogram(f"goodElectron_{prefix}{prefixExtra}phi", "", False, True, default_lumi, 4, -4, 4, 1e-4, 5e5, "#phi^{#e}", y_label, "_log", lbl_error),
+        Histogram(f"goodElectron_{prefix}{prefixExtra}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 20, "#phi^{#e}", y_label, "", lbl_error),
+      )
+    else:
+      histograms += (
+        #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}et", "", False, True, default_lumi, 2, 0, 40, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
+        
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}eta", "", False, True, default_lumi, 2, -3, 3, 1e-2, 5e5, "#eta^{#gamma}", y_label, "_log", lbl_error),
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}eta", "", False, False, default_lumi, 2, -3, 3, 0, 50, "#eta^{#gamma}", y_label, "", lbl_error),
+        
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}phi", "", False, True, default_lumi, 4, -4, 4, 1e-4, 5e5, "#phi^{#gamma}", y_label, "_log", lbl_error),
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 20, "#phi^{#gamma}", y_label, "", lbl_error),
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}seedTime", "", False, True, default_lumi, 5, -5, 5, 1e-2, 5e6, "Photon seed time (ns)", y_label, "", lbl_error),
+        
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}hOverE", "", False, True, default_lumi, 1, 0, 0.025, 1e-2, 5e5, "H/E", y_label, "", lbl_error),
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}swissCross", "", False, True, default_lumi, 40, 0, 1.5, 1e-2, 5e5, "Swiss cross", y_label, "", lbl_error),
+        
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}SCEtaWidth", "", False, True, default_lumi, 5, 0, 0.03, 1e-2, 5e5, "#eta^{SC} width", y_label, "_log", lbl_error),
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}SCEtaWidth", "", False, False, default_lumi, 5, 0, 0.03, 0, 50, "#eta^{SC} width", y_label, "", lbl_error),
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}SCPhiWidth", "", False, True, default_lumi, 10, 0, 0.05, 1e-2, 5e5, "#phi^{SC} width", y_label, "", lbl_error),
 
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}verticalOverCentral", "", False, True, default_lumi, 40, 0, 1.0, 1e-2, 3e3, "E_{right+left}/(2*E_{max})", y_label, "", lbl_error),
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}verticalImbalance", "", False, True, default_lumi, 5, -2, 2, 1e-2, 3e3, "E_{top-bottom}/E_{top+bottom}", y_label, "", lbl_error),
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}horizontalOverCentral", "", False, True, default_lumi, 40, 0, 1.0, 1e-2, 3e3, "E_{top+bottom}/(2*E_{max})", y_label, "", lbl_error),
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}horizontalImbalance", "", False, True, default_lumi, 5, -2, 2, 1e-2, 3e3, "E_{left-right}/E_{left+right}", y_label, "", lbl_error),
-      
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}sigmaEta2012", "", False, True, default_lumi, 2, 0, 0.04, 1e-1, 3e5, "#sigma_{#eta, 2012}", y_label, "", lbl_error),
-      Histogram(f"goodPhoton_{prefix}{prefixExtra}sigmaIEtaIEta2012", "", False, True, default_lumi, 2, 0, 0.06, 1e-1, 3e5, "#sigma_{i#eta i#eta, 2012}", y_label, "", lbl_error),
-    )
-
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}verticalOverCentral", "", False, True, default_lumi, 40, 0, 1.0, 1e-2, 3e3, "E_{right+left}/(2*E_{max})", y_label, "", lbl_error),
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}verticalImbalance", "", False, True, default_lumi, 5, -2, 2, 1e-2, 3e3, "E_{top-bottom}/E_{top+bottom}", y_label, "", lbl_error),
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}horizontalOverCentral", "", False, True, default_lumi, 40, 0, 1.0, 1e-2, 3e3, "E_{top+bottom}/(2*E_{max})", y_label, "", lbl_error),
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}horizontalImbalance", "", False, True, default_lumi, 5, -2, 2, 1e-2, 3e3, "E_{left-right}/E_{left+right}", y_label, "", lbl_error),
+        
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}sigmaEta2012", "", False, True, default_lumi, 2, 0, 0.04, 1e-1, 3e5, "#sigma_{#eta, 2012}", y_label, "", lbl_error),
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}sigmaIEtaIEta2012", "", False, True, default_lumi, 2, 0, 0.06, 1e-1, 3e5, "#sigma_{i#eta i#eta, 2012}", y_label, "", lbl_error),
+      )
+     
 # histograms2D = tuple(get_2d_plot(*histogram) for histogram in booked_2d_histograms())
 
 histogramsRatio = []

@@ -1,13 +1,19 @@
 # event cuts
 eventCuts = {
   "ZDC_cut": 2,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n, 4: target-nucleus-breaking
-  "max_Nelectrons": 0,
+  
   "max_Ntracks": 0,
   "max_Nmuons": 0,
   "max_NstandaloneMuons": 0,
   "max_Ntowers": 0,
   "beamHaloFilter": 1,  # 0: none, 1: loose, 2: tight, 3: global tight 2016, 4: global super tight 2016
   "max_NmuonSegmentsCSC": 0,
+  
+  "min_Nelectrons": 1,
+  "max_Nelectrons": 1,
+  
+  "min_Nphotons": 0,
+  "max_Nphotons": 0,
 }
 
 zdcCutNames = {
@@ -247,7 +253,8 @@ electronTrackMatching = {
 # luminosity = 1647.180726  # μb^-1, with ZDC
 # luminosity = 1647.2  # μb^-1, without ZDC
 # luminosity = 1583.902  # μb^-1, brilcalc for 2026 ntuples "ntuples_standaloneMuons_haloFlags"
-luminosity = 1609.391965935  # μb^-1, brilcalc for 2026 ntuples "ntuples_muonSegments"
+luminosity = 1609.391965935 * 1/1.0557  # μb^-1, brilcalc for 2026 ntuples "ntuples_muonSegments", 
+                                        # corrected for what we lost due to corrupted files
 
 luminosity_err = luminosity * 0.015  # 1.5% uncertainty
 

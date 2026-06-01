@@ -13,11 +13,11 @@ trigger = "singleEG5"
 
 processes = (
   "collisionData",
-  # "ds_from_lbl",
-  # "qed_superchic",
-  # "qed_starlight",
-  # "lbl",
-  # "cep",
+  "ds_from_lbl",
+  "qed_superchic",
+  "qed_starlight",
+  "lbl",
+  "cep",
   # "alps_5",
   # "alps_30",
   # "alps_90",
@@ -58,8 +58,9 @@ if do_trigger_selection:
   skim = f"bad_names_{trigger}"
   
 else:
-  input_skim = f"initial_{trigger}"  
-  skim = f"skimmed_{trigger}_baseSelections"
+  input_skim = f"initial_{trigger}"
+  # skim = f"skimmed_{trigger}_baseSelections"
+  skim = f"skimmed_{trigger}_monoElectronSelections"
 
 if facility == "naf":
   input_base_path = "/data/dust/user/jniedzie/monophoton/"

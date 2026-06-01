@@ -27,6 +27,10 @@ class Electron {
   bool PassesDeltaEtaAtVertex();
   bool PassesIsolationCuts();
 
+  float GetPt() { return GetAs<float>("pt"); }
+  float GetEta() { return eta; }
+  float GetPhi() { return phi; }
+
   int GetCharge() {
     try {
       return Get("charge");

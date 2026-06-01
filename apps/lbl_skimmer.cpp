@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
 
   cutFlowManager->RegisterCut("initial");
   cutFlowManager->RegisterCut("beamHaloFilters");
-  cutFlowManager->RegisterCut("singlePhoton");
+  cutFlowManager->RegisterCut("nPhotons");
   cutFlowManager->RegisterCut("nMuonSegmentsCSC");
   cutFlowManager->RegisterCut("nElectrons");
   cutFlowManager->RegisterCut("nTracks");
@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
 
     cutFlowManager->UpdateCutFlow("initial");
     if (!lblSelections->PassesBeamHaloFilters(event, cutFlowManager)) continue;
-    if (!lblSelections->PassesSinglePhotonSelection(event, cutFlowManager)) continue;
+    if (!lblSelections->PassesPhotonSelection(event, cutFlowManager)) continue;
     if (!lblSelections->PassesChargedExclusivity(event, cutFlowManager)) continue;
     if (!lblSelections->PassesNeutralExclusivity(event, cutFlowManager)) continue;
     if (!lblSelections->PassesZDC(event, cutFlowManager)) continue;
