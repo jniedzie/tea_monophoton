@@ -355,20 +355,22 @@ histograms = (
 )
 
 histograms2D = (
-  Histogram2D("goodPhoton_eta_vs_phi", "", False, False, True, default_lumi,
-    5, 5, 1.5, 1.8, -1.0, -0.5, 1e-1, 5e1, "#eta_{#gamma}", "#phi_{#gamma}","Counts",
-  ),
+  # Histogram2D("goodPhoton_eta_vs_phi", "", False, False, True, default_lumi,
+  #   5, 5, 1.5, 1.8, -1.0, -0.5, 1e-1, 5e1, "#eta_{#gamma}", "#phi_{#gamma}","Counts",
+  # ),
 )
 
-extraPrefixes = [""]
-# extraPrefixes = [
-#     "noDTsegments_", "withDTsegments_", 
-#     "noDTcosmicSegments_", "withDTcosmicSegments_", 
-#     "noCSCsegments_", "withCSCsegments_", 
-#     "noMuonSegments_", "withMuonSegments_"
-#   ]
+# extraPrefixes = [""]
+extraPrefixes = [
+  "",
+    "noDTsegments_", "withDTsegments_", 
+    "noDTcosmicSegments_", "withDTcosmicSegments_", 
+    "noCSCsegments_", "withCSCsegments_", 
+    "noMuonSegments_", "withMuonSegments_"
+  ]
 
-for prefix in ["", "Barrel_", "EndCap_"]:
+# for prefix in ["", "Barrel_", "EndCap_"]:
+for prefix in [""]:
   for prefixExtra in extraPrefixes:
     histograms += (
       #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix

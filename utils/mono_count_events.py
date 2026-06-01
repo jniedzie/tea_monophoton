@@ -22,7 +22,11 @@ from lbl_paths import base_path
 
 # directory = "/eos/cms/store/cmst3/group/lightbylight/new_tea_samples/collisionData/bad_names_doubleEG2"  # 4'563'693
 # directory = "/eos/cms/store/cmst3/group/lightbylight/new_tea_samples/collisionData/initial_doubleEG2"  # 4'566'634
-directory = "/eos/cms/store/cmst3/group/lightbylight/new_tea_samples/collisionData/initial_doubleEG2_merged"  # 4'566'634
+# directory = "/eos/cms/store/cmst3/group/lightbylight/new_tea_samples/collisionData/initial_doubleEG2_merged"  # 4'566'634
+
+# directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/collisionData/bad_names_singleEG5_unmerged"  # 59'531'366
+# directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/collisionData/bad_names_singleEG5"  # 57'536'320
+directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/collisionData/initial_singleEG5"  # 56'389'076
 
 # MC samples
 # directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/lbl/bad_names_noTrigger"  # 466000

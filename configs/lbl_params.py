@@ -6,7 +6,8 @@ eventCuts = {
   "max_Nmuons": 0,
   "max_NstandaloneMuons": 0,
   "max_Ntowers": 0,
-  "beamHaloFilter": 1  # 0: none, 1: loose, 2: tight, 3: global tight 2016, 4: global super tight 2016
+  "beamHaloFilter": 1,  # 0: none, 1: loose, 2: tight, 3: global tight 2016, 4: global super tight 2016
+  "max_NmuonSegmentsCSC": 0,
 }
 
 zdcCutNames = {
@@ -245,7 +246,8 @@ electronTrackMatching = {
 
 # luminosity = 1647.180726  # μb^-1, with ZDC
 # luminosity = 1647.2  # μb^-1, without ZDC
-luminosity = 1583.902  # μb^-1, brilcalc for 2026 ntuples with BH and SAmu
+# luminosity = 1583.902  # μb^-1, brilcalc for 2026 ntuples "ntuples_standaloneMuons_haloFlags"
+luminosity = 1609.391965935  # μb^-1, brilcalc for 2026 ntuples "ntuples_muonSegments"
 
 luminosity_err = luminosity * 0.015  # 1.5% uncertainty
 

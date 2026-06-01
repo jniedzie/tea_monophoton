@@ -31,7 +31,10 @@ qed_names = ["qed_superchic", "qed_starlight"]
 
 # Check if this is to preselect on trigger:
 command = [os.readlink("/proc/self/exe")]
-command.append(sys.argv)
+command.extend(sys.argv)
+command = " ".join(command)
+
+print(command)
 
 if "trigger_selector" in command:
   info("\n\nRunning trigger selection\n\n")
