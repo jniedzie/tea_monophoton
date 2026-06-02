@@ -19,12 +19,16 @@ class LbLHistogramsFiller {
   std::unique_ptr<EventProcessor> eventProcessor;
 
   void FillMonoPhotonHistograms(const std::shared_ptr<Event> event);
-  void FillMonoPhotonHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<Photon> photon, std::string prefix="");
-  void FillMonoPhotonHistograms2D(const std::shared_ptr<Event> event, const std::shared_ptr<Photon> photon, std::string prefix="");
+  void FillMonoPhotonHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<Photon> photon, std::string prefix = "");
+  void FillMonoPhotonHistograms2D(const std::shared_ptr<Event> event, const std::shared_ptr<Photon> photon, std::string prefix = "");
 
   void FillMonoElectronHistograms(const std::shared_ptr<Event> event);
-  void FillMonoElectronHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<Electron> electron, std::string prefix="");
-  
+  void FillMonoElectronHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<Electron> electron, std::string prefix = "");
+
+  void FillPhotonPlusElectronHistograms(const std::shared_ptr<Event> event);
+  void FillPhotonPlusElectronHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<Photon> photon,
+                                        const std::shared_ptr<Electron> electron, std::string prefix = "");
+
   void FillEGammaHistograms(const std::shared_ptr<Event> event);
   void FillGenLevelHistograms(const std::shared_ptr<Event> event);
   void FillEventLevelHistograms(const std::shared_ptr<Event> event);

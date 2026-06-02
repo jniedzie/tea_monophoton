@@ -11,7 +11,9 @@ from lbl_paths import base_path, processes, skim
 
 output_path = f"../plots/{skim.replace('skimmed_', '')}/"
 
+mono_gamma = "baseSelections" in skim
 mono_electron = "monoElectronSelections" in skim
+ele_plus_gamma = "gammaPlusElectronSelections" in skim
 
 do_photons = True
 do_alps = True
@@ -111,7 +113,7 @@ samples = [
 ]
 
 
-if mono_electron:
+if mono_electron or ele_plus_gamma:
   custom_stacks_order = ["qed_mg1gamma", "cep", "lbl", "ds_from_lbl", "qed_starlight", "qed_superchic", "data"]
 else:
   custom_stacks_order = ["qed_mg1gamma", "cep", "lbl", "qed_starlight", "qed_superchic", "ds_from_lbl", "data"]
@@ -366,26 +368,28 @@ histograms2D = (
   # ),
 )
 
-extraPrefixes = [""]
-# extraPrefixes = [
-#   "","lowSigmaEta_", "highSigmaEta_", 
-# ]
+# extraPrefixes = [""]
+extraPrefixes = [
+  "",
+  "tightVerticalOverCentral_", "looseVerticalOverCentral_", 
+  "tightHorizontalOverCentral_", "looseHorizontalOverCentral_", 
+]
 
-for prefix in ["", "Barrel_", "EndCap_"]:
-# for prefix in [""]:
+# for prefix in ["", "Barrel_", "EndCap_"]:
+for prefix in [""]:
   for prefixExtra in extraPrefixes:
-    if mono_electron:
+    if mono_electron or ele_plus_gamma:
       histograms += (
-        Histogram(f"goodElectron_{prefix}{prefixExtra}pt", "", False, True, default_lumi, 2, 0, 25, 1e-2, 5e2, "p_{T}^{#e} (GeV)", y_label, "", lbl_error),
+        Histogram(f"goodElectron_{prefix}{prefixExtra}pt", "", False, True, default_lumi, 2, 0, 25, 1e-2, 5e2, "p_{T}^{e} (GeV)", y_label, "", lbl_error),
         
-        Histogram(f"goodElectron_{prefix}{prefixExtra}eta", "", False, True, default_lumi, 2, -3, 3, 1e-2, 5e5, "#eta^{#e}", y_label, "_log", lbl_error),
-        # Histogram(f"goodElectron_{prefix}{prefixExtra}eta", "", False, False, default_lumi, 10, -3, 3, 0, 50, "#eta^{#e}", y_label, "", lbl_error),
-        Histogram(f"goodElectron_{prefix}{prefixExtra}eta", "", False, False, default_lumi, 1, -3, 3, 0, 50, "#eta^{#e}", y_label, "", lbl_error),
+        Histogram(f"goodElectron_{prefix}{prefixExtra}eta", "", False, True, default_lumi, 2, -3, 3, 1e-2, 5e5, "#eta^{e}", y_label, "_log", lbl_error),
+        # Histogram(f"goodElectron_{prefix}{prefixExtra}eta", "", False, False, default_lumi, 10, -3, 3, 0, 50, "#eta^{e}", y_label, "", lbl_error),
+        Histogram(f"goodElectron_{prefix}{prefixExtra}eta", "", False, False, default_lumi, 1, -3, 3, 0, 50, "#eta^{e}", y_label, "", lbl_error),
         
-        Histogram(f"goodElectron_{prefix}{prefixExtra}phi", "", False, True, default_lumi, 4, -4, 4, 1e-4, 5e5, "#phi^{#e}", y_label, "_log", lbl_error),
-        Histogram(f"goodElectron_{prefix}{prefixExtra}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 20, "#phi^{#e}", y_label, "", lbl_error),
+        Histogram(f"goodElectron_{prefix}{prefixExtra}phi", "", False, True, default_lumi, 4, -4, 4, 1e-4, 5e5, "#phi^{e}", y_label, "_log", lbl_error),
+        Histogram(f"goodElectron_{prefix}{prefixExtra}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 50, "#phi^{e}", y_label, "", lbl_error),
       )
-    else:
+    if mono_gamma or ele_plus_gamma:
       histograms += (
         #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
         Histogram(f"goodPhoton_{prefix}{prefixExtra}et", "", False, True, default_lumi, 2, 0, 40, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
@@ -394,7 +398,7 @@ for prefix in ["", "Barrel_", "EndCap_"]:
         Histogram(f"goodPhoton_{prefix}{prefixExtra}eta", "", False, False, default_lumi, 2, -3, 3, 0, 50, "#eta^{#gamma}", y_label, "", lbl_error),
         
         Histogram(f"goodPhoton_{prefix}{prefixExtra}phi", "", False, True, default_lumi, 4, -4, 4, 1e-4, 5e5, "#phi^{#gamma}", y_label, "_log", lbl_error),
-        Histogram(f"goodPhoton_{prefix}{prefixExtra}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 20, "#phi^{#gamma}", y_label, "", lbl_error),
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 50, "#phi^{#gamma}", y_label, "", lbl_error),
         Histogram(f"goodPhoton_{prefix}{prefixExtra}seedTime", "", False, True, default_lumi, 5, -5, 5, 1e-2, 5e6, "Photon seed time (ns)", y_label, "", lbl_error),
         
         Histogram(f"goodPhoton_{prefix}{prefixExtra}hOverE", "", False, True, default_lumi, 1, 0, 0.025, 1e-2, 5e5, "H/E", y_label, "", lbl_error),
@@ -412,6 +416,11 @@ for prefix in ["", "Barrel_", "EndCap_"]:
         Histogram(f"goodPhoton_{prefix}{prefixExtra}sigmaEta2012", "", False, True, default_lumi, 2, 0, 0.04, 1e-1, 3e5, "#sigma_{#eta, 2012}", y_label, "", lbl_error),
         Histogram(f"goodPhoton_{prefix}{prefixExtra}sigmaIEtaIEta2012", "", False, True, default_lumi, 2, 0, 0.06, 1e-1, 3e5, "#sigma_{i#eta i#eta, 2012}", y_label, "", lbl_error),
       )
+      if ele_plus_gamma:
+        histograms += (
+          Histogram(f"photonElectron_{prefix}{prefixExtra}invariantMass", "", False, True, default_lumi, 2, 0, 100, 1e-2, 5e5, "m_{e#gamma} (GeV)", y_label, "", lbl_error),
+          Histogram(f"photonElectron_{prefix}{prefixExtra}MET", "", False, True, default_lumi, 2, 0, 100, 1e-2, 5e5, "E_{T}^{miss} (GeV)", y_label, "", lbl_error),
+        )
      
 # histograms2D = tuple(get_2d_plot(*histogram) for histogram in booked_2d_histograms())
 

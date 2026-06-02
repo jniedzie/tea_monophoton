@@ -3,7 +3,7 @@ from lbl_params import *
 nEvents = -1
 previousBxMaxDistance = 150
 runHistograms2D = False
-runExtraPrefix = True
+runExtraPrefix = False
 
 defaultHistParams = (
   # collection      variable          bins    xmin     xmax     dir
@@ -49,7 +49,8 @@ goodPhotonPrefixes = detectorPrefixes.copy()
 
 if runExtraPrefix:
   extraPrefixes = [
-    "lowSigmaEta_", "highSigmaEta_", 
+    "tightVerticalOverCentral_", "looseVerticalOverCentral_", 
+    "tightHorizontalOverCentral_", "looseHorizontalOverCentral_", 
   ]
 
   for extraPrefix in extraPrefixes:
@@ -101,6 +102,9 @@ for prefix in goodPhotonPrefixes:
     ("goodElectron", f"{prefix}pt", 2000, 0, 1000, ""),
     ("goodElectron", f"{prefix}eta", 100, -5, 5, ""),
     ("goodElectron", f"{prefix}phi", 100, -5, 5, ""),
+    
+    ("photonElectron", f"{prefix}invariantMass", 1000, 0, 1000, ""),
+    ("photonElectron", f"{prefix}MET", 1000, 0, 1000, ""),
   )
 
   if runHistograms2D:

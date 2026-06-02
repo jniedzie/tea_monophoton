@@ -61,14 +61,18 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
 
   string extraPrefix_1, extraPrefix_2, extraPrefix_3, extraPrefix_4;
 
-  float sigmaIEtaIEta2012 = photon->Get("sigmaIEtaIEta2012");
+  float verticalOverCentral = photon->GetVerticalOverCentralEnergy();
+  float horizontalOverCentral = photon->GetHorizontalOverCentralEnergy();
 
   if (runExtraPrefix) {
     // Change that to whatever the extra prefix should be (same as in config)
-    extraPrefix_1 = sigmaIEtaIEta2012 < 0.02 ? "lowSigmaEta_" : "highSigmaEta_";
+    extraPrefix_1 = verticalOverCentral > 0.005 ? "tightVerticalOverCentral_" : "looseVerticalOverCentral_";
+    extraPrefix_2 = horizontalOverCentral > 0.005 ? "tightHorizontalOverCentral_" : "looseHorizontalOverCentral_";
 
     FillMonoPhotonHistograms(event, photon, extraPrefix_1);
+    FillMonoPhotonHistograms(event, photon, extraPrefix_2);
     FillMonoPhotonHistograms(event, photon, detectorPrefix + extraPrefix_1);
+    FillMonoPhotonHistograms(event, photon, detectorPrefix + extraPrefix_2);
   }
 
   if (runHistograms2D) {
@@ -97,6 +101,21 @@ void LbLHistogramsFiller::FillMonoElectronHistograms(const shared_ptr<Event> eve
 
   FillMonoElectronHistograms(event, electron);
   FillMonoElectronHistograms(event, electron, detectorPrefix);
+}
+
+void LbLHistogramsFiller::FillPhotonPlusElectronHistograms(const shared_ptr<Event> event) {
+  auto electrons = event->GetCollection("goodElectron");
+  auto electron = asElectron(electrons->at(0));
+
+  auto photons = event->GetCollection("goodPhoton");
+  auto photon = asPhoton(photons->at(0));
+
+  auto lblEvent = asLbLEvent(event);
+
+  string detectorPrefix = fabs(electron->GetEta()) > 1.2 ? "EndCap_" : "Barrel_";
+
+  FillPhotonPlusElectronHistograms(event, photon, electron);
+  FillPhotonPlusElectronHistograms(event, photon, electron, detectorPrefix);
 }
 
 void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event, const shared_ptr<Photon> photon, string prefix) {
@@ -133,12 +152,31 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
 
 void LbLHistogramsFiller::FillMonoElectronHistograms(const shared_ptr<Event> event, const shared_ptr<Electron> electron, string prefix) {
   vector<string> defaultBranches = {
-      "pt", "eta", "phi",
+      "pt",
+      "eta",
+      "phi",
   };
 
   for (string branch : defaultBranches) {
     histogramsHandler->Fill("goodElectron_" + prefix + branch, electron->GetAs<float>(branch));
   }
+}
+
+void LbLHistogramsFiller::FillPhotonPlusElectronHistograms(const shared_ptr<Event> event, const shared_ptr<Photon> photon,
+                                                           const shared_ptr<Electron> electron, string prefix) {
+  auto photonVec = photon->GetFourMomentum();
+  auto electronVec = electron->GetFourMomentum();
+
+  // calculate invariant mass of the photon and electron system
+  float invariantMass = (photonVec + electronVec).M();
+
+  // calculate MET from electron + photon system
+  float metX = -(photonVec.Px() + electronVec.Px());
+  float metY = -(photonVec.Py() + electronVec.Py());
+  float met = sqrt(metX * metX + metY * metY);
+
+  histogramsHandler->Fill("photonElectron_" + prefix + "invariantMass", invariantMass);
+  histogramsHandler->Fill("photonElectron_" + prefix + "MET", met);
 }
 
 void LbLHistogramsFiller::FillMonoPhotonHistograms2D(const shared_ptr<Event> event, const shared_ptr<Photon> photon, string prefix) {
@@ -514,7 +552,13 @@ void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
     FillEventLevelHistograms(event);
     SaveHighEtPhotonsInfo(event, 30.0, false);
     SaveHighEtPhotonsInfo(event, 50.0, false);
-  } else if (electrons->size() == 1) {
+  }
+  
+  if (electrons->size() == 1) {
     FillMonoElectronHistograms(event);
+  }
+
+  if (photons->size() == 1 && electrons->size() == 1) {
+    FillPhotonPlusElectronHistograms(event);
   }
 }
