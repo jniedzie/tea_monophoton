@@ -1,19 +1,19 @@
 # event cuts
 eventCuts = {
   "ZDC_cut": 2,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n, 4: target-nucleus-breaking
+  "beamHaloFilter": 1,  # 0: none, 1: loose, 2: tight, 3: global tight 2016, 4: global super tight 2016
   
   "max_Ntracks": 0,
   "max_Nmuons": 0,
   "max_NstandaloneMuons": 0,
   "max_Ntowers": 0,
-  "beamHaloFilter": 1,  # 0: none, 1: loose, 2: tight, 3: global tight 2016, 4: global super tight 2016
   "max_NmuonSegmentsCSC": 0,
   
-  "min_Nelectrons": 1,
-  "max_Nelectrons": 1,
+  "min_Nelectrons": 0,
+  "max_Nelectrons": 0,
   
-  "min_Nphotons": 0,
-  "max_Nphotons": 0,
+  "min_Nphotons": 1,
+  "max_Nphotons": 1,
 }
 
 zdcCutNames = {
@@ -40,32 +40,32 @@ photonCuts = {
   "max_verticalImbalance": 99999,
 
   # LbL cuts:
-  # "max_hOverE_barrel": 0.04596,
-  # "max_hOverE_endcap": 0.0590,
+  "max_hOverE_barrel": 0.04596,
+  "max_hOverE_endcap": 0.0590,
   # "max_swissCross": 0.95,
   # "min_et": 2.0,
-  # "min_SCEtaWidth": 0.0,
-  # "min_SCPhiWidth": 0.0,
+  "min_SCEtaWidth": 0.0,
+  "min_SCPhiWidth": 0.0,
   # "min_verticalOverCentral": 0.0,
   # "min_horizontalOverCentral": 0.0,
   "max_absEta": 2.2,
   "min_seedTime": -3.0,
   "max_seedTime": 3.0,
-  "max_sigmaIEtaIEta_endcap": 0.06,
+  # "max_sigmaIEtaIEta_endcap": 0.06,
 
   # Tightened cuts:
-  "max_hOverE_barrel": 0.001,
-  "max_hOverE_endcap": 0.001,
+  # "max_hOverE_barrel": 0.001,
+  # "max_hOverE_endcap": 0.001,
   "max_swissCross": 0.87,
   "min_et": 4.0,
-  "min_SCEtaWidth": 0.001,
-  "min_SCPhiWidth": 0.001,
+  # "min_SCEtaWidth": 0.001,
+  # "min_SCPhiWidth": 0.001,
   "min_verticalOverCentral": 0.005,
   "min_horizontalOverCentral": 0.005,
   # "max_absEta": 1.2,
   # "min_seedTime": -1.2,
   # "max_seedTime": 0.8,
-  # "max_sigmaIEtaIEta_endcap": 0.02,
+  "max_sigmaIEtaIEta_endcap": 0.02,
   # "max_SCPhiWidth_barrel": 0.01,
 
   # loosened cuts:
