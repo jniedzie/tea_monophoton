@@ -37,6 +37,9 @@ directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/collisionData/initial_single
 # directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/alps_30/bad_names_noTrigger"  # 719000
 # directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/alps_90/bad_names_noTrigger"  # 449000
 
+# directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/qed_starlight/skimmed_singleEG5_monoElectronSelections"  # 650
+directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/qed_starlight/initial_singleEG5"  # 181'653
+
 pattern = "*.root"
 
 

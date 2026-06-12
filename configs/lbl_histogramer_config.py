@@ -2,7 +2,7 @@ from lbl_params import *
 
 nEvents = -1
 previousBxMaxDistance = 150
-runHistograms2D = False
+runHistograms2D = True
 runExtraPrefix = False
 
 defaultHistParams = (
@@ -115,17 +115,35 @@ for prefix in goodPhotonPrefixes:
       (f"goodPhoton_{prefix}eta_vs_phi_vs_et", 1000, -3.0, 3.0, 1000, -4.0, 4.0, ""),
       (f"goodPhoton_{prefix}eta_vs_phi_gt30p0GeV", 100, -3.0, 3.0, 100, -4.0, 4.0, ""),
       (f"goodPhoton_{prefix}eta_vs_phi_gt50p0GeV", 100, -3.0, 3.0, 100, -4.0, 4.0, ""),
+      
+      (f"goodElectron_{prefix}eta_vs_phi", 1000, -3.0, 3.0, 1000, -4.0, 4.0, ""),
+            
       # (f"goodPhoton_{prefix}horizontalImbalance_vs_seedTime", 100, -2.0, 2.0, 100, -5.0, 5.0, ""),
       # (f"goodPhoton_{prefix}verticalImbalance_vs_seedTime", 100, -2.0, 2.0, 100, -5.0, 5.0, ""),
       # (f"goodPhoton_{prefix}et_vs_seedTime", 2000, 0, 1000, 100, -5.0, 5.0, ""),
       # (f"goodPhoton_{prefix}eta_vs_seedTime", 100, -5.0, 5.0, 1000, -50.0, 50.0, ""),
     )
 
-for prefix in detectorPrefixes:
-  histParams += (
-    # gen-level
-    ("genPhoton", f"{prefix}et", 2000, 0, 1000, ""),
-  )
+# gen-level
+histParams += (
+  ("genPhoton", "et", 2000, 0, 1000, ""),
+  ("genElectron", "pt", 2000, 0, 1000, ""),
+  ("genElectron", "eta", 100, -5, 5, ""),
+  ("genElectron", "phi", 100, -5, 5, ""),
+  
+  ("genOppositeElectron", "pt", 2000, 0, 1000, ""),
+  ("genOppositeElectron", "eta", 100, -5, 5, ""),
+  ("genOppositeElectron", "phi", 100, -5, 5, ""),
+  
+  ("genOppositeElectronInPeak", "pt", 2000, 0, 1000, ""),
+  ("genOppositeElectronInPeak", "eta", 100, -5, 5, ""),
+  ("genOppositeElectronInPeak", "phi", 100, -5, 5, ""),  
+)
+
+histParams2D += (
+  (f"allGenElectron_eta_vs_phi", 1000, -3.0, 3.0, 1000, -4.0, 4.0, ""),
+  (f"unmatchedGenElectron_eta_vs_phi", 1000, -3.0, 3.0, 1000, -4.0, 4.0, ""),
+)
 
 for bxPrefix in ["afterCollisionBX_", "withoutCollisionBX_"]:
   for detectorPrefix in detectorPrefixes:
