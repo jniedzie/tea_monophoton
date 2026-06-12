@@ -362,11 +362,23 @@ histograms = (
   # Histogram("event_ZDCenergyMinusLogX" , "", False, True, NormalizationType.to_lumi, 15, 1, 6, 1e-1, 1e5,"log[#sum E_{ZDC}^{-} (GeV)]", y_label),
 )
 
-histograms2D = (
-  # Histogram2D("goodPhoton_eta_vs_phi", "", False, False, True, default_lumi,
-  #   5, 5, 1.5, 1.8, -1.0, -0.5, 1e-1, 5e1, "#eta_{#gamma}", "#phi_{#gamma}","Counts",
-  # ),
-)
+histograms2D = ()
+
+eta_phi_maps_rebin = 20
+eta_phi_maps_max_z = 5
+
+if mono_electron or ele_plus_gamma:
+  histograms2D += (
+    Histogram2D("goodElectron_eta_vs_phi", "", False, False, True, default_lumi,
+      eta_phi_maps_rebin, eta_phi_maps_rebin, -3.0, 3.0, -4.0, -4.0, 1e-1, eta_phi_maps_max_z, "#eta_{e}", "#phi_{e}","Counts",
+    ),
+  )
+if mono_gamma or ele_plus_gamma:
+  histograms2D += (
+    Histogram2D("goodPhoton_eta_vs_phi", "", False, False, True, default_lumi,
+      eta_phi_maps_rebin, eta_phi_maps_rebin, -3.0, 3.0, -4.0, -4.0, 1e-1, eta_phi_maps_max_z, "#eta_{#gamma}", "#phi_{#gamma}","Counts",
+    ),
+  )
 
 # extraPrefixes = [""]
 extraPrefixes = [
@@ -387,7 +399,7 @@ for prefix in [""]:
         Histogram(f"goodElectron_{prefix}{prefixExtra}eta", "", False, False, default_lumi, 1, -3, 3, 0, 50, "#eta^{e}", y_label, "", lbl_error),
         
         Histogram(f"goodElectron_{prefix}{prefixExtra}phi", "", False, True, default_lumi, 4, -4, 4, 1e-4, 5e5, "#phi^{e}", y_label, "_log", lbl_error),
-        Histogram(f"goodElectron_{prefix}{prefixExtra}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 50, "#phi^{e}", y_label, "", lbl_error),
+        Histogram(f"goodElectron_{prefix}{prefixExtra}phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 50, "#phi^{e}", y_label, "", lbl_error),      
       )
     if mono_gamma or ele_plus_gamma:
       histograms += (
@@ -421,6 +433,14 @@ for prefix in [""]:
           Histogram(f"photonElectron_{prefix}{prefixExtra}invariantMass", "", False, True, default_lumi, 2, 0, 100, 1e-2, 5e5, "m_{e#gamma} (GeV)", y_label, "", lbl_error),
           Histogram(f"photonElectron_{prefix}{prefixExtra}MET", "", False, True, default_lumi, 2, 0, 100, 1e-2, 5e5, "E_{T}^{miss} (GeV)", y_label, "", lbl_error),
         )
+     
+histograms += (
+  Histogram(f"genElectron_pt", "", False, True, default_lumi, 2, 0, 25, 1e-2, 5e2, "p_{T}^{e} (GeV)", y_label, "", lbl_error),
+  Histogram(f"genElectron_eta", "", False, True, default_lumi, 2, -3, 3, 1e-2, 5e5, "#eta^{e}", y_label, "_log", lbl_error),
+  Histogram(f"genElectron_eta", "", False, False, default_lumi, 1, -3, 3, 0, 50, "#eta^{e}", y_label, "", lbl_error),
+  Histogram(f"genElectron_phi", "", False, True, default_lumi, 4, -4, 4, 1e-4, 5e5, "#phi^{e}", y_label, "_log", lbl_error),
+  Histogram(f"genElectron_phi", "", False, False, default_lumi, 4, -4, 4, 1e-2, 50, "#phi^{e}", y_label, "", lbl_error),
+)
      
 # histograms2D = tuple(get_2d_plot(*histogram) for histogram in booked_2d_histograms())
 

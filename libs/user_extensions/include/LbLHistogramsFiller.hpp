@@ -24,6 +24,7 @@ class LbLHistogramsFiller {
 
   void FillMonoElectronHistograms(const std::shared_ptr<Event> event);
   void FillMonoElectronHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<Electron> electron, std::string prefix = "");
+  void FillMonoElectronHistograms2D(const std::shared_ptr<Event> event, const std::shared_ptr<Electron> electron, std::string prefix = "");
 
   void FillPhotonPlusElectronHistograms(const std::shared_ptr<Event> event);
   void FillPhotonPlusElectronHistograms(const std::shared_ptr<Event> event, const std::shared_ptr<Photon> photon,

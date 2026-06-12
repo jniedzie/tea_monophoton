@@ -101,6 +101,11 @@ void LbLHistogramsFiller::FillMonoElectronHistograms(const shared_ptr<Event> eve
 
   FillMonoElectronHistograms(event, electron);
   FillMonoElectronHistograms(event, electron, detectorPrefix);
+
+  if (runHistograms2D) {
+    FillMonoElectronHistograms2D(event, electron);
+    FillMonoElectronHistograms2D(event, electron, detectorPrefix);
+  }
 }
 
 void LbLHistogramsFiller::FillPhotonPlusElectronHistograms(const shared_ptr<Event> event) {
@@ -215,6 +220,10 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms2D(const shared_ptr<Event> eve
                           photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "verticalImbalance_vs_seedTime", photon->GetVerticalImbalance(), photon->GetSeedTime());
   histogramsHandler->Fill("goodPhoton_" + prefix + "swissCross_vs_seedTime", photon->GetSwissCross(), photon->GetSeedTime());
+}
+
+void LbLHistogramsFiller::FillMonoElectronHistograms2D(const shared_ptr<Event> event, const shared_ptr<Electron> electron, string prefix) {
+  histogramsHandler->Fill("goodElectron_" + prefix + "eta_vs_phi", electron->GetEta(), electron->GetPhi());
 }
 
 void LbLHistogramsFiller::FillEGammaHistograms(const shared_ptr<Event> event) {
@@ -478,9 +487,6 @@ void LbLHistogramsFiller::SaveHighEtPhotonsInfo(const shared_ptr<Event> event, f
 
 void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) {
   auto photons = event->GetCollection("genPhoton");
-  // auto electrons = event->GetCollection("genElectron");
-
-  warn() << "Filling gen-level histograms. Number of gen photons: " << photons->size() << endl;
 
   for (auto physObject : *photons) {
     auto photon = asPhoton(physObject);
@@ -497,13 +503,70 @@ void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) 
     // if (overlapsWithElectron) continue;
 
     histogramsHandler->Fill("genPhoton_et", photon->GetEt());
+  }
 
-    if (fabs(photon->GetEta()) > 1.2) {
-      histogramsHandler->Fill("genPhoton_Barrel_et", photon->GetEt());
-    } else {
-      histogramsHandler->Fill("genPhoton_EndCap_et", photon->GetEt());
+  // find gen electron matching the reco electron:
+  shared_ptr<PhysicsObject> matchingGenElectron = nullptr;
+
+  auto genElectrons = event->GetCollection("genElectron");
+  auto recoElectrons = event->GetCollection("goodElectron");
+  auto recoElectron = asElectron(recoElectrons->at(0));
+  TLorentzVector recoElectronVec = recoElectron->GetFourMomentum();
+
+  float minDeltaR = 9999;
+
+  for (auto physicsObject : *genElectrons) {
+    auto genElectron = asElectron(physicsObject);
+    TLorentzVector genElectronVec = genElectron->GetFourMomentum();
+
+    if (recoElectronVec.DeltaR(genElectronVec) < minDeltaR) {
+      minDeltaR = recoElectronVec.DeltaR(genElectronVec);
+      matchingGenElectron = genElectron->GetPhysicsObject();
     }
   }
+
+  if (!matchingGenElectron) {
+    warn() << "No gen electron matching the reco electron found." << endl;
+    histogramsHandler->Fill("genElectron_pt", -1);
+    histogramsHandler->Fill("genElectron_eta", 5);
+    histogramsHandler->Fill("genElectron_phi", 5);
+    return;
+  }
+
+  histogramsHandler->Fill("genElectron_pt", matchingGenElectron->GetAs<float>("et"));
+  histogramsHandler->Fill("genElectron_eta", matchingGenElectron->GetAs<float>("eta"));
+  histogramsHandler->Fill("genElectron_phi", matchingGenElectron->GetAs<float>("phi"));
+
+  if (genElectrons->size() != 2) {
+    warn() << "Number of gen electrons is not equal to 2. Found " << genElectrons->size() << " gen electrons." << endl;
+    return;
+  }
+
+  shared_ptr<PhysicsObject> oppositeGenElectron = nullptr;
+
+  if (asElectron(genElectrons->at(0))->GetPhysicsObject() == matchingGenElectron) {
+    oppositeGenElectron = asElectron(genElectrons->at(1))->GetPhysicsObject();
+  } else if (asElectron(genElectrons->at(1))->GetPhysicsObject() == matchingGenElectron) {
+    oppositeGenElectron = asElectron(genElectrons->at(0))->GetPhysicsObject();
+  } else {
+    fatal() << "Matching gen electron does not match either of the two gen electrons." << endl;
+    exit(0);
+  }
+
+  histogramsHandler->Fill("genOppositeElectron_pt", oppositeGenElectron->GetAs<float>("et"));
+  histogramsHandler->Fill("genOppositeElectron_eta", oppositeGenElectron->GetAs<float>("eta"));
+  histogramsHandler->Fill("genOppositeElectron_phi", oppositeGenElectron->GetAs<float>("phi"));
+
+  if (oppositeGenElectron->GetAs<float>("phi") > 0.5 && oppositeGenElectron->GetAs<float>("phi") < 0.8) {
+    histogramsHandler->Fill("genOppositeElectronInPeak_pt", oppositeGenElectron->GetAs<float>("et"));
+    histogramsHandler->Fill("genOppositeElectronInPeak_eta", oppositeGenElectron->GetAs<float>("eta"));
+    histogramsHandler->Fill("genOppositeElectronInPeak_phi", oppositeGenElectron->GetAs<float>("phi"));
+  }
+
+  histogramsHandler->Fill("allGenElectron_eta_vs_phi", matchingGenElectron->GetAs<float>("eta"), matchingGenElectron->GetAs<float>("phi"));
+  histogramsHandler->Fill("allGenElectron_eta_vs_phi", oppositeGenElectron->GetAs<float>("eta"), oppositeGenElectron->GetAs<float>("phi"));
+  histogramsHandler->Fill("unmatchedGenElectron_eta_vs_phi", oppositeGenElectron->GetAs<float>("eta"), oppositeGenElectron->GetAs<float>("phi"));
+
 }
 
 void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event) {
@@ -541,11 +604,11 @@ void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
     FillGenLevelHistograms(event);
   } catch (const Exception& e) {
     warn() << "No gen-level information found in event. Skipping gen-level histograms filling." << endl;
+  } catch (const std::out_of_range& e) {
+    warn() << "Error while filling gen-level histograms: " << e.what() << endl;
   }
-
   auto photons = event->GetCollection("goodPhoton");
   auto electrons = event->GetCollection("goodElectron");
-
   if (photons->size() == 1) {
     FillMonoPhotonHistograms(event);
     FillEGammaHistograms(event);
@@ -553,7 +616,7 @@ void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
     SaveHighEtPhotonsInfo(event, 30.0, false);
     SaveHighEtPhotonsInfo(event, 50.0, false);
   }
-  
+
   if (electrons->size() == 1) {
     FillMonoElectronHistograms(event);
   }
