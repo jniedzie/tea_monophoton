@@ -16,8 +16,8 @@ Photon::Photon(std::shared_ptr<PhysicsObject> physicsObject_) : physicsObject(ph
   absEta = fabs(eta);
 
   try {
-    etaSC = Get("SCEta");
-    phiSC = Get("SCPhi");
+    etaSC = Get("SCEta", false);
+    phiSC = Get("SCPhi", false);
     absEtaSC = fabs(etaSC);
   } catch (const std::exception& e) {
     warn() << "No photon supercluster information found. Using regular eta and phi" << endl;

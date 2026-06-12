@@ -11,12 +11,16 @@ class Electron {
  public:
   Electron(std::shared_ptr<PhysicsObject> physicsObject_);
 
-  auto Get(std::string branchName) { return physicsObject->Get(branchName); }
+  auto Get(std::string branchName, bool verbose = true) { return physicsObject->Get(branchName, verbose); }
 
   template <typename T>
-  T GetAs(std::string branchName) { return physicsObject->GetAs<float>(branchName); }
+  T GetAs(std::string branchName) {
+    return physicsObject->GetAs<float>(branchName);
+  }
   std::string GetOriginalCollection() { return physicsObject->GetOriginalCollection(); }
   void Reset() { physicsObject->Reset(); }
+
+  std::shared_ptr<PhysicsObject> GetPhysicsObject() { return physicsObject; }
 
   bool PassesPtCuts();
   bool IsEtaAboveLimit();
@@ -42,7 +46,7 @@ class Electron {
   TLorentzVector GetFourMomentum() {
     TLorentzVector fourMomentum;
     try {
-      fourMomentum.SetPtEtaPhiM(Get("pt"), eta, phi, 0.000511);
+      fourMomentum.SetPtEtaPhiM(Get("pt", false), eta, phi, 0.000511);
     } catch (const std::exception& e) {
       fourMomentum.SetPtEtaPhiM(Get("et"), eta, phi, 0.000511);
     }
