@@ -12,8 +12,8 @@ from lbl_paths import base_path, processes, skim
 output_path = f"../plots/{skim.replace('skimmed_', '')}/"
 
 mono_gamma = "baseSelections" in skim
-mono_electron = "monoElectronSelections" in skim
-ele_plus_gamma = "gammaPlusElectronSelections" in skim
+mono_electron = "monoElectron" in skim
+ele_plus_gamma = "gammaPlusElectron" in skim
 
 do_photons = True
 do_alps = True
@@ -380,12 +380,12 @@ if mono_gamma or ele_plus_gamma:
     ),
   )
 
-# extraPrefixes = [""]
-extraPrefixes = [
-  "",
-  "tightVerticalOverCentral_", "looseVerticalOverCentral_", 
-  "tightHorizontalOverCentral_", "looseHorizontalOverCentral_", 
-]
+extraPrefixes = [""]
+# extraPrefixes = [
+#   "",
+#   "tightVerticalOverCentral_", "looseVerticalOverCentral_", 
+#   "tightHorizontalOverCentral_", "looseHorizontalOverCentral_", 
+# ]
 
 # for prefix in ["", "Barrel_", "EndCap_"]:
 for prefix in [""]:

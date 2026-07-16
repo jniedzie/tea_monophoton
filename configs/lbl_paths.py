@@ -62,10 +62,9 @@ else:
   # skim = f"skimmed_{trigger}_baseSelections"
   
   # skim = f"initial_{trigger}"
-  skim = f"skimmed_{trigger}_monoElectronWithIDselections"
-  # skim = f"skimmed_{trigger}_gammaPlusElectronSelections"
+  # skim = f"skimmed_{trigger}_monoElectronWithIDselections"
+  skim = f"skimmed_{trigger}_gammaPlusElectronWithIDselections"
   
-  # skim = f"skimmed_{trigger}_gammaPlusNelectronsSelections"
 
 if facility == "naf":
   input_base_path = "/data/dust/user/jniedzie/monophoton/"
