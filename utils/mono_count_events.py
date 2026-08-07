@@ -26,7 +26,7 @@ from lbl_paths import base_path
 
 # directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/collisionData/bad_names_singleEG5_unmerged"  # 59'531'366
 # directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/collisionData/bad_names_singleEG5"  # 57'536'320
-directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/collisionData/initial_singleEG5"  # 56'389'076
+# directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/collisionData/initial_singleEG5"  # 56'389'076
 
 # MC samples
 # directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/lbl/bad_names_noTrigger"  # 466000
@@ -38,7 +38,13 @@ directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/collisionData/initial_single
 # directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/alps_90/bad_names_noTrigger"  # 449000
 
 # directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/qed_starlight/skimmed_singleEG5_monoElectronSelections"  # 650
-directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/qed_starlight/initial_singleEG5"  # 181'653
+# directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/qed_starlight/initial_singleEG5"  # 181'653
+
+# directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/gamma_y/bad_names_noTrigger"  # 99'600
+# directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/gamma_y/bad_names_singleEG5"  # 52'047
+# directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/gamma_y/initial_singleEG5"  # (before merging) 52'047
+directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/gamma_y/initial_singleEG5"  # 52'047
+
 
 pattern = "*.root"
 

@@ -1,6 +1,6 @@
 # event cuts
 eventCuts = {
-  "ZDC_cut": 2,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n, 4: target-nucleus-breaking
+  "ZDC_cut": 5,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n, 4: target-nucleus-breaking, 5: tight 0n0n
   "beamHaloFilter": 1,  # 0: none, 1: loose, 2: tight, 3: global tight 2016, 4: global super tight 2016
   
   "max_Ntracks": 0,
@@ -275,8 +275,25 @@ lbl_scaling = 1.05  # inclusive
 # lbl_scaling = 1.05 * 0.74  # 0n0n
 # lbl_scaling = 1.05 * (0.74 + 0.046 + 0.006)  # 0n0n + 0n1n + 1n0n + 1n1n
 
-mc_scale = 1.0
-# mc_scale = 10
+
+
+# for tight 0n0n ZDC cut, we need to scale MC to account for lost events
+# mc_scale = 1.0  # for 1600 GeV 0n threshold
+mc_scale = 0.932  # for 400 GeV 0n threshold
+
+
+gamma_y_raw_cross_section = 3.923  # μb, -1.413 +2.387 (-36%, +61%)
+gamma_y_S_A = 1.005  # EPPS21 nuclear-PDF correction
+gamma_y_f_1n = 0.1361  # True \(1n0n+0n1n\) fraction after cascade, ABLA++, and additional EMD
+
+# Probability for the true one-neutron side to be reconstructed as zero-neutron (from our CMS BW measurement). 
+# gamma_y_P_1n_0n = 0.15  1600 GeV threshold, 1n only
+# gamma_y_P_1n_0n = 0.191  1600 GeV threshold, 1n + ≥2n
+# gamma_y_P_1n_0n = 0.006  # 400 GeV threshold, 1n only
+gamma_y_P_1n_0n = 0.014  # 400 GeV threshold, 1n + ≥2n
+
+gamma_y_arbitrary_scaling = 1.0  # arbitrary scaling factor for gamma_y, to be used for testing
+
 
 crossSections = {
   "lbl": mc_scale * 2.59 * lbl_scaling,  # μb
@@ -286,6 +303,7 @@ crossSections = {
   "qed_mg1gamma": mc_scale * 13.45,  # μb
   "qed_mg2gamma": mc_scale * 0.1945,  # μb
   "cep": mc_scale * 5.8e-3,  # we scale it to data
+  "gamma_y":  gamma_y_raw_cross_section * gamma_y_S_A * gamma_y_f_1n * gamma_y_arbitrary_scaling,  # μb
   "alps_5": reference_alp_cross_section,
   "alps_30": reference_alp_cross_section,
   "alps_90": reference_alp_cross_section,
@@ -362,6 +380,7 @@ nGenEvents = {
   "cep": 668000,  # we scale it to data
   "qed_superchic": 65693200,
   "qed_starlight": 66750000,
+  "gamma_y": 99600,
   
   "alps_5": 754000,
   "alps_30": 719000,
@@ -371,13 +390,14 @@ nGenEvents = {
   "qed_mg2gamma": 6457150,
 }
 
-knownPids = [11, 22, 1000822080]
+knownPids = [11, 22, 130, 211, 321, 2112, 2212, 1000822080]
 
 uncertainty_on_zero = 1.84  # 95% CL
 # uncertainty_on_zero = 1.14  # 68% CL
 
 total_uncertainty_qed = 1.068
-total_uncertainty_lbl_run2 = 1.23
+# total_uncertainty_lbl_run2 = 1.23
+total_uncertainty_lbl_run2 = 1.55  # including gamma_y uncertainty
 non_stat_uncertainty_lbl_run2 = 1.18
 stat_uncertainty_lbl_run2 = 1.15
 

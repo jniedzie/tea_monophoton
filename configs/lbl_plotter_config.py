@@ -65,17 +65,17 @@ samples = [
     legend_description="Data",
     custom_legend=Legend(0.62, 0.80, 0.82, 0.90, "pl", ""),
   ),
-  Sample(
-    name="ds_from_lbl",
-    file_path=f"{base_path}/ds_from_lbl/merged_{skim}_histograms.root",
-    type=SampleType.background,
-    cross_section=crossSections["lbl"] * get_scale_factor(do_photons, single_photon)[0] * 82,
-    initial_weight_sum=nGenEvents["lbl"],
-    fill_color=ROOT.kGreen + 2,
-    fill_alpha=1.0,
-    legend_description="DS (from LbL)",
-    custom_legend=Legend(0.62, 0.75, 0.82, 0.80, "FL"),
-  ),
+  # Sample(
+  #   name="ds_from_lbl",
+  #   file_path=f"{base_path}/ds_from_lbl/merged_{skim}_histograms.root",
+  #   type=SampleType.background,
+  #   cross_section=crossSections["lbl"] * get_scale_factor(do_photons, single_photon)[0] * 82,
+  #   initial_weight_sum=nGenEvents["lbl"],
+  #   fill_color=ROOT.kGreen + 2,
+  #   fill_alpha=1.0,
+  #   legend_description="DS (from LbL)",
+  #   custom_legend=Legend(0.62, 0.75, 0.82, 0.80, "FL"),
+  # ),
   Sample(
     name="lbl",
     file_path=f"{base_path}/lbl/merged_{skim}_histograms.root",
@@ -110,13 +110,25 @@ samples = [
     legend_description="#gamma#gamma#rightarrowe^{+}e^{-}#gamma",
     custom_legend=Legend(0.62, 0.55, 0.82, 0.60, "FL"),
   ),
+  Sample(
+    name="gamma_y",
+    file_path=f"{base_path}/gamma_y/merged_{skim}_histograms.root",
+    type=SampleType.background,
+    cross_section=scale * crossSections["gamma_y"] * get_scale_factor(do_photons, single_photon)[0],
+    initial_weight_sum=nGenEvents["gamma_y"],
+    fill_color=ROOT.kGreen,
+    fill_alpha=1.0,
+    marker_size=0.0,
+    legend_description="#gamma Pb#rightarrow#gamma Y",
+    custom_legend=Legend(0.62, 0.50, 0.82, 0.55, "FL"),
+  )
 ]
 
 
 if mono_electron or ele_plus_gamma:
   custom_stacks_order = ["qed_mg1gamma", "cep", "lbl", "ds_from_lbl", "qed_starlight", "qed_superchic", "data"]
 else:
-  custom_stacks_order = ["qed_mg1gamma", "cep", "lbl", "qed_starlight", "qed_superchic", "ds_from_lbl", "data"]
+  custom_stacks_order = ["qed_mg1gamma", "cep", "lbl", "qed_starlight", "qed_superchic", "ds_from_lbl", "gamma_y", "data"]
 
 alp_colors = (
   ROOT.kGray + 2,

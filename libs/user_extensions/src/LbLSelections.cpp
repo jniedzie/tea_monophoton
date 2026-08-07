@@ -198,6 +198,8 @@ bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager
 
     if (zdcEnergy < 10000) return false;  // 0nXn, X>3n (on the side opposite to the photon)
     // if (totalEnergyPlus < 10000 || totalEnergyMinus < 10000) return false;  // 0nXn, X≥3n
+  } else if (eventCuts.at("ZDC_cut") == 5) {
+    if (totalEnergyPlus > 400 || totalEnergyMinus > 400) return false;  // tight 0n0n
   } else {
     warn() << "Unknown ZDC cut type: " << eventCuts.at("ZDC_cut") << ". Will skip ZDC cuts." << endl;
   }

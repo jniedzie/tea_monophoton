@@ -18,6 +18,7 @@ processes = (
   "qed_starlight",
   "lbl",
   "cep",
+  "gamma_y",
   # "alps_5",
   # "alps_30",
   # "alps_90",
@@ -59,11 +60,11 @@ if do_trigger_selection:
   
 else:
   input_skim = f"initial_{trigger}"
-  # skim = f"skimmed_{trigger}_baseSelections"
+  skim = f"skimmed_{trigger}_baseSelections"
   
   # skim = f"initial_{trigger}"
   # skim = f"skimmed_{trigger}_monoElectronWithIDselections"
-  skim = f"skimmed_{trigger}_gammaPlusElectronWithIDselections"
+  # skim = f"skimmed_{trigger}_gammaPlusElectronWithIDselections"
   
 
 if facility == "naf":
@@ -79,7 +80,8 @@ elif facility == "vub":
   # input_base_path = "/store/group/phys_diffraction/lbyl_2018/ntuples_2026_muonSegments/HIForward/ntuples_muonSegments/260526_120651/0002"
   # input_base_path = "/store/group/phys_diffraction/lbyl_2018/ntuples_2026_muonSegments/HIForward/ntuples_muonSegments/260526_120651/0003"
   # input_base_path = "/store/group/phys_diffraction/lbyl_2018/ntuples_2026_muonSegments/HIForward/ntuples_muonSegments/260526_120651/0004"
-  input_base_path = "/store/group/phys_diffraction/lbyl_2018/ntuples_2026_muonSegments/HIForward/ntuples_muonSegments/260526_120651/0005"
+  # input_base_path = "/store/group/phys_diffraction/lbyl_2018/ntuples_2026_muonSegments/HIForward/ntuples_muonSegments/260526_120651/0005"
+  input_base_path = "/pnfs/iihe/cms/store/user/jniedzie/upc"
   output_base_path = "/pnfs/iihe/cms/store/user/jniedzie/upc"
   base_path = "/pnfs/iihe/cms/store/user/jniedzie/upc"
   redirector = "eoscms.cern.ch"
