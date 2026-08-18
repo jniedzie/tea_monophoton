@@ -284,15 +284,28 @@ mc_scale = 0.932  # for 400 GeV 0n threshold
 
 gamma_y_raw_cross_section = 3.923  # μb, -1.413 +2.387 (-36%, +61%)
 gamma_y_S_A = 1.005  # EPPS21 nuclear-PDF correction
-gamma_y_f_1n = 0.1361  # True \(1n0n+0n1n\) fraction after cascade, ABLA++, and additional EMD
+
+# fraction after cascade, ABLA++, and additional EMD
+gamma_y_f_0n = 0.1536  # True (0n0n) 
+gamma_y_f_1n = 0.1361  # True (1n0n+0n1n)
+gamma_y_f_ge2n = 0.7103  # True (≥2n)
 
 # Probability for the true one-neutron side to be reconstructed as zero-neutron (from our CMS BW measurement). 
-# gamma_y_P_1n_0n = 0.15  1600 GeV threshold, 1n only
-# gamma_y_P_1n_0n = 0.191  1600 GeV threshold, 1n + ≥2n
-# gamma_y_P_1n_0n = 0.006  # 400 GeV threshold, 1n only
-gamma_y_P_1n_0n = 0.014  # 400 GeV threshold, 1n + ≥2n
+# 1600 GeV threshold:
+# gamma_y_P_1n_0n = 0.15   # P(1n -> 0n)
+# gamma_y_P_1n_0n = 0.191  # P(≥1n -> 0n)
+
+# 400 GeV threshold:
+gamma_y_P_0n = 0.932
+gamma_y_P_1n_0n = 0.006  # P(1n -> 0n)
+gamma_y_P_ge2n_0n = 0.0075  # P(≥2n -> 0n)
+# gamma_y_P_1n_0n = 0.014  # P(≥1n -> 0n)
 
 gamma_y_arbitrary_scaling = 1.0  # arbitrary scaling factor for gamma_y, to be used for testing
+
+gamma_y_scale = gamma_y_raw_cross_section * gamma_y_S_A 
+gamma_y_scale *= (gamma_y_f_0n * gamma_y_P_0n + gamma_y_f_1n * gamma_y_P_1n_0n + gamma_y_f_ge2n * gamma_y_P_ge2n_0n) 
+gamma_y_scale *= gamma_y_arbitrary_scaling
 
 
 crossSections = {
@@ -303,7 +316,7 @@ crossSections = {
   "qed_mg1gamma": mc_scale * 13.45,  # μb
   "qed_mg2gamma": mc_scale * 0.1945,  # μb
   "cep": mc_scale * 5.8e-3,  # we scale it to data
-  "gamma_y":  gamma_y_raw_cross_section * gamma_y_S_A * gamma_y_f_1n * gamma_y_arbitrary_scaling,  # μb
+  "gamma_y":  gamma_y_scale,  # μb
   "alps_5": reference_alp_cross_section,
   "alps_30": reference_alp_cross_section,
   "alps_90": reference_alp_cross_section,
