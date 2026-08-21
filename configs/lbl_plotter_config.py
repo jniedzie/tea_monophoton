@@ -8,6 +8,7 @@ from mono_helpers import get_cep_scale
 from lbl_histogramer_config import histParams2D
 from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, total_uncertainty_qed, total_uncertainty_lbl_run2
 from lbl_paths import base_path, processes, skim
+from CmsLabelsManager import CmsLabel
 
 output_path = f"../plots/{skim.replace('skimmed_', '')}/"
 
@@ -119,7 +120,7 @@ samples = [
     fill_color=ROOT.kGreen,
     fill_alpha=1.0,
     marker_size=0.0,
-    legend_description="#gamma Pb#rightarrow#gamma Y",
+    legend_description="#gamma Pb#rightarrow #gamma N* + Pb-207/Tl^{81}",
     custom_legend=Legend(0.62, 0.50, 0.82, 0.55, "FL"),
   )
 ]
@@ -416,7 +417,7 @@ for prefix in [""]:
     if mono_gamma or ele_plus_gamma:
       histograms += (
         #           name                  title logx logy    norm_type                    rebin xmin   xmax  ymin    ymax,    xlabel                ylabel            suffix
-        Histogram(f"goodPhoton_{prefix}{prefixExtra}et", "", False, True, default_lumi, 2, 0, 40, 1e-2, 5e5, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
+        Histogram(f"goodPhoton_{prefix}{prefixExtra}et", "", False, True, default_lumi, 2, 0, 40, None, None, "E_{T}^{#gamma} (GeV)", y_label, "", lbl_error),
         
         Histogram(f"goodPhoton_{prefix}{prefixExtra}eta", "", False, True, default_lumi, 2, -3, 3, 1e-2, 5e5, "#eta^{#gamma}", y_label, "_log", lbl_error),
         Histogram(f"goodPhoton_{prefix}{prefixExtra}eta", "", False, False, default_lumi, 2, -3, 3, 0, 50, "#eta^{#gamma}", y_label, "", lbl_error),
@@ -487,12 +488,13 @@ show_ratio_plots = True
 ratio_limits = (0.0, 5.0)
 
 show_cms_labels = True
-extraText = "Preliminary"
+cms_label = CmsLabel.pas
+label_outside_axes = True
 
 beam_label = " PbPb @ 5.02 TeV"
 lumi_unit = "nb"
 # lumi_label_offset = -0.2
-lumi_label_offset = 0.1
+# lumi_label_offset = 0.1
 lumi_label_value = luminosity
 
 # output_formats = ["pdf", "C"]
