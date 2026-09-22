@@ -1,7 +1,8 @@
 from teaHelpers import get_facility
 
 from lbl_params import eventCuts, zdcCutNames, photonCuts
-import os, sys
+import os
+import sys
 from Logger import info
 
 facility = get_facility()
@@ -12,17 +13,18 @@ trigger = "singleEG5"
 # trigger = "noTrigger"
 
 processes = (
-  "collisionData",
-  "ds_from_lbl",
-  "qed_superchic",
-  "qed_starlight",
-  "lbl",
-  "cep",
-  "gamma_y",
+  # "collisionData",
+  # "ds_from_lbl",
+  # "qed_superchic",
+  # "qed_starlight",
+  # "lbl",
+  # "cep",
+  # "gamma_y",
+  "upsilon",
   # "alps_5",
   # "alps_30",
   # "alps_90",
-  
+
   # "qed_mg1gamma",
   # "emptyBX",
   # "zeroBias",
@@ -51,21 +53,21 @@ else:
 if do_trigger_selection:
   # input_skim = "initial_noTrigger"
   # skim = f"initial_{trigger}"
-  
+
   # input_skim = "initial_noTrigger_unmerged"
   # skim = f"initial_{trigger}_unmerged"
-  
+
   input_skim = "bad_names_noTrigger"
   skim = f"bad_names_{trigger}"
-  
+
 else:
   input_skim = f"initial_{trigger}"
   skim = f"skimmed_{trigger}_baseSelections"
-  
+
   # skim = f"initial_{trigger}"
   # skim = f"skimmed_{trigger}_monoElectronWithIDselections"
   # skim = f"skimmed_{trigger}_gammaPlusElectronWithIDselections"
-  
+
 
 if facility == "naf":
   input_base_path = "/data/dust/user/jniedzie/monophoton/"
@@ -87,4 +89,3 @@ elif facility == "vub":
   redirector = "eoscms.cern.ch"
 
 merged_histograms_path = output_base_path + "/{}/merged_{}_histograms.root"
-

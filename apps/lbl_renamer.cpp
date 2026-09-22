@@ -4,8 +4,8 @@
 
 using namespace std;
 
-map<string, vector<float>*> vectors;
-map<string, vector<int>*> vectorsInt;
+map<string, vector<float> *> vectors;
+map<string, vector<int> *> vectorsInt;
 map<string, int> sizes;
 map<string, uint> uints;
 map<string, ULong64_t> longs;
@@ -13,18 +13,18 @@ map<string, float[9999]> floats;
 map<string, int[9999]> ints;
 map<string, bool[9999]> bools;
 
-void SetupBranchesForMerging(TTree* tree, TTree* outputTree, map<string, vector<string>>& renameMap) {
-  TObjArray* branches = tree->GetListOfBranches();
+void SetupBranchesForMerging(TTree *tree, TTree *outputTree, map<string, vector<string>> &renameMap) {
+  TObjArray *branches = tree->GetListOfBranches();
   if (!branches) {
     fatal() << "No branches found in tree " << tree->GetName() << endl;
     exit(1);
   }
 
   for (int i = 0; i < branches->GetEntries(); ++i) {
-    auto branch = (TBranch*)branches->At(i);
+    auto branch = (TBranch *)branches->At(i);
     string branchName = branch->GetName();
 
-    if (renameMap.find(branchName) == renameMap.end()) continue;
+    if (renameMap.find(branchName) == renameMap.end()) { continue; }
 
     string newBranchName = renameMap[branchName][0];
 
@@ -66,19 +66,20 @@ void SetupBranchesForMerging(TTree* tree, TTree* outputTree, map<string, vector<
   }
 }
 
-void MergeTrees(vector<TTree*> inputTrees, TTree* outputTree, map<string, vector<string>>& renameMap, int maxEntries = -1) {
+void MergeTrees(vector<TTree *> inputTrees, TTree *outputTree, map<string, vector<string>> &renameMap,
+                int maxEntries = -1) {
   Long64_t nEntries = maxEntries > 0 ? maxEntries : inputTrees[0]->GetEntries();
 
-  for (auto tree : inputTrees) SetupBranchesForMerging(tree, outputTree, renameMap);
+  for (auto tree : inputTrees) { SetupBranchesForMerging(tree, outputTree, renameMap); }
 
   for (Long64_t i = 0; i < nEntries; ++i) {
-    if (i % 1000 == 0) info() << "Processing event " << i << " out of " << nEntries << endl;
-    for (auto tree : inputTrees) tree->GetEntry(i);
+    if (i % 1000 == 0) { info() << "Processing event " << i << " out of " << nEntries << endl; }
+    for (auto tree : inputTrees) { tree->GetEntry(i); }
     outputTree->Fill();
   }
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   vector<string> requiredArgs = {"config", "input_path", "output_trees_path"};
   vector<string> optionalArgs = {};
   auto args = make_unique<ArgsManager>(argc, argv, requiredArgs, optionalArgs);
@@ -87,11 +88,12 @@ int main(int argc, char** argv) {
   string inputPath = args->GetString("input_path").value();
   auto inputFile = TFile::Open(inputPath.c_str());
 
-  vector<TTree*> trees;
-  vector<string> treeNames = {"ggHiNtuplizer/EventTree", "rechitanalyzerpp/zdcrechit", "l1object/L1UpgradeFlatTree", "hltanalysis/HltTree"};
+  vector<TTree *> trees;
+  vector<string> treeNames = {"ggHiNtuplizer/EventTree", "rechitanalyzerpp/zdcrechit", "l1object/L1UpgradeFlatTree",
+                              "hltanalysis/HltTree"};
 
   for (auto treeName : treeNames) {
-    auto tree = (TTree*)inputFile->Get(treeName.c_str());
+    auto tree = (TTree *)inputFile->Get(treeName.c_str());
     if (!tree || tree->IsZombie()) {
       error() << "Tree " << treeName << " not found in file " << inputPath << ". It will be skipped" << endl;
       continue;
@@ -105,7 +107,7 @@ int main(int argc, char** argv) {
   auto outputTree = new TTree("Events", "Events");
 
   // Define the branch renaming map
-  auto& config = ConfigManager::GetInstance();
+  auto &config = ConfigManager::GetInstance();
   map<string, vector<string>> renameMap;
   config.GetMap("branchesNames", renameMap);
 

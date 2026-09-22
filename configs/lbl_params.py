@@ -1,76 +1,77 @@
 # event cuts
 eventCuts = {
-  "ZDC_cut": 5,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n, 4: target-nucleus-breaking, 5: tight 0n0n
-  "beamHaloFilter": 1,  # 0: none, 1: loose, 2: tight, 3: global tight 2016, 4: global super tight 2016
-  
-  "max_Ntracks": 0,
-  "max_Nmuons": 0,
-  "max_NstandaloneMuons": 0,
-  "max_Ntowers": 0,
-  "max_NmuonSegmentsCSC": 0,
-  
-  "min_Nelectrons": 0,
-  "max_Nelectrons": 0,
-  
-  "min_Nphotons": 1,
-  "max_Nphotons": 1,
+    "ZDC_cut": 5,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n, 4: target-nucleus-breaking, 5: tight 0n0n
+    # 0: none, 1: loose, 2: tight, 3: global tight 2016, 4: global super tight 2016
+    "beamHaloFilter": 1,
+
+    "max_Ntracks": 0,
+    "max_Nmuons": 0,
+    "max_NstandaloneMuons": 0,
+    "max_Ntowers": 0,
+    "max_NmuonSegmentsCSC": 0,
+
+    "min_Nelectrons": 0,
+    "max_Nelectrons": 0,
+
+    "min_Nphotons": 1,
+    "max_Nphotons": 1,
 }
 
 zdcCutNames = {
-  0: "None",
-  1: "LbLstyle",
-  2: "0n0n",
-  3: "Le1n1n",
-  4: "TargetNucleusBreaking",
+    0: "None",
+    1: "LbLstyle",
+    2: "0n0n",
+    3: "Le1n1n",
+    4: "TargetNucleusBreaking",
 }
 
 # good object definitions
 photonCuts = {
-  # Common cuts:
-  "max_SCEtaWidth_barrel": 0.0106,
-  "max_SCEtaWidth_endcap": 0.0272,
-  "max_SCPhiWidth_barrel": 999999,
-  "max_SCPhiWidth_endcap": 999999,
-  "min_sigmaIEtaIEta_barrel": 0,  # try 0.009
-  "max_sigmaIEtaIEta_barrel": 0.02,
-  "min_sigmaIEtaIEta_endcap": 0,  # try 0.009
-  "min_horizontalImbalance": -99999,
-  "min_verticalImbalance": -99999,
-  "max_horizontalImbalance": 99999,
-  "max_verticalImbalance": 99999,
+    # Common cuts:
+    "max_SCEtaWidth_barrel": 0.0106,
+    "max_SCEtaWidth_endcap": 0.0272,
+    "max_SCPhiWidth_barrel": 999999,
+    "max_SCPhiWidth_endcap": 999999,
+    "min_sigmaIEtaIEta_barrel": 0,  # try 0.009
+    "max_sigmaIEtaIEta_barrel": 0.02,
+    "min_sigmaIEtaIEta_endcap": 0,  # try 0.009
+    "min_horizontalImbalance": -99999,
+    "min_verticalImbalance": -99999,
+    "max_horizontalImbalance": 99999,
+    "max_verticalImbalance": 99999,
 
-  # LbL cuts:
-  "max_hOverE_barrel": 0.04596,
-  "max_hOverE_endcap": 0.0590,
-  # "max_swissCross": 0.95,
-  # "min_et": 2.0,
-  "min_SCEtaWidth": 0.0,
-  "min_SCPhiWidth": 0.0,
-  # "min_verticalOverCentral": 0.0,
-  # "min_horizontalOverCentral": 0.0,
-  "max_absEta": 2.2,
-  "min_seedTime": -3.0,
-  "max_seedTime": 3.0,
-  # "max_sigmaIEtaIEta_endcap": 0.06,
+    # LbL cuts:
+    "max_hOverE_barrel": 0.04596,
+    "max_hOverE_endcap": 0.0590,
+    # "max_swissCross": 0.95,
+    # "min_et": 2.0,
+    "min_SCEtaWidth": 0.0,
+    "min_SCPhiWidth": 0.0,
+    # "min_verticalOverCentral": 0.0,
+    # "min_horizontalOverCentral": 0.0,
+    "max_absEta": 2.2,
+    "min_seedTime": -3.0,
+    "max_seedTime": 3.0,
+    # "max_sigmaIEtaIEta_endcap": 0.06,
 
-  # Tightened cuts:
-  # "max_hOverE_barrel": 0.001,
-  # "max_hOverE_endcap": 0.001,
-  "max_swissCross": 0.87,
-  "min_et": 4.0,
-  # "min_SCEtaWidth": 0.001,
-  # "min_SCPhiWidth": 0.001,
-  "min_verticalOverCentral": 0.005,
-  "min_horizontalOverCentral": 0.005,
-  # "max_absEta": 1.2,
-  # "min_seedTime": -1.2,
-  # "max_seedTime": 0.8,
-  "max_sigmaIEtaIEta_endcap": 0.02,
-  # "max_SCPhiWidth_barrel": 0.01,
+    # Tightened cuts:
+    # "max_hOverE_barrel": 0.001,
+    # "max_hOverE_endcap": 0.001,
+    "max_swissCross": 0.87,
+    "min_et": 4.0,
+    # "min_SCEtaWidth": 0.001,
+    # "min_SCPhiWidth": 0.001,
+    "min_verticalOverCentral": 0.005,
+    "min_horizontalOverCentral": 0.005,
+    # "max_absEta": 1.2,
+    # "min_seedTime": -1.2,
+    # "max_seedTime": 0.8,
+    "max_sigmaIEtaIEta_endcap": 0.02,
+    # "max_SCPhiWidth_barrel": 0.01,
 
-  # loosened cuts:
-  # "min_seedTime": -999,
-  # "max_seedTime": 999,
+    # loosened cuts:
+    # "min_seedTime": -999,
+    # "max_seedTime": 999,
 }
 
 # good object definitions
@@ -102,159 +103,161 @@ photonCuts = {
 # }
 
 photonHotSpots = {
-  # eta_min, eta_max, phi_min, phi_max
-  # "hotspot_1": (-1.87, -1.83, 2.20, 2.27),
-  # "hotspot_2": (-1.62, -1.58, -2.78, -2.70),
-  # "hotspot_3": (-1.60, -1.58, 2.17, 2.21),
-  # "hotspot_4": (2.12, 2.14, 0.09, 0.13),
+    # eta_min, eta_max, phi_min, phi_max
+    # "hotspot_1": (-1.87, -1.83, 2.20, 2.27),
+    # "hotspot_2": (-1.62, -1.58, -2.78, -2.70),
+    # "hotspot_3": (-1.60, -1.58, 2.17, 2.21),
+    # "hotspot_4": (2.12, 2.14, 0.09, 0.13),
 }
 
 dataBlinding = {
-  # "max_et": 10.0,  # blind data with photon ET > X GeV
-  "max_et": 999999,  # blind data with photon ET > X GeV
+    # "max_et": 10.0,  # blind data with photon ET > X GeV
+    "max_et": 999999,  # blind data with photon ET > X GeV
 }
 
 electronCuts = {
-  # standard cuts:
-  # "min_pt": 2.0,
-  # "max_absEtaSC": 2.2,
-  # "max_nMissingHits": 1,
-  # "max_hOverE": 0.005,
-  # "max_deltaEtaAtVertex": 0.1,
+    # standard cuts:
+    # "min_pt": 2.0,
+    # "max_absEtaSC": 2.2,
+    # "max_nMissingHits": 1,
+    # "max_hOverE": 0.005,
+    # "max_deltaEtaAtVertex": 0.1,
 
-  # super-clean CHE cuts:
-  "min_pt": 0.0,
-  "max_absEtaSC": 999999,
-  "max_nMissingHits": 999999,
-  "max_hOverE": 999999,
-  "max_deltaEtaAtVertex": 999999,
+    # super-clean CHE cuts:
+    "min_pt": 0.0,
+    "max_absEtaSC": 999999,
+    "max_nMissingHits": 999999,
+    "max_hOverE": 999999,
+    "max_deltaEtaAtVertex": 999999,
 
-  # we don't apply electron isolation:
-  "max_PFChIso_barrel": 999999,
-  "max_PFPhoIso_barrel": 999999,
-  "max_PFNeuIso_barrel": 999999,
-  "max_PFChIso_endcap": 999999,
-  "max_PFPhoIso_endcap": 999999,
-  "max_PFNeuIso_endcap": 999999,
+    # we don't apply electron isolation:
+    "max_PFChIso_barrel": 999999,
+    "max_PFPhoIso_barrel": 999999,
+    "max_PFNeuIso_barrel": 999999,
+    "max_PFChIso_endcap": 999999,
+    "max_PFPhoIso_endcap": 999999,
+    "max_PFNeuIso_endcap": 999999,
 }
 
 trackCuts = {
-  # standard cuts
-  # "min_pt": 0.3,
-  # "max_absEta": 2.4,
-  # "min_nValidHits": 4,
+    # standard cuts
+    # "min_pt": 0.3,
+    # "max_absEta": 2.4,
+    # "min_nValidHits": 4,
 
-  # super-clean CHE cuts:
-  "min_pt": 0.0,
-  "max_absEta": 999999,
-  "min_nValidHits": 0,
+    # super-clean CHE cuts:
+    "min_pt": 0.0,
+    "max_absEta": 999999,
+    "min_nValidHits": 0,
 
-  # we don't apply these track selections:
-  "max_normalizedChi2": 999999,
-  "max_dxy": 999999,
-  "max_dz": 999999,
-  "max_dxyOverError": 999999,
-  "max_dzOverError": 999999,
+    # we don't apply these track selections:
+    "max_normalizedChi2": 999999,
+    "max_dxy": 999999,
+    "max_dz": 999999,
+    "max_dxyOverError": 999999,
+    "max_dzOverError": 999999,
 }
 
 muonCuts = {
-  # standard cuts
-  # "min_pt": 2.5,
-  # "max_absEta": 2.4,
+    # standard cuts
+    # "min_pt": 2.5,
+    # "max_absEta": 2.4,
 
-  # super-clean CHE cuts:
-  "min_pt": 0,
-  "max_absEta": 999999,
+    # super-clean CHE cuts:
+    "min_pt": 0,
+    "max_absEta": 999999,
 }
 
 standaloneMuonCuts = {
-  "min_pt": 0,
-  "max_absEta": 999999, 
+    "min_pt": 0,
+    "max_absEta": 999999,
 }
 
 # calorimeter cuts
 caloNoiseThresholds = {
-  "HFp": 6.0,
-  "HFm": 6.0,
+    "HFp": 6.0,
+    "HFm": 6.0,
 
-  # "HFp": 9.1, # + 0.8 - 1.3
-  # "HFm": 8.8, # + 0.7 - 1.0
-  "HB": 2.8,
-  "HE": 1.0,
-  "EB": 0.7,
-  "EE": 3.0,
+    # "HFp": 9.1, # + 0.8 - 1.3
+    # "HFm": 8.8, # + 0.7 - 1.0
+    "HB": 2.8,
+    "HE": 1.0,
+    "EB": 0.7,
+    "EE": 3.0,
 }
 
 caloNoiseVariables = {
-  "HFm": "energy",
-  "HFp": "energy",
-  "HB": "hadE",
-  "HE": "hadE",
-  "EB": "emE",
-  "EE": "emE",
+    "HFm": "energy",
+    "HFp": "energy",
+    "HB": "hadE",
+    "HE": "hadE",
+    "EB": "emE",
+    "EE": "emE",
 }
 
 # detector parameters
 deadEtas = {
-  "HFp": (29, 30),  # 2.853 -- 3.139
-  "HFm": (-29, -30),
+    "HFp": (29, 30),  # 2.853 -- 3.139
+    "HFm": (-29, -30),
 
-  # "HFp": (29,), # 2.853 -- 3.000
-  # "HFm": (-29,),
-  "HE": (-16, 16),  # 1.305 -- 1.392
+    # "HFp": (29,), # 2.853 -- 3.000
+    # "HFm": (-29,),
+    "HE": (-16, 16),  # 1.305 -- 1.392
 }
 
 caloEtaEdges = {
-  "maxEB": 1.479,
-  "minEE": 1.479,
-  "maxEE": 3.0,
-  "maxHB": 1.305,
-  "minHE": 1.305,
-  "maxHE": 3.0,
-  "minHF": 2.9,
-  "maxHF": 5.2,
+    "maxEB": 1.479,
+    "minEE": 1.479,
+    "maxEE": 3.0,
+    "maxHB": 1.305,
+    "minHE": 1.305,
+    "maxHE": 3.0,
+    "minHF": 2.9,
+    "maxHF": 5.2,
 }
 
 detectorParams = {
-  "crack_start": 1.4442,
-  "crack_end": 1.566,
-  # "crack_end": 1.65,  # to kill weird monophotons
-  "crackHadron_start": 1.305,
-  "crackHadron_end": 1.41,
-  "hem_etaStart": -3.0,
-  "hem_etaEnd": -1.39,
-  "hem_phiStart": -1.6,
-  "hem_phiEnd": -0.9,
-  "caloTower_etaMax": 2.4,
+    "crack_start": 1.4442,
+    "crack_end": 1.566,
+    # "crack_end": 1.65,  # to kill weird monophotons
+    "crackHadron_start": 1.305,
+    "crackHadron_end": 1.41,
+    "hem_etaStart": -3.0,
+    "hem_etaEnd": -1.39,
+    "hem_phiStart": -1.6,
+    "hem_phiEnd": -0.9,
+    "caloTower_etaMax": 2.4,
 }
 
 # matching between calorimeters and photons/electrons
 caloMatching = {
-  "maxDeltaEta_EB": 0.15,
-  "maxDeltaPhi_EB": 0.15,
-  "maxDeltaEta_EE": 0.15,
-  "maxDeltaPhi_EE": 0.15,
+    "maxDeltaEta_EB": 0.15,
+    "maxDeltaPhi_EB": 0.15,
+    "maxDeltaEta_EE": 0.15,
+    "maxDeltaPhi_EE": 0.15,
 }
 
 # matching between photons and electrons
 electronPhotonMatching = {
-  "maxDeltaEta": 0.5,  # ???
-  "maxDeltaPhi": 0.5,  # ???
+    "maxDeltaEta": 0.5,  # ???
+    "maxDeltaPhi": 0.5,  # ???
 }
 
 # matching between tracks and electrons
 electronTrackMatching = {
-  "maxDeltaEta": 0.15,
-  "maxDeltaPhi": 0.7,
+    "maxDeltaEta": 0.15,
+    "maxDeltaPhi": 0.7,
 }
 
 #  scaling parameters
+gamma_y_model = "GiBUU"  # simple, DPMJET, GiBUU, or lbl_run2 for the LbL measurement
 
 # luminosity = 1647.180726  # μb^-1, with ZDC
 # luminosity = 1647.2  # μb^-1, without ZDC
 # luminosity = 1583.902  # μb^-1, brilcalc for 2026 ntuples "ntuples_standaloneMuons_haloFlags"
-luminosity = 1609.391965935 * 1/1.0557  # μb^-1, brilcalc for 2026 ntuples "ntuples_muonSegments", 
-                                        # corrected for what we lost due to corrupted files
+# μb^-1, brilcalc for 2026 ntuples "ntuples_muonSegments",
+luminosity = 1609.391965935 * 1/1.0557
+# corrected for what we lost due to corrupted files
 
 luminosity_err = luminosity * 0.015  # 1.5% uncertainty
 
@@ -276,21 +279,26 @@ lbl_scaling = 1.05  # inclusive
 # lbl_scaling = 1.05 * (0.74 + 0.046 + 0.006)  # 0n0n + 0n1n + 1n0n + 1n1n
 
 
-
 # for tight 0n0n ZDC cut, we need to scale MC to account for lost events
 # mc_scale = 1.0  # for 1600 GeV 0n threshold
 mc_scale = 0.932  # for 400 GeV 0n threshold
 
 
 gamma_y_raw_cross_section = 3.923  # μb, -1.413 +2.387 (-36%, +61%)
-gamma_y_S_A = 1.005  # EPPS21 nuclear-PDF correction
+nuclear_pdf_factor = 1.005  # EPPS21 nuclear-PDF correction
+
+upsilon_raw_cross_section = 0.25  # μb
+
 
 # fraction after cascade, ABLA++, and additional EMD
-gamma_y_f_0n = 0.1536  # True (0n0n) 
-gamma_y_f_1n = 0.1361  # True (1n0n+0n1n)
-gamma_y_f_ge2n = 0.7103  # True (≥2n)
 
-# Probability for the true one-neutron side to be reconstructed as zero-neutron (from our CMS BW measurement). 
+gamma_y_f = {
+    "simple": {"0n": 0.0569, "1n": 0.0399, "ge2n": 0.9031},
+    "GiBUU": {"0n": 0.1207, "1n": 0.1258, "ge2n": 0.7535},
+    "DPMJET": {"0n": 0.0157, "1n": 0.0440, "ge2n": 0.9403},
+}
+
+# Probability for the true one-neutron side to be reconstructed as zero-neutron (from our CMS BW measurement).
 # 1600 GeV threshold:
 # gamma_y_P_1n_0n = 0.15   # P(1n -> 0n)
 # gamma_y_P_1n_0n = 0.191  # P(≥1n -> 0n)
@@ -301,63 +309,74 @@ gamma_y_P_1n_0n = 0.006  # P(1n -> 0n)
 gamma_y_P_ge2n_0n = 0.0075  # P(≥2n -> 0n)
 # gamma_y_P_1n_0n = 0.014  # P(≥1n -> 0n)
 
-gamma_y_arbitrary_scaling = 1.0  # arbitrary scaling factor for gamma_y, to be used for testing
 
-gamma_y_scale = gamma_y_raw_cross_section * gamma_y_S_A 
-gamma_y_scale *= (gamma_y_f_0n * gamma_y_P_0n + gamma_y_f_1n * gamma_y_P_1n_0n + gamma_y_f_ge2n * gamma_y_P_ge2n_0n) 
+probability_of_zero_neutrons = (
+    gamma_y_f[gamma_y_model]["0n"] * gamma_y_P_0n +
+    gamma_y_f[gamma_y_model]["1n"] * gamma_y_P_1n_0n +
+    gamma_y_f[gamma_y_model]["ge2n"] * gamma_y_P_ge2n_0n
+)
+
+# arbitrary scaling factor for gamma_y, to be used for testing
+gamma_y_arbitrary_scaling = 1.0
+
+gamma_y_scale = gamma_y_raw_cross_section * nuclear_pdf_factor
+gamma_y_scale *= probability_of_zero_neutrons
 gamma_y_scale *= gamma_y_arbitrary_scaling
 
 
+# print(f"Probability of zero neutrons: {probability_of_zero_neutrons:.4f}")
+# mc_scale = 1 + probability_of_zero_neutrons
+
 crossSections = {
-  "lbl": mc_scale * 2.59 * lbl_scaling,  # μb
-  "ds_from_lbl": mc_scale * 2.59 * lbl_scaling * 82,  # μb
-  "qed_superchic": mc_scale * 8827.220 * qed_scaling,  # μb
-  "qed_starlight": mc_scale * 7920.0 * qed_scaling,  # μb
-  "qed_mg1gamma": mc_scale * 13.45,  # μb
-  "qed_mg2gamma": mc_scale * 0.1945,  # μb
-  "cep": mc_scale * 5.8e-3,  # we scale it to data
-  "gamma_y":  gamma_y_scale,  # μb
-  "alps_5": reference_alp_cross_section,
-  "alps_30": reference_alp_cross_section,
-  "alps_90": reference_alp_cross_section,
+    "lbl": mc_scale * 2.59 * lbl_scaling,  # μb
+    "ds_from_lbl": mc_scale * 2.59 * lbl_scaling * 82,  # μb
+    "qed_superchic": mc_scale * 8827.220 * qed_scaling,  # μb
+    "qed_starlight": mc_scale * 7920.0 * qed_scaling,  # μb
+    "qed_mg1gamma": mc_scale * 13.45,  # μb
+    "qed_mg2gamma": mc_scale * 0.1945,  # μb
+    "cep": mc_scale * 5.8e-3,  # we scale it to data
+    "gamma_y":  gamma_y_scale,  # μb
+    "alps_5": reference_alp_cross_section,
+    "alps_30": reference_alp_cross_section,
+    "alps_90": reference_alp_cross_section,
 
-  # "alps_5": mc_scale * 2e2 * 1e-3,  # nb -> μb, limit cross section
-  # "alps_30": mc_scale * 5 * 1e-3,  # nb -> μb, limit cross section
-  # "alps_90": mc_scale * 5 * 1e-3,  # nb -> μb, limit cross section
+    # "alps_5": mc_scale * 2e2 * 1e-3,  # nb -> μb, limit cross section
+    # "alps_30": mc_scale * 5 * 1e-3,  # nb -> μb, limit cross section
+    # "alps_90": mc_scale * 5 * 1e-3,  # nb -> μb, limit cross section
 
-  # nb -> μb, g = 0.2 TeV-1
-  # "alps_14": 70.21369385210362 * 1e-3,
-  # "alps_30": 21.396925059153958 * 1e-3,
+    # nb -> μb, g = 0.2 TeV-1
+    # "alps_14": 70.21369385210362 * 1e-3,
+    # "alps_30": 21.396925059153958 * 1e-3,
 
-  # nb -> μb, g = 0.25 TeV-1
-  # "alps_14": 109.82586410834259 * 1e-3,
-  # "alps_30": 33.46834007669329 * 1e-3,
+    # nb -> μb, g = 0.25 TeV-1
+    # "alps_14": 109.82586410834259 * 1e-3,
+    # "alps_30": 33.46834007669329 * 1e-3,
 
-  # nb -> μb, g = 0.3 TeV-1
-  # "alps_14": 158.28699751455125 * 1e-3,
-  # "alps_30": 48.23638862799777 * 1e-3,
+    # nb -> μb, g = 0.3 TeV-1
+    # "alps_14": 158.28699751455125 * 1e-3,
+    # "alps_30": 48.23638862799777 * 1e-3,
 }
 
 # photon ET > 2.0 GeV, diphoton pt < 1 GeV
 scale_factors = {
-  "photonReco": 0.9758,
-  "photonID": 0.946,
-  "electronRecoID": 0.943,
-  "l1eg": 1.0089,
-  "l1hf": 0.8716,
-  "che": 0.9252,
-  "nee": 0.8487,  # old SF
-  # "nee": 0.953,  # new SF (higher HF thresholds)
+    "photonReco": 0.9758,
+    "photonID": 0.946,
+    "electronRecoID": 0.943,
+    "l1eg": 1.0089,
+    "l1hf": 0.8716,
+    "che": 0.9252,
+    "nee": 0.8487,  # old SF
+    # "nee": 0.953,  # new SF (higher HF thresholds)
 }
 
 scale_factor_errors = {
-  "photonReco": 0.0314,
-  "photonID": 0.049,
-  "electronRecoID": 0.0085,
-  "l1eg": 0.002,
-  "l1hf": 0.054,
-  "che": 0.0087,
-  "nee": 0.0085,
+    "photonReco": 0.0314,
+    "photonID": 0.049,
+    "electronRecoID": 0.0085,
+    "l1eg": 0.002,
+    "l1hf": 0.054,
+    "che": 0.0087,
+    "nee": 0.0085,
 }
 
 
@@ -379,7 +398,8 @@ def get_scale_factor(photon=True, single_photon=False):
     value *= scale_factors[variable]
 
     if squared in variable:
-      error += (scale_factor_errors[variable] / scale_factors[variable])**2
+      error += (scale_factor_errors[variable] /
+                scale_factors[variable])**2
       value *= scale_factors[variable]
 
   sf_error = value * error**(1 / 2)
@@ -388,19 +408,20 @@ def get_scale_factor(photon=True, single_photon=False):
 
 
 nGenEvents = {
-  "lbl": 466000,
-  "ds_from_lbl": 466000,
-  "cep": 668000,  # we scale it to data
-  "qed_superchic": 65693200,
-  "qed_starlight": 66750000,
-  "gamma_y": 99600,
-  
-  "alps_5": 754000,
-  "alps_30": 719000,
-  "alps_90": 449000,
-  
-  "qed_mg1gamma": 10228329,
-  "qed_mg2gamma": 6457150,
+    "lbl": 466000,
+    "ds_from_lbl": 466000,
+    "cep": 668000,  # we scale it to data
+    "qed_superchic": 65693200,
+    "qed_starlight": 66750000,
+    "gamma_y": 99600,
+    "upsilon": 500000,
+
+    "alps_5": 754000,
+    "alps_30": 719000,
+    "alps_90": 449000,
+
+    "qed_mg1gamma": 10228329,
+    "qed_mg2gamma": 6457150,
 }
 
 knownPids = [11, 22, 130, 211, 321, 2112, 2212, 1000822080]
@@ -408,9 +429,19 @@ knownPids = [11, 22, 130, 211, 321, 2112, 2212, 1000822080]
 uncertainty_on_zero = 1.84  # 95% CL
 # uncertainty_on_zero = 1.14  # 68% CL
 
+total_uncertanties = {
+    "lbl_run2": 0.23,
+    # 0.50 for raw cross section unc., 0.33 for the simple model uncertainty
+    "simple": (0.23**2 + 0.50**2 + 0.33**2)**0.5,
+    # 0.50 for raw cross section unc., 0.19 for the DPMJET model uncertainty
+    "DPMJET": (0.23**2 + 0.50**2 + 0.19**2)**0.5,
+    # 0.50 for raw cross section unc., 0.16 for the GiBBU model uncertainty
+    "GiBUU": (0.23**2 + 0.50**2 + 0.16**2)**0.5,
+}
+
 total_uncertainty_qed = 1.068
-# total_uncertainty_lbl_run2 = 1.23
-total_uncertainty_lbl_run2 = 1.55  # including gamma_y uncertainty
+
+total_uncertainty_lbl_run2 = 1+total_uncertanties[gamma_y_model]
 non_stat_uncertainty_lbl_run2 = 1.18
 stat_uncertainty_lbl_run2 = 1.15
 

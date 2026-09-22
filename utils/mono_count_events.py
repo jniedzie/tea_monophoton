@@ -43,7 +43,10 @@ from lbl_paths import base_path
 # directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/gamma_y/bad_names_noTrigger"  # 99'600
 # directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/gamma_y/bad_names_singleEG5"  # 52'047
 # directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/gamma_y/initial_singleEG5"  # (before merging) 52'047
-directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/gamma_y/initial_singleEG5"  # 52'047
+# directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/gamma_y/initial_singleEG5"  # 52'047
+
+# directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/upsilon/bad_names_noTrigger"  # 466888
+directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/upsilon/bad_names_singleEG5"  # 214
 
 
 pattern = "*.root"

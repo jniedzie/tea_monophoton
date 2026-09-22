@@ -1,5 +1,5 @@
 from lbl_params import *
-from lbl_paths import redirector, trigger, bad_names_input
+from lbl_paths import bad_names_input, redirector, trigger
 from Logger import fatal
 
 nEvents = -1
@@ -16,7 +16,7 @@ elif not bad_names_input and trigger == "doubleEG2":
 elif not bad_names_input and trigger == "UnpairedBptx":
   triggerSelection = ("UnpairedBptxMinus", "UnpairedBptxPlus",)
 else:
-  fatal(f"Wrong trigger selection - check mono_trigger_selector_config.py")
+  fatal("Wrong trigger selection - check mono_trigger_selector_config.py")
 
 eventCuts = {}
 
