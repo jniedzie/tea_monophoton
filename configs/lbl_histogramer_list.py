@@ -1,11 +1,11 @@
-from lbl_paths import processes, skim, base_path
+from lbl_paths import processes, skim, input_base_path, output_base_path
 
 samples = processes
 sample_path = ""
 
 # condor:
-input_directory = f"{base_path}/{sample_path}/{skim}/"
-output_hists_dir = f"{base_path}/{sample_path}/{skim}/histograms/"
+input_directory = f"{input_base_path}/{sample_path}/{skim}/"
+output_hists_dir = f"{output_base_path}/{sample_path}/{skim}/histograms/"
 
 
 # local:

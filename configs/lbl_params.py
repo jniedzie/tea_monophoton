@@ -3,16 +3,13 @@ eventCuts = {
     "ZDC_cut": 5,  # 0: none, 1: LbL-style, 2: 0n0n, 3: <=1n1n, 4: target-nucleus-breaking, 5: tight 0n0n
     # 0: none, 1: loose, 2: tight, 3: global tight 2016, 4: global super tight 2016
     "beamHaloFilter": 1,
-
     "max_Ntracks": 0,
     "max_Nmuons": 0,
     "max_NstandaloneMuons": 0,
     "max_Ntowers": 0,
     "max_NmuonSegmentsCSC": 0,
-
     "min_Nelectrons": 0,
     "max_Nelectrons": 0,
-
     "min_Nphotons": 1,
     "max_Nphotons": 1,
 }
@@ -39,7 +36,6 @@ photonCuts = {
     "min_verticalImbalance": -99999,
     "max_horizontalImbalance": 99999,
     "max_verticalImbalance": 99999,
-
     # LbL cuts:
     "max_hOverE_barrel": 0.04596,
     "max_hOverE_endcap": 0.0590,
@@ -53,7 +49,6 @@ photonCuts = {
     "min_seedTime": -3.0,
     "max_seedTime": 3.0,
     # "max_sigmaIEtaIEta_endcap": 0.06,
-
     # Tightened cuts:
     # "max_hOverE_barrel": 0.001,
     # "max_hOverE_endcap": 0.001,
@@ -68,7 +63,6 @@ photonCuts = {
     # "max_seedTime": 0.8,
     "max_sigmaIEtaIEta_endcap": 0.02,
     # "max_SCPhiWidth_barrel": 0.01,
-
     # loosened cuts:
     # "min_seedTime": -999,
     # "max_seedTime": 999,
@@ -122,14 +116,12 @@ electronCuts = {
     # "max_nMissingHits": 1,
     # "max_hOverE": 0.005,
     # "max_deltaEtaAtVertex": 0.1,
-
     # super-clean CHE cuts:
     "min_pt": 0.0,
     "max_absEtaSC": 999999,
     "max_nMissingHits": 999999,
     "max_hOverE": 999999,
     "max_deltaEtaAtVertex": 999999,
-
     # we don't apply electron isolation:
     "max_PFChIso_barrel": 999999,
     "max_PFPhoIso_barrel": 999999,
@@ -144,12 +136,10 @@ trackCuts = {
     # "min_pt": 0.3,
     # "max_absEta": 2.4,
     # "min_nValidHits": 4,
-
     # super-clean CHE cuts:
     "min_pt": 0.0,
     "max_absEta": 999999,
     "min_nValidHits": 0,
-
     # we don't apply these track selections:
     "max_normalizedChi2": 999999,
     "max_dxy": 999999,
@@ -162,7 +152,6 @@ muonCuts = {
     # standard cuts
     # "min_pt": 2.5,
     # "max_absEta": 2.4,
-
     # super-clean CHE cuts:
     "min_pt": 0,
     "max_absEta": 999999,
@@ -177,7 +166,6 @@ standaloneMuonCuts = {
 caloNoiseThresholds = {
     "HFp": 6.0,
     "HFm": 6.0,
-
     # "HFp": 9.1, # + 0.8 - 1.3
     # "HFm": 8.8, # + 0.7 - 1.0
     "HB": 2.8,
@@ -199,7 +187,6 @@ caloNoiseVariables = {
 deadEtas = {
     "HFp": (29, 30),  # 2.853 -- 3.139
     "HFm": (-29, -30),
-
     # "HFp": (29,), # 2.853 -- 3.000
     # "HFm": (-29,),
     "HE": (-16, 16),  # 1.305 -- 1.392
@@ -256,7 +243,7 @@ gamma_y_model = "GiBUU"  # simple, DPMJET, GiBUU, or lbl_run2 for the LbL measur
 # luminosity = 1647.2  # μb^-1, without ZDC
 # luminosity = 1583.902  # μb^-1, brilcalc for 2026 ntuples "ntuples_standaloneMuons_haloFlags"
 # μb^-1, brilcalc for 2026 ntuples "ntuples_muonSegments",
-luminosity = 1609.391965935 * 1/1.0557
+luminosity = 1609.391965935 * 1 / 1.0557
 # corrected for what we lost due to corrupted files
 
 luminosity_err = luminosity * 0.015  # 1.5% uncertainty
@@ -311,9 +298,9 @@ gamma_y_P_ge2n_0n = 0.0075  # P(≥2n -> 0n)
 
 
 probability_of_zero_neutrons = (
-    gamma_y_f[gamma_y_model]["0n"] * gamma_y_P_0n +
-    gamma_y_f[gamma_y_model]["1n"] * gamma_y_P_1n_0n +
-    gamma_y_f[gamma_y_model]["ge2n"] * gamma_y_P_ge2n_0n
+    gamma_y_f[gamma_y_model]["0n"] * gamma_y_P_0n
+    + gamma_y_f[gamma_y_model]["1n"] * gamma_y_P_1n_0n
+    + gamma_y_f[gamma_y_model]["ge2n"] * gamma_y_P_ge2n_0n
 )
 
 # arbitrary scaling factor for gamma_y, to be used for testing
@@ -335,23 +322,21 @@ crossSections = {
     "qed_mg1gamma": mc_scale * 13.45,  # μb
     "qed_mg2gamma": mc_scale * 0.1945,  # μb
     "cep": mc_scale * 5.8e-3,  # we scale it to data
-    "gamma_y":  gamma_y_scale,  # μb
+    "gamma_y": gamma_y_scale,  # μb
+    "tautau": mc_scale * 1.0606354 * 1e3 * 0.2549,  # mb -> μb * BR(pi0 pi nu)
+    "tautau_allDecays": mc_scale * 1.0606354 * 1e3,  # mb -> μb
     "alps_5": reference_alp_cross_section,
     "alps_30": reference_alp_cross_section,
     "alps_90": reference_alp_cross_section,
-
     # "alps_5": mc_scale * 2e2 * 1e-3,  # nb -> μb, limit cross section
     # "alps_30": mc_scale * 5 * 1e-3,  # nb -> μb, limit cross section
     # "alps_90": mc_scale * 5 * 1e-3,  # nb -> μb, limit cross section
-
     # nb -> μb, g = 0.2 TeV-1
     # "alps_14": 70.21369385210362 * 1e-3,
     # "alps_30": 21.396925059153958 * 1e-3,
-
     # nb -> μb, g = 0.25 TeV-1
     # "alps_14": 109.82586410834259 * 1e-3,
     # "alps_30": 33.46834007669329 * 1e-3,
-
     # nb -> μb, g = 0.3 TeV-1
     # "alps_14": 158.28699751455125 * 1e-3,
     # "alps_30": 48.23638862799777 * 1e-3,
@@ -381,30 +366,29 @@ scale_factor_errors = {
 
 
 def get_scale_factor(photon=True, single_photon=False):
-  value = 1
-  error = 0
+    value = 1
+    error = 0
 
-  to_skip = "electron" if photon else "photon"
-  squared = "photon" if photon else "electron"
+    to_skip = "electron" if photon else "photon"
+    squared = "photon" if photon else "electron"
 
-  if single_photon:
-    squared = "noSquaring"
+    if single_photon:
+        squared = "noSquaring"
 
-  for variable in scale_factors:
-    if to_skip in variable:
-      continue
+    for variable in scale_factors:
+        if to_skip in variable:
+            continue
 
-    error += (scale_factor_errors[variable] / scale_factors[variable])**2
-    value *= scale_factors[variable]
+        error += (scale_factor_errors[variable] / scale_factors[variable]) ** 2
+        value *= scale_factors[variable]
 
-    if squared in variable:
-      error += (scale_factor_errors[variable] /
-                scale_factors[variable])**2
-      value *= scale_factors[variable]
+        if squared in variable:
+            error += (scale_factor_errors[variable] / scale_factors[variable]) ** 2
+            value *= scale_factors[variable]
 
-  sf_error = value * error**(1 / 2)
+    sf_error = value * error ** (1 / 2)
 
-  return value, sf_error
+    return value, sf_error
 
 
 nGenEvents = {
@@ -415,16 +399,16 @@ nGenEvents = {
     "qed_starlight": 66750000,
     "gamma_y": 99600,
     "upsilon": 500000,
-
+    "tautau": 5407805,
+    "tautau_allDecays": 5407805,
     "alps_5": 754000,
     "alps_30": 719000,
     "alps_90": 449000,
-
     "qed_mg1gamma": 10228329,
     "qed_mg2gamma": 6457150,
 }
 
-knownPids = [11, 22, 130, 211, 321, 2112, 2212, 1000822080]
+knownPids = [11, 16, 22, 130, 211, 321, 2112, 2212, 1000822080]
 
 uncertainty_on_zero = 1.84  # 95% CL
 # uncertainty_on_zero = 1.14  # 68% CL
@@ -432,16 +416,16 @@ uncertainty_on_zero = 1.84  # 95% CL
 total_uncertanties = {
     "lbl_run2": 0.23,
     # 0.50 for raw cross section unc., 0.33 for the simple model uncertainty
-    "simple": (0.23**2 + 0.50**2 + 0.33**2)**0.5,
+    "simple": (0.23**2 + 0.50**2 + 0.33**2) ** 0.5,
     # 0.50 for raw cross section unc., 0.19 for the DPMJET model uncertainty
-    "DPMJET": (0.23**2 + 0.50**2 + 0.19**2)**0.5,
+    "DPMJET": (0.23**2 + 0.50**2 + 0.19**2) ** 0.5,
     # 0.50 for raw cross section unc., 0.16 for the GiBBU model uncertainty
-    "GiBUU": (0.23**2 + 0.50**2 + 0.16**2)**0.5,
+    "GiBUU": (0.23**2 + 0.50**2 + 0.16**2) ** 0.5,
 }
 
 total_uncertainty_qed = 1.068
 
-total_uncertainty_lbl_run2 = 1+total_uncertanties[gamma_y_model]
+total_uncertainty_lbl_run2 = 1 + total_uncertanties[gamma_y_model]
 non_stat_uncertainty_lbl_run2 = 1.18
 stat_uncertainty_lbl_run2 = 1.15
 

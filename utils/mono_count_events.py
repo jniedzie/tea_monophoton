@@ -2,8 +2,6 @@ import ROOT
 import glob
 import os
 
-from lbl_paths import base_path
-
 # directory = f"{base_path}/collisionData/initial"
 # pattern = "ntuple_*.root"
 
@@ -46,52 +44,59 @@ from lbl_paths import base_path
 # directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/gamma_y/initial_singleEG5"  # 52'047
 
 # directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/upsilon/bad_names_noTrigger"  # 466888
-directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/upsilon/bad_names_singleEG5"  # 214
+# directory = "/pnfs/iihe/cms/store/user/jniedzie/upc/upsilon/bad_names_singleEG5"  # 214
 
+# directory = "/eos/home-j/jniedzie/mono_cmssw/output_ntuples/tautau"  # 5407805
+# directory = "/eos/cms/store/cmst3/group/lightbylight/new_tea_samples/tautau/bad_names_singleEG5"  # 12644
+# directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/tautau/initial_singleEG5"  # 12644
+
+# directory = "/eos/home-j/jniedzie/mono_cmssw/output_ntuples/tautau_allDecays"  #  3630040
+# directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/tautau_allDecays/bad_names_singleEG5"  #  6115
+directory = "/eos/cms/store/cmst3/group/lightbylight/upc_monophoton/ntuples/tautau_allDecays/initial_singleEG5"  #  6115
 
 pattern = "*.root"
 
 
 def count_tree_entries(directory, pattern):
 
-  tree_name_1 = "ggHiNtuplizer/EventTree"
-  tree_name_2 = "Events"
+    tree_name_1 = "ggHiNtuplizer/EventTree"
+    tree_name_2 = "Events"
 
-  total_entries = 0
-  path_pattern = os.path.join(directory, pattern)
+    total_entries = 0
+    path_pattern = os.path.join(directory, pattern)
 
-  file_paths = glob.glob(path_pattern)
+    file_paths = glob.glob(path_pattern)
 
-  print(f"Found {len(file_paths)} files matching pattern {path_pattern}")
+    print(f"Found {len(file_paths)} files matching pattern {path_pattern}")
 
-  for filename in file_paths:
-    print(f"Processing file: {filename}")
-    try:
-      root_file = ROOT.TFile.Open(filename, "READ")
-    except OSError:
-      print(f"Error opening file {filename}")
-      continue
-    if root_file.IsOpen():
-      tree = root_file.Get(tree_name_1)
-      if tree:
-        total_entries += tree.GetEntries()
-      else:
-        tree = root_file.Get(tree_name_2)
-        if tree:
-          total_entries += tree.GetEntries()
+    for filename in file_paths:
+        print(f"Processing file: {filename}")
+        try:
+            root_file = ROOT.TFile.Open(filename, "READ")
+        except OSError:
+            print(f"Error opening file {filename}")
+            continue
+        if root_file.IsOpen():
+            tree = root_file.Get(tree_name_1)
+            if tree:
+                total_entries += tree.GetEntries()
+            else:
+                tree = root_file.Get(tree_name_2)
+                if tree:
+                    total_entries += tree.GetEntries()
+                else:
+                    print(f"Failed to open tree {tree_name_1} or {tree_name_2}")
+            root_file.Close()
         else:
-          print(f"Failed to open tree {tree_name_1} or {tree_name_2}")
-      root_file.Close()
-    else:
-      print(f"Failed to open {filename}")
+            print(f"Failed to open {filename}")
 
-  return total_entries
+    return total_entries
 
 
 def main():
-  total = count_tree_entries(directory, pattern)
-  print(f"Total entries in all trees: {total}")
+    total = count_tree_entries(directory, pattern)
+    print(f"Total entries in all trees: {total}")
 
 
 if __name__ == "__main__":
-  main()
+    main()
