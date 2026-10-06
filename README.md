@@ -34,6 +34,29 @@ The analysis involves a few steps:
 
 All apps and configs are in the `bin` directory - that's where you should run all commands.
 
+For Condor on lxplus, activate the environment and run the submitter from `bin`:
+
+```bash
+source tea/setup.sh
+cd bin
+python submitter.py --app mono_trigger_selector --config mono_trigger_selector_config.py --files_config mono_trigger_selector_list.py --condor --max_materialize 500 --save_logs
+```
+
+The submitter keeps each submission's wrapper and input-file list under
+`~/.local/state/tea/condor/` on AFS. `--save_logs` puts stdout, stderr, and the
+Condor event log in that submission directory, whose path is printed by the
+submitter. Set `TEA_CONDOR_DIR` to another AFS directory to change this location.
+Keep the submission directory until its jobs finish. The workers use the EOS
+analysis checkout and installed environment, so keep those available as well.
+
+CERN submissions use `condor_submit` with a stable AFS working directory and
+transfer the input-file list and any valid VOMS proxy into the worker's scratch
+directory. ROOT outputs go to the directories configured in the files config.
+This supports deferred job materialization without using `-spool`; an EOS
+working directory with `-spool` left factory jobs held before startup. See
+[CERN's EOS submission documentation](https://batchdocs.web.cern.ch/troubleshooting/eos.html).
+Add `--dry` to prepare and inspect a submission without queuing jobs.
+
 ### Renaming
 
 The first step is to format ntuples in a way that `tea` can easily understand, also getting rid of some ambiguity in the original HIForest branch names.
