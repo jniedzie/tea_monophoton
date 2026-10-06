@@ -1,19 +1,18 @@
 # Welcome to CMS UPC-monophoton analysis (Run 2)
 
-## Prerequisites
-
-The analysis framework is based on `tea` - please have a look at the general setup instructions here: [cern.ch/tea](https://jniedzie.github.io/tea/docs/build/).
-
-**You don't need to install `tea` though, it will come automatically when you install `tea_monophoton`!!**
-
-If you're going to run on lxplus, just remember to use lxplus9, install the `correctionlib`, and use `python3`.
-
 ## Installation
+
+Create a directory for your project:
+- on macOS: `mkdir tea_monophoton.nosync`
+- on other platforms: `mkdir tea_monophoton`
+
+For simplicity, the examples below will assume `tea_monophoton`, but adjust the commands if you're on macOS.
 
 To clone the repo, together with all submodules, run:
 
 ```bash
-git clone --recurse-submodules git@github.com:jniedzie/tea_monophoton.git
+cd tea_monophoton
+git clone --recurse-submodules git@github.com:jniedzie/tea_monophoton.git .
 ```
 
 Then, simply run `. tea/build.sh` from the `tea_monophoton` directory.
