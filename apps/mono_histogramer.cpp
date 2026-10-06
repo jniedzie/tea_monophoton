@@ -5,8 +5,8 @@
 #include "ExtensionsHelpers.hpp"
 #include "HistogramsFiller.hpp"
 #include "HistogramsHandler.hpp"
-#include "LbLHistogramsFiller.hpp"
-#include "LbLObjectsManager.hpp"
+#include "MonoHistogramsFiller.hpp"
+#include "MonoObjectsManager.hpp"
 #include "Logger.hpp"
 
 using namespace std;
@@ -22,8 +22,8 @@ int main(int argc, char** argv) {
   auto histogramsHandler = make_shared<HistogramsHandler>();
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader);
   auto histogramsFiller = make_unique<HistogramsFiller>(histogramsHandler);
-  auto lblHistogramsFiller = make_unique<LbLHistogramsFiller>(histogramsHandler);
-  auto lblObjectsManager = make_unique<LbLObjectsManager>();
+  auto monoHistogramsFiller = make_unique<MonoHistogramsFiller>(histogramsHandler);
+  auto monoObjectsManager = make_unique<MonoObjectsManager>();
 
   cutFlowManager->RegisterCut("initial");
 
@@ -31,19 +31,19 @@ int main(int argc, char** argv) {
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
 
-    lblObjectsManager->InsertGoodPhotonsCollection(event);
-    lblObjectsManager->InsertGoodElectronsCollection(event);
+    monoObjectsManager->InsertGoodPhotonsCollection(event);
+    monoObjectsManager->InsertGoodElectronsCollection(event);
 
     try {
-      lblObjectsManager->InsertGenPhotonsCollection(event);
-      lblObjectsManager->InsertGenElectronsCollection(event);
+      monoObjectsManager->InsertGenPhotonsCollection(event);
+      monoObjectsManager->InsertGenElectronsCollection(event);
     } catch (const Exception& e) {
       warn() << "No gen-level information found in event. Skipping gen-level histograms filling." << endl;
     }
 
     cutFlowManager->UpdateCutFlow("initial");
     histogramsFiller->FillDefaultVariables(event);
-    lblHistogramsFiller->Fill(event);
+    monoHistogramsFiller->Fill(event);
   }
 
   info() << "Finishing up" << endl;

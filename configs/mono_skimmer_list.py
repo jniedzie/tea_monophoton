@@ -1,4 +1,4 @@
-from lbl_paths import processes, skim, input_base_path, output_base_path, input_skim
+from mono_paths import processes, skim, input_base_path, output_base_path, input_skim
 
 samples = processes
 sample_path = ""

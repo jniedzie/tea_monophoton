@@ -1,18 +1,18 @@
-#include "LbLObjectsManager.hpp"
+#include "MonoObjectsManager.hpp"
 
 #include "ConfigManager.hpp"
 #include "Logger.hpp"
 
 using namespace std;
 
-LbLObjectsManager::LbLObjectsManager() {
+MonoObjectsManager::MonoObjectsManager() {
   auto& config = ConfigManager::GetInstance();
   config.GetMap("detectorParams", detectorParams);
   config.GetMap("caloEtaEdges", caloEtaEdges);
   config.GetVector("knownPids", knownPids);
 }
 
-bool LbLObjectsManager::IsGoodPhoton(const shared_ptr<Photon> photon, shared_ptr<map<string, int>> cutFlow) {
+bool MonoObjectsManager::IsGoodPhoton(const shared_ptr<Photon> photon, shared_ptr<map<string, int>> cutFlow) {
   if (cutFlow) cutFlow->at("00_initial")++;
   if (!photon->PassesConversionCuts()) return false;
   if (cutFlow) cutFlow->at("01_conversionCuts")++;
@@ -38,7 +38,7 @@ bool LbLObjectsManager::IsGoodPhoton(const shared_ptr<Photon> photon, shared_ptr
   return true;
 }
 
-bool LbLObjectsManager::IsGoodElectron(const shared_ptr<Electron> electron) {
+bool MonoObjectsManager::IsGoodElectron(const shared_ptr<Electron> electron) {
   if (!electron->PassesPtCuts()) return false;
   if (electron->IsInCrack()) return false;
   if (electron->IsEtaAboveLimit()) return false;
@@ -51,7 +51,7 @@ bool LbLObjectsManager::IsGoodElectron(const shared_ptr<Electron> electron) {
   return true;
 }
 
-bool LbLObjectsManager::IsGoodTrack(const shared_ptr<Track> track) {
+bool MonoObjectsManager::IsGoodTrack(const shared_ptr<Track> track) {
   if (!track->PassesPtCuts()) return false;
   if (track->IsEtaAboveLimit()) return false;
   if (!track->PassesValidHitsCuts()) return false;
@@ -61,14 +61,14 @@ bool LbLObjectsManager::IsGoodTrack(const shared_ptr<Track> track) {
   return true;
 }
 
-bool LbLObjectsManager::IsGoodMuon(const shared_ptr<Muon> muon) {
+bool MonoObjectsManager::IsGoodMuon(const shared_ptr<Muon> muon) {
   if (!muon->PassesPtCuts()) return false;
   if (muon->IsEtaAboveLimit()) return false;
 
   return true;
 }
 
-void LbLObjectsManager::InsertGoodPhotonsCollection(shared_ptr<Event> event, shared_ptr<map<string, int>> cutFlow) {
+void MonoObjectsManager::InsertGoodPhotonsCollection(shared_ptr<Event> event, shared_ptr<map<string, int>> cutFlow) {
   auto photons = event->GetCollection("photon");
   auto goodPhotons = make_shared<PhysicsObjects>();
 
@@ -81,7 +81,7 @@ void LbLObjectsManager::InsertGoodPhotonsCollection(shared_ptr<Event> event, sha
   event->AddCollection("goodPhoton", goodPhotons);
 }
 
-void LbLObjectsManager::InsertGoodElectronsCollection(shared_ptr<Event> event) {
+void MonoObjectsManager::InsertGoodElectronsCollection(shared_ptr<Event> event) {
   auto electrons = event->GetCollection("electron");
   auto goodElectrons = make_shared<PhysicsObjects>();
 
@@ -94,7 +94,7 @@ void LbLObjectsManager::InsertGoodElectronsCollection(shared_ptr<Event> event) {
   event->AddCollection("goodElectron", goodElectrons);
 }
 
-void LbLObjectsManager::InsertGoodTracksCollection(shared_ptr<Event> event) {
+void MonoObjectsManager::InsertGoodTracksCollection(shared_ptr<Event> event) {
   auto tracks = event->GetCollection("track");
   auto goodTracks = make_shared<PhysicsObjects>();
 
@@ -107,7 +107,7 @@ void LbLObjectsManager::InsertGoodTracksCollection(shared_ptr<Event> event) {
   event->AddCollection("goodTrack", goodTracks);
 }
 
-void LbLObjectsManager::InsertGoodMuonsCollection(shared_ptr<Event> event, bool isStandalone) {
+void MonoObjectsManager::InsertGoodMuonsCollection(shared_ptr<Event> event, bool isStandalone) {
   shared_ptr<PhysicsObjects> muons;
 
   try {
@@ -127,19 +127,19 @@ void LbLObjectsManager::InsertGoodMuonsCollection(shared_ptr<Event> event, bool 
   event->AddCollection(isStandalone ? "goodStandaloneMuon" : "goodMuon", goodMuons);
 }
 
-void LbLObjectsManager::InsertGenPhotonsCollection(shared_ptr<Event> event) {
+void MonoObjectsManager::InsertGenPhotonsCollection(shared_ptr<Event> event) {
   auto genParticles = event->GetCollection("genParticle");
   auto genPhotons = GetGenParticles(event, 22);
   event->AddCollection("genPhoton", genPhotons);
 }
 
-void LbLObjectsManager::InsertGenElectronsCollection(shared_ptr<Event> event) {
+void MonoObjectsManager::InsertGenElectronsCollection(shared_ptr<Event> event) {
   auto genParticles = event->GetCollection("genParticle");
   auto genPhotons = GetGenParticles(event, 11);
   event->AddCollection("genElectron", genPhotons);
 }
 
-void LbLObjectsManager::InsertGoodCaloTowerCollection(shared_ptr<Event> event) {
+void MonoObjectsManager::InsertGoodCaloTowerCollection(shared_ptr<Event> event) {
   auto towers = event->GetCollection("CaloTower");
   auto goodTowers = make_shared<PhysicsObjects>();
 
@@ -167,7 +167,7 @@ void LbLObjectsManager::InsertGoodCaloTowerCollection(shared_ptr<Event> event) {
   event->AddCollection("goodCaloTower", goodTowers);
 }
 
-shared_ptr<PhysicsObjects> LbLObjectsManager::GetGenParticles(const shared_ptr<Event> event, int pid) {
+shared_ptr<PhysicsObjects> MonoObjectsManager::GetGenParticles(const shared_ptr<Event> event, int pid) {
   auto mcParticles = event->GetCollection("genParticle");
   auto genParticles = make_shared<PhysicsObjects>();
 
@@ -178,7 +178,7 @@ shared_ptr<PhysicsObjects> LbLObjectsManager::GetGenParticles(const shared_ptr<E
   return genParticles;
 }
 
-int LbLObjectsManager::GetParticlePid(const shared_ptr<PhysicsObject> particle) {
+int MonoObjectsManager::GetParticlePid(const shared_ptr<PhysicsObject> particle) {
   int particlePid = particle->Get("pid");
   int convertedPid;
 

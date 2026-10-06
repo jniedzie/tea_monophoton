@@ -3,8 +3,8 @@ import ROOT
 
 from Logger import info, warn, error, fatal
 
-from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, uncertainty_on_zero
-from lbl_paths import processes, merged_histograms_path, qed_names
+from mono_params import luminosity, crossSections, nGenEvents, get_scale_factor, uncertainty_on_zero
+from mono_paths import processes, merged_histograms_path, qed_names
 
 input_files = {}
 input_histograms = {}

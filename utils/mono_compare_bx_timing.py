@@ -1,7 +1,7 @@
 import ROOT
 
 from Logger import info
-from lbl_paths import base_path, skim
+from mono_paths import base_path, skim
 
 file_path = f"{base_path}/collisionData/merged_{skim}_histograms.root"
 

@@ -1,6 +1,6 @@
 import ROOT
 import random
-from lbl_paths import base_path, merged_histograms_path
+from mono_paths import base_path, merged_histograms_path
 
 
 def get_gaus_formula(offset):

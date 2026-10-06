@@ -8,7 +8,7 @@
 #include "Profiler.hpp"
 #include "HistogramsFiller.hpp"
 #include "ArgsManager.hpp"
-#include "LbLObjectsManager.hpp"
+#include "MonoObjectsManager.hpp"
 
 using namespace std;
 
@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 
   auto eventReader = make_shared<EventReader>();
   auto histogramsHandler = make_shared<HistogramsHandler>();
-  auto objectsManager = make_shared<LbLObjectsManager>();
+  auto objectsManager = make_shared<MonoObjectsManager>();
   
   
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {

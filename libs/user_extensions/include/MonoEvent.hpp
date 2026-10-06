@@ -1,5 +1,5 @@
-#ifndef LbLEvent_hpp
-#define LbLEvent_hpp
+#ifndef MonoEvent_hpp
+#define MonoEvent_hpp
 
 #include <memory>
 #include <optional>
@@ -8,9 +8,9 @@
 #include "Event.hpp"
 #include "Helpers.hpp"
 
-class LbLEvent {
+class MonoEvent {
  public:
-  LbLEvent(std::shared_ptr<Event> event_) : event(event_) {}
+  MonoEvent(std::shared_ptr<Event> event_) : event(event_) {}
 
   auto Get(std::string branchName) { return event->Get(branchName); }
   
@@ -37,4 +37,4 @@ class LbLEvent {
   std::shared_ptr<Event> event;
 };
 
-#endif /* LbLEvent_hpp */
+#endif /* MonoEvent_hpp */

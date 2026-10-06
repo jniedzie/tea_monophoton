@@ -1,5 +1,5 @@
-from lbl_paths import base_path, trigger, merged_histograms_path
-from lbl_plotter_config import histograms
+from mono_paths import base_path, trigger, merged_histograms_path
+from mono_plotter_config import histograms
 from Logger import info, warn
 
 import ROOT

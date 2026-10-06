@@ -1,4 +1,4 @@
-from lbl_paths import processes, base_path
+from mono_paths import processes, base_path
 
 samples = processes
 sample_path = ""

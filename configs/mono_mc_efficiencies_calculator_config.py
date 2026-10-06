@@ -1,4 +1,4 @@
-from lbl_params import *
+from mono_params import *
 
 nEvents = -1
 printEveryNevents = 1000

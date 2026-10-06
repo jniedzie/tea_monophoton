@@ -7,8 +7,8 @@
 #include "ExtensionsHelpers.hpp"
 #include "HistogramsFiller.hpp"
 #include "HistogramsHandler.hpp"
-#include "LbLObjectsManager.hpp"
-#include "LbLSelections.hpp"
+#include "MonoObjectsManager.hpp"
+#include "MonoSelections.hpp"
 #include "Logger.hpp"
 #include "Profiler.hpp"
 #include "UserExtensionsHelpers.hpp"
@@ -26,8 +26,8 @@ int main(int argc, char** argv) {
   auto eventWriter = make_shared<EventWriter>(eventReader);
   auto eventProcessor = make_unique<EventProcessor>();
   auto cutFlowManager = make_shared<CutFlowManager>(eventReader, eventWriter);
-  auto lblSelections = make_unique<LbLSelections>();
-  auto lblObjectsManager = make_unique<LbLObjectsManager>();
+  auto monoSelections = make_unique<MonoSelections>();
+  auto monoObjectsManager = make_unique<MonoObjectsManager>();
 
   cutFlowManager->RegisterCut("initial");
   cutFlowManager->RegisterCut("beamHaloFilters");
@@ -65,18 +65,18 @@ int main(int argc, char** argv) {
 
   for (int iEvent = 0; iEvent < eventReader->GetNevents(); iEvent++) {
     auto event = eventReader->GetEvent(iEvent);
-    lblObjectsManager->InsertGoodPhotonsCollection(event, singlePhotonCutFlow);
-    lblObjectsManager->InsertGoodElectronsCollection(event);
-    lblObjectsManager->InsertGoodTracksCollection(event);
-    lblObjectsManager->InsertGoodMuonsCollection(event, false);
-    lblObjectsManager->InsertGoodMuonsCollection(event, true);
+    monoObjectsManager->InsertGoodPhotonsCollection(event, singlePhotonCutFlow);
+    monoObjectsManager->InsertGoodElectronsCollection(event);
+    monoObjectsManager->InsertGoodTracksCollection(event);
+    monoObjectsManager->InsertGoodMuonsCollection(event, false);
+    monoObjectsManager->InsertGoodMuonsCollection(event, true);
 
     cutFlowManager->UpdateCutFlow("initial");
-    if (!lblSelections->PassesBeamHaloFilters(event, cutFlowManager)) continue;
-    if (!lblSelections->PassesPhotonSelection(event, cutFlowManager)) continue;
-    if (!lblSelections->PassesChargedExclusivity(event, cutFlowManager)) continue;
-    if (!lblSelections->PassesNeutralExclusivity(event, cutFlowManager)) continue;
-    if (!lblSelections->PassesZDC(event, cutFlowManager)) continue;
+    if (!monoSelections->PassesBeamHaloFilters(event, cutFlowManager)) continue;
+    if (!monoSelections->PassesPhotonSelection(event, cutFlowManager)) continue;
+    if (!monoSelections->PassesChargedExclusivity(event, cutFlowManager)) continue;
+    if (!monoSelections->PassesNeutralExclusivity(event, cutFlowManager)) continue;
+    if (!monoSelections->PassesZDC(event, cutFlowManager)) continue;
 
     for (string eventsTreeName : eventsTreeNames) {
       eventWriter->AddCurrentEvent(eventsTreeName);

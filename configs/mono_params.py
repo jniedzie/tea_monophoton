@@ -261,9 +261,9 @@ qed_scaling = 0.5  # adding SC + SL
 # qed_scaling = 2.047  # no CEP
 
 # LbL may be scaled up due to NLO corrections
-lbl_scaling = 1.05  # inclusive
-# lbl_scaling = 1.05 * 0.74  # 0n0n
-# lbl_scaling = 1.05 * (0.74 + 0.046 + 0.006)  # 0n0n + 0n1n + 1n0n + 1n1n
+mono_scaling = 1.05  # inclusive
+# mono_scaling = 1.05 * 0.74  # 0n0n
+# mono_scaling = 1.05 * (0.74 + 0.046 + 0.006)  # 0n0n + 0n1n + 1n0n + 1n1n
 
 
 # for tight 0n0n ZDC cut, we need to scale MC to account for lost events
@@ -315,8 +315,8 @@ gamma_y_scale *= gamma_y_arbitrary_scaling
 # mc_scale = 1 + probability_of_zero_neutrons
 
 crossSections = {
-    "lbl": mc_scale * 2.59 * lbl_scaling,  # μb
-    "ds_from_lbl": mc_scale * 2.59 * lbl_scaling * 82,  # μb
+    "lbl": mc_scale * 2.59 * mono_scaling,  # μb
+    "ds_from_lbl": mc_scale * 2.59 * mono_scaling * 82,  # μb
     "qed_superchic": mc_scale * 8827.220 * qed_scaling,  # μb
     "qed_starlight": mc_scale * 7920.0 * qed_scaling,  # μb
     "qed_mg1gamma": mc_scale * 13.45,  # μb
@@ -425,11 +425,11 @@ total_uncertanties = {
 
 total_uncertainty_qed = 1.068
 
-total_uncertainty_lbl_run2 = 1 + total_uncertanties[gamma_y_model]
-non_stat_uncertainty_lbl_run2 = 1.18
-stat_uncertainty_lbl_run2 = 1.15
+total_uncertainty_mono_run2 = 1 + total_uncertanties[gamma_y_model]
+non_stat_uncertainty_mono_run2 = 1.18
+stat_uncertainty_mono_run2 = 1.15
 
-total_uncertainty_lbl_run1 = 1.24
+total_uncertainty_mono_run1 = 1.24
 alp_mc_uncertainty = 1.03
 
 total_diphoton_efficiency = 0.1352

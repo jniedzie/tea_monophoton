@@ -1,4 +1,4 @@
-#include "LbLHistogramsFiller.hpp"
+#include "MonoHistogramsFiller.hpp"
 
 #include "ConfigManager.hpp"
 #include "ExtensionsHelpers.hpp"
@@ -6,7 +6,7 @@
 
 using namespace std;
 
-LbLHistogramsFiller::LbLHistogramsFiller(shared_ptr<HistogramsHandler> histogramsHandler_) : histogramsHandler(histogramsHandler_) {
+MonoHistogramsFiller::MonoHistogramsFiller(shared_ptr<HistogramsHandler> histogramsHandler_) : histogramsHandler(histogramsHandler_) {
   // Create a config manager
   auto& config = ConfigManager::GetInstance();
 
@@ -38,16 +38,16 @@ LbLHistogramsFiller::LbLHistogramsFiller(shared_ptr<HistogramsHandler> histogram
   eventProcessor = make_unique<EventProcessor>();
 }
 
-LbLHistogramsFiller::~LbLHistogramsFiller() {}
+MonoHistogramsFiller::~MonoHistogramsFiller() {}
 
-void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event) {
+void MonoHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event) {
   auto photons = event->GetCollection("goodPhoton");
   auto photon = asPhoton(photons->at(0));
 
-  if (asLbLEvent(event)->IsData() && photon->GetEt() > dataBlinding["max_et"]) return;
+  if (asMonoEvent(event)->IsData() && photon->GetEt() > dataBlinding["max_et"]) return;
 
-  auto lblEvent = asLbLEvent(event);
-  auto hasCollisionInPreviousBXs = lblEvent->HasCollisionInPreviousBXs(previousBxMaxDistance);
+  auto monoEvent = asMonoEvent(event);
+  auto hasCollisionInPreviousBXs = monoEvent->HasCollisionInPreviousBXs(previousBxMaxDistance);
   auto bxPrefix = GetBxPrefix(hasCollisionInPreviousBXs);
 
   if (!hasCollisionInPreviousBXs.has_value()) {
@@ -91,11 +91,11 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
   }
 }
 
-void LbLHistogramsFiller::FillMonoElectronHistograms(const shared_ptr<Event> event) {
+void MonoHistogramsFiller::FillMonoElectronHistograms(const shared_ptr<Event> event) {
   auto electrons = event->GetCollection("goodElectron");
   auto electron = asElectron(electrons->at(0));
 
-  auto lblEvent = asLbLEvent(event);
+  auto monoEvent = asMonoEvent(event);
 
   string detectorPrefix = fabs(electron->GetEta()) > 1.2 ? "EndCap_" : "Barrel_";
 
@@ -108,14 +108,14 @@ void LbLHistogramsFiller::FillMonoElectronHistograms(const shared_ptr<Event> eve
   }
 }
 
-void LbLHistogramsFiller::FillPhotonPlusElectronHistograms(const shared_ptr<Event> event) {
+void MonoHistogramsFiller::FillPhotonPlusElectronHistograms(const shared_ptr<Event> event) {
   auto electrons = event->GetCollection("goodElectron");
   auto electron = asElectron(electrons->at(0));
 
   auto photons = event->GetCollection("goodPhoton");
   auto photon = asPhoton(photons->at(0));
 
-  auto lblEvent = asLbLEvent(event);
+  auto monoEvent = asMonoEvent(event);
 
   string detectorPrefix = fabs(electron->GetEta()) > 1.2 ? "EndCap_" : "Barrel_";
 
@@ -123,7 +123,7 @@ void LbLHistogramsFiller::FillPhotonPlusElectronHistograms(const shared_ptr<Even
   FillPhotonPlusElectronHistograms(event, photon, electron, detectorPrefix);
 }
 
-void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event, const shared_ptr<Photon> photon, string prefix) {
+void MonoHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event, const shared_ptr<Photon> photon, string prefix) {
   histogramsHandler->Fill("goodPhoton_" + prefix + "et", photon->GetEt());
   histogramsHandler->Fill("goodPhoton_" + prefix + "logEt", TMath::Log10(photon->GetEt()));
   histogramsHandler->Fill("goodPhoton_" + prefix + "seedTime", photon->GetSeedTime());
@@ -155,7 +155,7 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms(const shared_ptr<Event> event
   }
 }
 
-void LbLHistogramsFiller::FillMonoElectronHistograms(const shared_ptr<Event> event, const shared_ptr<Electron> electron, string prefix) {
+void MonoHistogramsFiller::FillMonoElectronHistograms(const shared_ptr<Event> event, const shared_ptr<Electron> electron, string prefix) {
   vector<string> defaultBranches = {
       "pt",
       "eta",
@@ -167,7 +167,7 @@ void LbLHistogramsFiller::FillMonoElectronHistograms(const shared_ptr<Event> eve
   }
 }
 
-void LbLHistogramsFiller::FillPhotonPlusElectronHistograms(const shared_ptr<Event> event, const shared_ptr<Photon> photon,
+void MonoHistogramsFiller::FillPhotonPlusElectronHistograms(const shared_ptr<Event> event, const shared_ptr<Photon> photon,
                                                            const shared_ptr<Electron> electron, string prefix) {
   auto photonVec = photon->GetFourMomentum();
   auto electronVec = electron->GetFourMomentum();
@@ -184,7 +184,7 @@ void LbLHistogramsFiller::FillPhotonPlusElectronHistograms(const shared_ptr<Even
   histogramsHandler->Fill("photonElectron_" + prefix + "MET", met);
 }
 
-void LbLHistogramsFiller::FillMonoPhotonHistograms2D(const shared_ptr<Event> event, const shared_ptr<Photon> photon, string prefix) {
+void MonoHistogramsFiller::FillMonoPhotonHistograms2D(const shared_ptr<Event> event, const shared_ptr<Photon> photon, string prefix) {
   histogramsHandler->Fill("goodPhoton_" + prefix + "absEta_vs_et", fabs(photon->GetEta()), photon->GetEt());
   histogramsHandler->Fill("goodPhoton_" + prefix + "eta_vs_et", photon->GetEta(), photon->GetEt());
   histogramsHandler->Fill("goodPhoton_" + prefix + "eta_vs_phi", photon->GetEta(), photon->GetPhi());
@@ -222,16 +222,16 @@ void LbLHistogramsFiller::FillMonoPhotonHistograms2D(const shared_ptr<Event> eve
   histogramsHandler->Fill("goodPhoton_" + prefix + "swissCross_vs_seedTime", photon->GetSwissCross(), photon->GetSeedTime());
 }
 
-void LbLHistogramsFiller::FillMonoElectronHistograms2D(const shared_ptr<Event> event, const shared_ptr<Electron> electron, string prefix) {
+void MonoHistogramsFiller::FillMonoElectronHistograms2D(const shared_ptr<Event> event, const shared_ptr<Electron> electron, string prefix) {
   histogramsHandler->Fill("goodElectron_" + prefix + "eta_vs_phi", electron->GetEta(), electron->GetPhi());
 }
 
-void LbLHistogramsFiller::FillEGammaHistograms(const shared_ptr<Event> event) {
+void MonoHistogramsFiller::FillEGammaHistograms(const shared_ptr<Event> event) {
   auto eGammaObjects = event->GetCollection("egamma");
   auto photons = event->GetCollection("goodPhoton");
   auto photon = asPhoton(photons->at(0));
   float et = photon->Get("et");
-  if (asLbLEvent(event)->IsData() && et > dataBlinding["max_et"]) return;
+  if (asMonoEvent(event)->IsData() && et > dataBlinding["max_et"]) return;
 
   shared_ptr<PhysicsObject> closestEgamma = nullptr;
   float minDeltaR = 9999;
@@ -272,7 +272,7 @@ void LbLHistogramsFiller::FillEGammaHistograms(const shared_ptr<Event> event) {
   histogramsHandler->Fill("egamma_et_vs_goodPhoton_et", closestEgamma->Get("et"), et);
 }
 
-void LbLHistogramsFiller::SaveHighEtPhotonsInfo(const shared_ptr<Event> event, float minEt, bool saveTextFile = false) {
+void MonoHistogramsFiller::SaveHighEtPhotonsInfo(const shared_ptr<Event> event, float minEt, bool saveTextFile = false) {
   auto photons = event->GetCollection("goodPhoton");
   auto photon = asPhoton(photons->at(0));
 
@@ -284,7 +284,7 @@ void LbLHistogramsFiller::SaveHighEtPhotonsInfo(const shared_ptr<Event> event, f
   // replace "." with "p" in minEtStr, e.g. "50.0" -> "50p0"
   minEtStr.replace(minEtStr.find("."), 1, "p");
 
-  auto bxPrefix = GetBxPrefix(asLbLEvent(event)->HasCollisionInPreviousBXs(previousBxMaxDistance));
+  auto bxPrefix = GetBxPrefix(asMonoEvent(event)->HasCollisionInPreviousBXs(previousBxMaxDistance));
   string detectorPrefix = fabs(photon->GetEta()) > 1.2 ? "EndCap_" : "Barrel_";
 
   histogramsHandler->Fill("goodPhoton_seedTime_gt" + minEtStr + "GeV", photon->GetSeedTime());
@@ -485,7 +485,7 @@ void LbLHistogramsFiller::SaveHighEtPhotonsInfo(const shared_ptr<Event> event, f
   }
 }
 
-void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) {
+void MonoHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) {
   auto photons = event->GetCollection("genPhoton");
 
   for (auto physObject : *photons) {
@@ -569,7 +569,7 @@ void LbLHistogramsFiller::FillGenLevelHistograms(const shared_ptr<Event> event) 
 
 }
 
-void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event) {
+void MonoHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event) {
   try {
     auto zdcEnergies = event->GetCollection("ZDC");
 
@@ -594,12 +594,12 @@ void LbLHistogramsFiller::FillEventLevelHistograms(const shared_ptr<Event> event
   }
 }
 
-string LbLHistogramsFiller::GetBxPrefix(const optional<bool>& hasCollisionInPreviousBXs) {
+string MonoHistogramsFiller::GetBxPrefix(const optional<bool>& hasCollisionInPreviousBXs) {
   if (!hasCollisionInPreviousBXs.has_value()) return "";
   return *hasCollisionInPreviousBXs ? "afterCollisionBX_" : "withoutCollisionBX_";
 }
 
-void LbLHistogramsFiller::Fill(const shared_ptr<Event> event) {
+void MonoHistogramsFiller::Fill(const shared_ptr<Event> event) {
   try {
     FillGenLevelHistograms(event);
   } catch (const Exception& e) {

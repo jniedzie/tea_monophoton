@@ -5,10 +5,10 @@
 #include "Helpers.hpp"
 #include "UserExtensionsHelpers.hpp"
 
-class LbLObjectsManager {
+class MonoObjectsManager {
  public:
-  LbLObjectsManager();
-  ~LbLObjectsManager() = default;
+  MonoObjectsManager();
+  ~MonoObjectsManager() = default;
 
   void InsertGoodPhotonsCollection(std::shared_ptr<Event> event, std::shared_ptr<std::map<std::string, int>> cutFlow = nullptr);
   void InsertGoodElectronsCollection(std::shared_ptr<Event> event);

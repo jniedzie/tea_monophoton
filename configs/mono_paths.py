@@ -1,6 +1,6 @@
 from teaHelpers import get_facility
 
-from lbl_params import eventCuts, zdcCutNames, photonCuts
+from mono_params import eventCuts, zdcCutNames, photonCuts
 import os
 import sys
 from Logger import info
@@ -98,4 +98,6 @@ elif facility == "vub":
     base_path = "/pnfs/iihe/cms/store/user/jniedzie/upc"
     redirector = "eoscms.cern.ch"
 
+# Utilities use this alias on every supported facility.
+base_path = input_base_path
 merged_histograms_path = output_base_path + "/{}/merged_{}_histograms.root"

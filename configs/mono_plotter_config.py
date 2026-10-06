@@ -5,17 +5,17 @@ from Histogram import Histogram, Histogram2D
 from HistogramNormalizer import NormalizationType
 from mono_helpers import get_cep_scale
 
-from lbl_histogramer_config import histParams2D
-from lbl_params import (
+from mono_histogramer_config import histParams2D
+from mono_params import (
     luminosity,
     crossSections,
     nGenEvents,
     get_scale_factor,
     total_uncertainty_qed,
-    total_uncertainty_lbl_run2,
+    total_uncertainty_mono_run2,
     gamma_y_model,
 )
-from lbl_paths import input_base_path, processes, skim
+from mono_paths import input_base_path, processes, skim
 from CmsLabelsManager import CmsLabel
 
 base_path = input_base_path
@@ -31,9 +31,9 @@ do_alps = True
 
 single_photon = True
 
-lbl_error = total_uncertainty_lbl_run2 - 1
+mono_error = total_uncertainty_mono_run2 - 1
 
-print(f"\n\nLbL error: {lbl_error:.3f} ({total_uncertainty_lbl_run2:.3f})")
+print(f"\n\nMono error: {mono_error:.3f} ({total_uncertainty_mono_run2:.3f})")
 
 qed_error = total_uncertainty_qed - 1
 
@@ -569,14 +569,14 @@ for prefix in [""]:
         if mono_electron or ele_plus_gamma:
             # fmt: off
             histograms += (
-          Histogram(f"goodElectron_{prefix}{prefixExtra}pt" , "", False, True, default_lumi, 2,  0, 25, 1e-2, 5e2, "p_{T}^{e} (GeV)", y_label, ""    , lbl_error),
+          Histogram(f"goodElectron_{prefix}{prefixExtra}pt" , "", False, True, default_lumi, 2,  0, 25, 1e-2, 5e2, "p_{T}^{e} (GeV)", y_label, ""    , mono_error),
 
-          Histogram(f"goodElectron_{prefix}{prefixExtra}eta", "", False, True, default_lumi, 2, -3,  3, 1e-2, 5e5, "#eta^{e}"       , y_label, "_log", lbl_error),
-          # Histogram(f"goodElectron_{prefix}{prefixExtra}eta"  ""  False  False  default_lumi  10  -3  3  0     50   "#eta^{e}"  y_label  ""      lbl_error)
-          Histogram(f"goodElectron_{prefix}{prefixExtra}eta"          , "", False, False, default_lumi,  1, -3, 3,    0,  50, "#eta^{e}", y_label, ""    , lbl_error),
+          Histogram(f"goodElectron_{prefix}{prefixExtra}eta", "", False, True, default_lumi, 2, -3,  3, 1e-2, 5e5, "#eta^{e}"       , y_label, "_log", mono_error),
+          # Histogram(f"goodElectron_{prefix}{prefixExtra}eta"  ""  False  False  default_lumi  10  -3  3  0     50   "#eta^{e}"  y_label  ""      mono_error)
+          Histogram(f"goodElectron_{prefix}{prefixExtra}eta"          , "", False, False, default_lumi,  1, -3, 3,    0,  50, "#eta^{e}", y_label, ""    , mono_error),
 
-          Histogram(f"goodElectron_{prefix}{prefixExtra}phi"          , "", False, True , default_lumi,  4, -4, 4, 1e-4, 5e5, "#phi^{e}", y_label, "_log", lbl_error),
-          Histogram(f"goodElectron_{prefix}{prefixExtra}phi"          , "", False, False, default_lumi,  4, -4, 4, 1e-2,  50, "#phi^{e}", y_label, ""    , lbl_error),
+          Histogram(f"goodElectron_{prefix}{prefixExtra}phi"          , "", False, True , default_lumi,  4, -4, 4, 1e-4, 5e5, "#phi^{e}", y_label, "_log", mono_error),
+          Histogram(f"goodElectron_{prefix}{prefixExtra}phi"          , "", False, False, default_lumi,  4, -4, 4, 1e-2,  50, "#phi^{e}", y_label, ""    , mono_error),
       )
             # fmt: on
         if mono_gamma or ele_plus_gamma:
@@ -596,7 +596,7 @@ for prefix in [""]:
                     "E_{T}^{#gamma} (GeV)",
                     y_label,
                     "",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}eta",
@@ -612,7 +612,7 @@ for prefix in [""]:
                     "#eta^{#gamma}",
                     y_label,
                     "_log",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}eta",
@@ -628,7 +628,7 @@ for prefix in [""]:
                     "#eta^{#gamma}",
                     y_label,
                     "",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}phi",
@@ -644,7 +644,7 @@ for prefix in [""]:
                     "#phi^{#gamma}",
                     y_label,
                     "_log",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}phi",
@@ -660,7 +660,7 @@ for prefix in [""]:
                     "#phi^{#gamma}",
                     y_label,
                     "",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}seedTime",
@@ -676,7 +676,7 @@ for prefix in [""]:
                     "Photon seed time (ns)",
                     y_label,
                     "",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}hOverE",
@@ -692,7 +692,7 @@ for prefix in [""]:
                     "H/E",
                     y_label,
                     "",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}swissCross",
@@ -708,7 +708,7 @@ for prefix in [""]:
                     "Swiss cross",
                     y_label,
                     "",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}SCEtaWidth",
@@ -724,7 +724,7 @@ for prefix in [""]:
                     "#eta^{SC} width",
                     y_label,
                     "_log",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}SCEtaWidth",
@@ -740,7 +740,7 @@ for prefix in [""]:
                     "#eta^{SC} width",
                     y_label,
                     "",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}SCPhiWidth",
@@ -756,7 +756,7 @@ for prefix in [""]:
                     "#phi^{SC} width",
                     y_label,
                     "",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}verticalOverCentral",
@@ -772,7 +772,7 @@ for prefix in [""]:
                     "E_{right+left}/(2*E_{max})",
                     y_label,
                     "",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}verticalImbalance",
@@ -788,7 +788,7 @@ for prefix in [""]:
                     "E_{top-bottom}/E_{top+bottom}",
                     y_label,
                     "",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}horizontalOverCentral",
@@ -804,7 +804,7 @@ for prefix in [""]:
                     "E_{top+bottom}/(2*E_{max})",
                     y_label,
                     "",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}horizontalImbalance",
@@ -820,7 +820,7 @@ for prefix in [""]:
                     "E_{left-right}/E_{left+right}",
                     y_label,
                     "",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}sigmaEta2012",
@@ -836,7 +836,7 @@ for prefix in [""]:
                     "#sigma_{#eta, 2012}",
                     y_label,
                     "",
-                    lbl_error,
+                    mono_error,
                 ),
                 Histogram(
                     f"goodPhoton_{prefix}{prefixExtra}sigmaIEtaIEta2012",
@@ -852,7 +852,7 @@ for prefix in [""]:
                     "#sigma_{i#eta i#eta, 2012}",
                     y_label,
                     "",
-                    lbl_error,
+                    mono_error,
                 ),
             )
             if ele_plus_gamma:
@@ -871,7 +871,7 @@ for prefix in [""]:
                         "m_{e#gamma} (GeV)",
                         y_label,
                         "",
-                        lbl_error,
+                        mono_error,
                     ),
                     Histogram(
                         f"photonElectron_{prefix}{prefixExtra}MET",
@@ -887,7 +887,7 @@ for prefix in [""]:
                         "E_{T}^{miss} (GeV)",
                         y_label,
                         "",
-                        lbl_error,
+                        mono_error,
                     ),
                 )
 
@@ -907,7 +907,7 @@ if mono_electron or ele_plus_gamma:
             "p_{T}^{e} (GeV)",
             y_label,
             "",
-            lbl_error,
+            mono_error,
         ),
         Histogram(
             f"genElectron_eta",
@@ -923,7 +923,7 @@ if mono_electron or ele_plus_gamma:
             "#eta^{e}",
             y_label,
             "_log",
-            lbl_error,
+            mono_error,
         ),
         Histogram(
             f"genElectron_eta",
@@ -939,7 +939,7 @@ if mono_electron or ele_plus_gamma:
             "#eta^{e}",
             y_label,
             "",
-            lbl_error,
+            mono_error,
         ),
         Histogram(
             f"genElectron_phi",
@@ -955,7 +955,7 @@ if mono_electron or ele_plus_gamma:
             "#phi^{e}",
             y_label,
             "_log",
-            lbl_error,
+            mono_error,
         ),
         Histogram(
             f"genElectron_phi",
@@ -971,7 +971,7 @@ if mono_electron or ele_plus_gamma:
             "#phi^{e}",
             y_label,
             "",
-            lbl_error,
+            mono_error,
         ),
     )
 

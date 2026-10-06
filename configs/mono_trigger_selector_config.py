@@ -1,5 +1,5 @@
-from lbl_params import *
-from lbl_paths import bad_names_input, redirector, trigger
+from mono_params import *
+from mono_paths import bad_names_input, redirector, trigger
 from Logger import fatal
 
 nEvents = -1

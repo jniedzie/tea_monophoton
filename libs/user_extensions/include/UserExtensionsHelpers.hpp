@@ -8,7 +8,7 @@
 #include "Track.hpp"
 #include "Muon.hpp"
 #include "ZDCEnergy.hpp"
-#include "LbLEvent.hpp"
+#include "MonoEvent.hpp"
 #include "PhysicsObject.hpp"
 #include "Event.hpp"
 
@@ -38,8 +38,8 @@ inline std::shared_ptr<ZDCEnergy> asZDCEnergy(const std::shared_ptr<PhysicsObjec
   return std::make_shared<ZDCEnergy>(physicsObject);
 }
 
-inline std::shared_ptr<LbLEvent> asLbLEvent(const std::shared_ptr<Event> physicsObject) {
-  return std::make_shared<LbLEvent>(physicsObject);
+inline std::shared_ptr<MonoEvent> asMonoEvent(const std::shared_ptr<Event> physicsObject) {
+  return std::make_shared<MonoEvent>(physicsObject);
 }
 
 #endif /* UserExtensionsHelpers_hpp */

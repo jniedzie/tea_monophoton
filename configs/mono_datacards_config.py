@@ -1,10 +1,12 @@
-from lbl_paths import skim, qed_superchic, qed_starlight, base_path, processes
-from lbl_params import luminosity, crossSections, nGenEvents, get_scale_factor, total_uncertainty_lbl_run2, alp_mc_uncertainty
-from lbl_helpers import get_cep_scale
+from mono_paths import skim, qed_names, base_path, processes
+from mono_params import luminosity, crossSections, nGenEvents, get_scale_factor, total_uncertainty_mono_run2, alp_mc_uncertainty
+from mono_helpers import get_cep_scale
 
 from Sample import Sample, SampleType
 from Histogram import Histogram
 from HistogramNormalizer import NormalizationType
+
+qed_superchic, qed_starlight = qed_names
 
 do_alps = True
 alp_mass = 5
@@ -12,7 +14,7 @@ alp_mass = 5
 output_path = f"../datacards/{skim.replace('skimmed_', '')}/"
 
 scale_factor = get_scale_factor(True)[0]
-lbl_error = total_uncertainty_lbl_run2 - 1
+mono_error = total_uncertainty_mono_run2 - 1
 add_uncertainties_on_zero = False
 
 samples = [
@@ -46,7 +48,7 @@ samples = [
         name="cep",
         file_path=f"{base_path}/cep/merged_{skim}_histograms.root",
         type=SampleType.background,
-        cross_section=get_cep_scale(skim)[0],
+        cross_section=get_cep_scale()[0],
         initial_weight_sum=luminosity,
     )
 ]
@@ -65,16 +67,16 @@ if do_alps:
 histograms = []
 
 if do_alps:
-    histograms.append(Histogram("diphotonSR_mass200"      , "", False, False, NormalizationType.to_lumi, 1, 0, 0, 0, 0, "", "", "", lbl_error))
+    histograms.append(Histogram("diphotonSR_mass200"      , "", False, False, NormalizationType.to_lumi, 1, 0, 0, 0, 0, "", "", "", mono_error))
 else:
-    histograms.append(Histogram("diphoton_acoplanarity40" , "", False, False, NormalizationType.to_lumi, 1, 0, 0, 0, 0, "", "", "", lbl_error))
+    histograms.append(Histogram("diphoton_acoplanarity40" , "", False, False, NormalizationType.to_lumi, 1, 0, 0, 0, 0, "", "", "", mono_error))
 
 nuisances = {
     "bck_syst": {
-        "lbl": total_uncertainty_lbl_run2,
-        "qed": total_uncertainty_lbl_run2,
-        "qed_starlight": total_uncertainty_lbl_run2,
-        "cep": total_uncertainty_lbl_run2,
+        "lbl": total_uncertainty_mono_run2,
+        "qed": total_uncertainty_mono_run2,
+        "qed_starlight": total_uncertainty_mono_run2,
+        "cep": total_uncertainty_mono_run2,
     },
     "alp_mc": {
         "signal_alps_5": alp_mc_uncertainty,

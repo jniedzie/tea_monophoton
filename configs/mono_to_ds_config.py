@@ -1,4 +1,4 @@
-from lbl_paths import trigger, facility
+from mono_paths import trigger, facility
 
 nEvents = -1
 

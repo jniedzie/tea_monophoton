@@ -1,4 +1,4 @@
-#include "LbLEvent.hpp"
+#include "MonoEvent.hpp"
 
 #include <cctype>
 #include <algorithm>
@@ -97,15 +97,15 @@ namespace {
   }
 }
 
-struct LbLEvent::MonoCollisionCache {
+struct MonoEvent::MonoCollisionCache {
   map<int, int> runToFill;
   map<int, string> fillToScheme;
   map<string, optional<set<int>>> collidingBXsByScheme;
 };
 
-string LbLEvent::GetMonoUtilsDir() {
+string MonoEvent::GetMonoUtilsDir() {
   const string sourcePath = __FILE__;
-  const string marker = "libs/user_extensions/src/LbLEvent.cpp";
+  const string marker = "libs/user_extensions/src/MonoEvent.cpp";
   const auto markerPos = sourcePath.rfind(marker);
 
   if (markerPos == string::npos) return "utils";
@@ -113,7 +113,7 @@ string LbLEvent::GetMonoUtilsDir() {
   return sourcePath.substr(0, markerPos) + "utils";
 }
 
-LbLEvent::MonoCollisionCache LbLEvent::LoadMonoCollisionCache() {
+MonoEvent::MonoCollisionCache MonoEvent::LoadMonoCollisionCache() {
   MonoCollisionCache cache;
   const string utilsDir = GetMonoUtilsDir();
 
@@ -232,12 +232,12 @@ LbLEvent::MonoCollisionCache LbLEvent::LoadMonoCollisionCache() {
   return cache;
 }
 
-const LbLEvent::MonoCollisionCache& LbLEvent::GetMonoCollisionCache() {
+const MonoEvent::MonoCollisionCache& MonoEvent::GetMonoCollisionCache() {
   static const MonoCollisionCache cache = LoadMonoCollisionCache();
   return cache;
 }
 
-optional<bool> LbLEvent::HasCollisionInPreviousBXs(int nBXs) {
+optional<bool> MonoEvent::HasCollisionInPreviousBXs(int nBXs) {
   const auto& cache = GetMonoCollisionCache();
   const int runNumber = GetAs<int>("runNumber");
   const int bx = GetAs<int>("bunchNumber");
@@ -275,7 +275,7 @@ optional<bool> LbLEvent::HasCollisionInPreviousBXs(int nBXs) {
   return false;
 }
 
-float LbLEvent::GetDeltaEt() {
+float MonoEvent::GetDeltaEt() {
   auto photons = GetCollection("goodPhoton");
 
   if (photons->size() != 2) {
@@ -327,7 +327,7 @@ float LbLEvent::GetDeltaEt() {
   return maxDelta;
 }
 
-float LbLEvent::GetCosThetaStar(bool doElectrons) {
+float MonoEvent::GetCosThetaStar(bool doElectrons) {
   auto objects = GetCollection(doElectrons ? "goodElectron" : "goodPhoton");
 
   if (objects->size() != 2) {
@@ -350,7 +350,7 @@ float LbLEvent::GetCosThetaStar(bool doElectrons) {
   return costhetastarCS;
 }
 
-float LbLEvent::GetDiphotonAcoplanarity() {
+float MonoEvent::GetDiphotonAcoplanarity() {
   auto photons = event->GetCollection("goodPhoton");
   if (photons->size() != 2) return -1;
 
@@ -360,7 +360,7 @@ float LbLEvent::GetDiphotonAcoplanarity() {
   return acoplanarity;
 }
 
-vector<shared_ptr<PhysicsObject>> LbLEvent::GetGenPhotons() {
+vector<shared_ptr<PhysicsObject>> MonoEvent::GetGenPhotons() {
   vector<shared_ptr<PhysicsObject>> genPhotons;
 
   auto genParticles = GetCollection("genParticle");
@@ -380,7 +380,7 @@ vector<shared_ptr<PhysicsObject>> LbLEvent::GetGenPhotons() {
   return genPhotons;
 }
 
-vector<shared_ptr<PhysicsObject>> LbLEvent::GetGenMatchedRecoPhotons() {
+vector<shared_ptr<PhysicsObject>> MonoEvent::GetGenMatchedRecoPhotons() {
   vector<shared_ptr<PhysicsObject>> matchedPhotons;
 
   auto genPhotons = GetGenPhotons();

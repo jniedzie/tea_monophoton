@@ -64,7 +64,7 @@ endforeach()
 include_directories(${CORRECTIONLIB_INCLUDE_DIRS})
 
 # add user-defined libraries
-file(GLOB_RECURSE USER_LIBS_SRC "${CMAKE_CURRENT_SOURCE_DIR}/libs/*/*.cpp") # Assuming the source files are in .cpp format
+file(GLOB_RECURSE USER_LIBS_SRC CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/libs/*/*.cpp") # Assuming the source files are in .cpp format
 message(STATUS "Found user libs: ${USER_LIBS_SRC}")
 if(USER_LIBS_SRC)
     add_library(user_libs ${USER_LIBS_SRC})
@@ -73,7 +73,7 @@ if(USER_LIBS_SRC)
 endif()
 
 # add user-defined apps
-file(GLOB_RECURSE USER_APPS_SRC "apps/*.cpp")
+file(GLOB_RECURSE USER_APPS_SRC CONFIGURE_DEPENDS "apps/*.cpp")
 foreach(APP_SRC ${USER_APPS_SRC})
     get_filename_component(APP_NAME ${APP_SRC} NAME_WE) # Get the name without extension
     
@@ -93,8 +93,24 @@ foreach(APP_SRC ${USER_APPS_SRC})
 endforeach()
 
 # make links to python configs
-file(GLOB_RECURSE PYTHON_CONFIGS "configs/*" "utils/*")
+file(GLOB_RECURSE PYTHON_CONFIGS CONFIGURE_DEPENDS "configs/*" "utils/*")
 set(PYTHON_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}")
+
+# Remove the former generated entry points when upgrading an existing install.
+# Only symlinks are removed for configs, so ordinary user files are preserved.
+install(CODE "
+    foreach(APP histogramer renamer skimmer to_ds)
+        file(REMOVE \"${CMAKE_INSTALL_PREFIX}/lbl_\${APP}\")
+    endforeach()
+    foreach(CONFIG datacards_config histogramer_config histogramer_list
+                   mc_efficiencies_calculator_config params paths plotter_config
+                   renamer_config renamer_list skimmer_config skimmer_list to_ds_config)
+        set(OLD_CONFIG \"${PYTHON_INSTALL_DIR}/lbl_\${CONFIG}.py\")
+        if(IS_SYMLINK \"\${OLD_CONFIG}\")
+            file(REMOVE \"\${OLD_CONFIG}\")
+        endif()
+    endforeach()
+")
 
 foreach(PYTHON_FILE ${PYTHON_CONFIGS})
     get_filename_component(PYTHON_FILENAME ${PYTHON_FILE} NAME)

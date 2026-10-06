@@ -1,7 +1,7 @@
 import os
 import argparse
 
-from lbl_paths import base_path, processes, skim
+from mono_paths import base_path, processes, skim
 
 
 def get_args():

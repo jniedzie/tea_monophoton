@@ -1,5 +1,5 @@
 import ROOT
-from lbl_paths import merged_histograms_path, skim
+from mono_paths import merged_histograms_path, skim
 
 main_rebin = 10
 ratio_rebin = 1

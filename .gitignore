@@ -12,7 +12,7 @@ utils/__pycache__/*
 debugging/*
 
 plotting_macros/figures/*
-lbl_ntuplizer
-lbl_ntuplizer_src
+mono_ntuplizer
+mono_ntuplizer_src
 
 

@@ -1,5 +1,5 @@
-#ifndef LbLHistogramsFiller_hpp
-#define LbLHistogramsFiller_hpp
+#ifndef MonoHistogramsFiller_hpp
+#define MonoHistogramsFiller_hpp
 
 #include "Event.hpp"
 #include "EventProcessor.hpp"
@@ -7,10 +7,10 @@
 #include "HistogramsHandler.hpp"
 #include "UserExtensionsHelpers.hpp"
 
-class LbLHistogramsFiller {
+class MonoHistogramsFiller {
  public:
-  LbLHistogramsFiller(std::shared_ptr<HistogramsHandler> histogramsHandler_);
-  ~LbLHistogramsFiller();
+  MonoHistogramsFiller(std::shared_ptr<HistogramsHandler> histogramsHandler_);
+  ~MonoHistogramsFiller();
 
   void Fill(const std::shared_ptr<Event> event);
 
@@ -43,4 +43,4 @@ class LbLHistogramsFiller {
   bool runExtraPrefix = false;
 };
 
-#endif /* LbLHistogramsFiller_hpp */
+#endif /* MonoHistogramsFiller_hpp */

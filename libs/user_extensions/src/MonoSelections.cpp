@@ -1,4 +1,4 @@
-#include "LbLSelections.hpp"
+#include "MonoSelections.hpp"
 
 #include "ConfigManager.hpp"
 #include "Logger.hpp"
@@ -6,14 +6,14 @@
 
 using namespace std;
 
-LbLSelections::LbLSelections() {
+MonoSelections::MonoSelections() {
   auto& config = ConfigManager::GetInstance();
   config.GetMap("eventCuts", eventCuts);
 
-  lblObjectsManager = make_shared<LbLObjectsManager>();
+  monoObjectsManager = make_shared<MonoObjectsManager>();
 }
 
-bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+bool MonoSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   auto towers = event->GetCollection("CaloTower");
   int nPassingTowers = 0;
 
@@ -58,7 +58,7 @@ bool LbLSelections::PassesNeutralExclusivity(shared_ptr<Event> event, shared_ptr
   return true;
 }
 
-bool LbLSelections::PassesPhotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+bool MonoSelections::PassesPhotonSelection(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   auto goodPhotons = event->GetCollection("goodPhoton");
   int nPhotons = goodPhotons->size();
   if (nPhotons < eventCuts.at("min_Nphotons") || nPhotons > eventCuts.at("max_Nphotons")) return false;
@@ -67,7 +67,7 @@ bool LbLSelections::PassesPhotonSelection(shared_ptr<Event> event, shared_ptr<Cu
   return true;
 }
 
-bool LbLSelections::PassesChargedExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+bool MonoSelections::PassesChargedExclusivity(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   
   try {
     int nAdditionalMuonSegmentsCSC = event->Get("nAdditionalMuonCSCsegments");
@@ -103,7 +103,7 @@ bool LbLSelections::PassesChargedExclusivity(shared_ptr<Event> event, shared_ptr
   return true;
 }
 
-bool LbLSelections::PassesBeamHaloFilters(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+bool MonoSelections::PassesBeamHaloFilters(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   map<int, string> options = {
     {0, "none"},
     {1, "isBeamHaloLoose"},
@@ -133,7 +133,7 @@ bool LbLSelections::PassesBeamHaloFilters(shared_ptr<Event> event, shared_ptr<Cu
   return true;
 }
 
-bool LbLSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
+bool MonoSelections::PassesZDC(shared_ptr<Event> event, shared_ptr<CutFlowManager> cutFlowManager) {
   if (eventCuts.at("ZDC_cut") == 0) {
     cutFlowManager->UpdateCutFlow("ZDC");
     return true;
